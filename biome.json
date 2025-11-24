@@ -245,6 +245,12 @@
           }
         }
       }
+    },
+    {
+      "includes": ["styles/css/typography.css"],
+      "linter": {
+        "enabled": false
+      }
     }
   ]
 }

@@ -1,0 +1,60 @@
+/**
+ * Typography Classes
+ * Custom typography utilities using @apply
+ */
+
+/* ============================================
+   HEADINGS - Bianco Serif Regular
+   ============================================ */
+
+.heading-1 {
+  @apply font-heading font-normal text-[96px] leading-none;
+}
+
+.heading-2 {
+  @apply font-heading font-normal text-[72px] leading-none;
+}
+
+.heading-3 {
+  @apply font-heading font-normal text-[48px] leading-none;
+}
+
+.heading-4 {
+  @apply font-heading font-normal text-[32px] leading-none;
+}
+
+.heading-5 {
+  @apply font-heading font-normal text-[24px] leading-none;
+}
+
+.heading-6 {
+  @apply font-heading font-normal text-[20px] leading-none;
+}
+
+/* ============================================
+   BODY - IBM Plex Sans
+   ============================================ */
+
+.body-large {
+  @apply font-body font-normal text-lg leading-relaxed;
+}
+
+.body {
+  @apply font-body font-normal text-base leading-relaxed;
+}
+
+.body-small {
+  @apply font-body font-normal text-sm leading-relaxed;
+}
+
+/* ============================================
+   MONO - PP Neue Montreal Mono
+   ============================================ */
+
+.mono {
+  @apply font-mono font-normal text-base leading-relaxed;
+}
+
+.mono-wide {
+  @apply font-mono font-normal text-sm leading-relaxed tracking-[0.1em] uppercase;
+}
