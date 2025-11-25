@@ -175,9 +175,15 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Default Variant</h3>
         <div className="flex flex-wrap gap-4">
-          <Button url="#" color="primary">Primary</Button>
-          <Button url="#" color="secondary">Secondary</Button>
-          <Button url="#" color="neutral">Neutral</Button>
+          <Button url="#" color="primary">
+            Primary
+          </Button>
+          <Button url="#" color="secondary">
+            Secondary
+          </Button>
+          <Button url="#" color="neutral">
+            Neutral
+          </Button>
         </div>
       </section>
 
@@ -185,9 +191,15 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Default with Icons</h3>
         <div className="flex flex-wrap gap-4">
-          <Button url="#" color="primary" hasIcon>Primary</Button>
-          <Button url="#" color="secondary" hasIcon>Secondary</Button>
-          <Button url="#" color="neutral" hasIcon>Neutral</Button>
+          <Button url="#" color="primary" hasIcon>
+            Primary
+          </Button>
+          <Button url="#" color="secondary" hasIcon>
+            Secondary
+          </Button>
+          <Button url="#" color="neutral" hasIcon>
+            Neutral
+          </Button>
         </div>
       </section>
 
@@ -195,9 +207,15 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Outline Variant</h3>
         <div className="flex flex-wrap gap-4">
-          <Button url="#" variant="outline" color="primary">Primary</Button>
-          <Button url="#" variant="outline" color="secondary">Secondary</Button>
-          <Button url="#" variant="outline" color="neutral">Neutral</Button>
+          <Button url="#" variant="outline" color="primary">
+            Primary
+          </Button>
+          <Button url="#" variant="outline" color="secondary">
+            Secondary
+          </Button>
+          <Button url="#" variant="outline" color="neutral">
+            Neutral
+          </Button>
         </div>
       </section>
 
@@ -205,9 +223,15 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Outline with Icons</h3>
         <div className="flex flex-wrap gap-4">
-          <Button url="#" variant="outline" color="primary" hasIcon>Primary</Button>
-          <Button url="#" variant="outline" color="secondary" hasIcon>Secondary</Button>
-          <Button url="#" variant="outline" color="neutral" hasIcon>Neutral</Button>
+          <Button url="#" variant="outline" color="primary" hasIcon>
+            Primary
+          </Button>
+          <Button url="#" variant="outline" color="secondary" hasIcon>
+            Secondary
+          </Button>
+          <Button url="#" variant="outline" color="neutral" hasIcon>
+            Neutral
+          </Button>
         </div>
       </section>
 
@@ -215,9 +239,15 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Tertiary Variant (Mono Wide)</h3>
         <div className="flex flex-wrap gap-4">
-          <Button url="#" variant="tertiary" color="primary">Primary</Button>
-          <Button url="#" variant="tertiary" color="secondary">Secondary</Button>
-          <Button url="#" variant="tertiary" color="neutral">Neutral</Button>
+          <Button url="#" variant="tertiary" color="primary">
+            Primary
+          </Button>
+          <Button url="#" variant="tertiary" color="secondary">
+            Secondary
+          </Button>
+          <Button url="#" variant="tertiary" color="neutral">
+            Neutral
+          </Button>
         </div>
       </section>
 
@@ -225,9 +255,15 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Tertiary with Icons</h3>
         <div className="flex flex-wrap gap-4">
-          <Button url="#" variant="tertiary" color="primary" hasIcon>Primary</Button>
-          <Button url="#" variant="tertiary" color="secondary" hasIcon>Secondary</Button>
-          <Button url="#" variant="tertiary" color="neutral" hasIcon>Neutral</Button>
+          <Button url="#" variant="tertiary" color="primary" hasIcon>
+            Primary
+          </Button>
+          <Button url="#" variant="tertiary" color="secondary" hasIcon>
+            Secondary
+          </Button>
+          <Button url="#" variant="tertiary" color="neutral" hasIcon>
+            Neutral
+          </Button>
         </div>
       </section>
 
@@ -235,9 +271,15 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Sizes</h3>
         <div className="flex flex-wrap items-center gap-4">
-          <Button url="#" size="small">Small</Button>
-          <Button url="#" size="medium">Medium</Button>
-          <Button url="#" size="large">Large</Button>
+          <Button url="#" size="small">
+            Small
+          </Button>
+          <Button url="#" size="medium">
+            Medium
+          </Button>
+          <Button url="#" size="large">
+            Large
+          </Button>
         </div>
       </section>
 
@@ -245,9 +287,15 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Sizes with Icons</h3>
         <div className="flex flex-wrap items-center gap-4">
-          <Button url="#" size="small" hasIcon>Small</Button>
-          <Button url="#" size="medium" hasIcon>Medium</Button>
-          <Button url="#" size="large" hasIcon>Large</Button>
+          <Button url="#" size="small" hasIcon>
+            Small
+          </Button>
+          <Button url="#" size="medium" hasIcon>
+            Medium
+          </Button>
+          <Button url="#" size="large" hasIcon>
+            Large
+          </Button>
         </div>
       </section>
     </div>
@@ -258,10 +306,18 @@ export const AllVariants: Story = {
 export const OnDarkBackground: Story = {
   render: () => (
     <div className="bg-black p-8 space-y-4">
-      <Button url="#" color="primary">Primary</Button>
-      <Button url="#" color="primary" hasIcon>With Icon</Button>
-      <Button url="#" variant="outline" color="primary">Outline</Button>
-      <Button url="#" variant="tertiary" color="primary">Tertiary</Button>
+      <Button url="#" color="primary">
+        Primary
+      </Button>
+      <Button url="#" color="primary" hasIcon>
+        With Icon
+      </Button>
+      <Button url="#" variant="outline" color="primary">
+        Outline
+      </Button>
+      <Button url="#" variant="tertiary" color="primary">
+        Tertiary
+      </Button>
     </div>
   ),
 }
