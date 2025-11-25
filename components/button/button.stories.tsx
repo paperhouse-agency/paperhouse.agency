@@ -21,7 +21,7 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'select',
-      options: ['small', 'medium', 'large'],
+      options: ['sm', 'md', 'lg'],
       description: 'Button size',
     },
     hasIcon: {
@@ -109,7 +109,7 @@ export const Small: Story = {
   args: {
     children: 'Small Button',
     url: '#',
-    size: 'small',
+    size: 'sm',
   },
 }
 
@@ -117,7 +117,7 @@ export const Medium: Story = {
   args: {
     children: 'Medium Button',
     url: '#',
-    size: 'medium',
+    size: 'md',
   },
 }
 
@@ -125,7 +125,7 @@ export const Large: Story = {
   args: {
     children: 'Large Button',
     url: '#',
-    size: 'large',
+    size: 'lg',
   },
 }
 
@@ -134,7 +134,7 @@ export const SmallWithIcon: Story = {
   args: {
     children: 'Small',
     url: '#',
-    size: 'small',
+    size: 'sm',
     hasIcon: true,
   },
 }
@@ -143,7 +143,7 @@ export const MediumWithIcon: Story = {
   args: {
     children: 'Medium',
     url: '#',
-    size: 'medium',
+    size: 'md',
     hasIcon: true,
   },
 }
@@ -152,7 +152,7 @@ export const LargeWithIcon: Story = {
   args: {
     children: 'Large',
     url: '#',
-    size: 'large',
+    size: 'lg',
     hasIcon: true,
   },
 }
@@ -271,13 +271,13 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Sizes</h3>
         <div className="flex flex-wrap items-center gap-4">
-          <Button url="#" size="small">
+          <Button url="#" size="sm">
             Small
           </Button>
-          <Button url="#" size="medium">
+          <Button url="#" size="md">
             Medium
           </Button>
-          <Button url="#" size="large">
+          <Button url="#" size="lg">
             Large
           </Button>
         </div>
@@ -287,13 +287,13 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Sizes with Icons</h3>
         <div className="flex flex-wrap items-center gap-4">
-          <Button url="#" size="small" hasIcon>
+          <Button url="#" size="sm" hasIcon>
             Small
           </Button>
-          <Button url="#" size="medium" hasIcon>
+          <Button url="#" size="md" hasIcon>
             Medium
           </Button>
-          <Button url="#" size="large" hasIcon>
+          <Button url="#" size="lg" hasIcon>
             Large
           </Button>
         </div>

@@ -5,7 +5,7 @@ import ArrowTopRight from '~/public/arrow-top-right.svg'
 
 const buttonVariants = cva(
   // Base styles
-  'inline-flex items-center justify-center transition-colors rounded-full',
+  'inline-flex items-center justify-center transition-colors duration-500 rounded-full',
   {
     variants: {
       variant: {
@@ -19,9 +19,9 @@ const buttonVariants = cva(
         neutral: '',
       },
       size: {
-        small: 'body-large',
-        medium: 'body-large',
-        large: 'body',
+        sm: 'body',
+        md: 'body-large',
+        lg: 'body-large',
       },
       hasIcon: {
         true: '',
@@ -33,7 +33,7 @@ const buttonVariants = cva(
       {
         variant: 'default',
         color: 'primary',
-        className: 'bg-primary text-offwhite',
+        className: 'bg-primary text-offwhite hover:bg-primary/90',
       },
       {
         variant: 'default',
@@ -80,38 +80,38 @@ const buttonVariants = cva(
       // Size padding for default and outline variants (without icon)
       {
         variant: ['default', 'outline'],
-        size: 'small',
+        size: 'sm',
         hasIcon: false,
         className: 'px-3 py-1.5',
       },
       {
         variant: ['default', 'outline'],
-        size: 'medium',
+        size: 'md',
         hasIcon: false,
         className: 'px-5 py-2.5',
       },
       {
         variant: ['default', 'outline'],
-        size: 'large',
+        size: 'lg',
         hasIcon: false,
         className: 'px-[30px] py-5',
       },
       // Size padding with icon
       {
         variant: ['default', 'outline'],
-        size: 'small',
+        size: 'sm',
         hasIcon: true,
         className: 'py-1.5 pr-1.5 pl-3',
       },
       {
         variant: ['default', 'outline'],
-        size: 'medium',
+        size: 'md',
         hasIcon: true,
         className: 'py-2 pr-2 pl-4',
       },
       {
         variant: ['default', 'outline'],
-        size: 'large',
+        size: 'lg',
         hasIcon: true,
         className: 'py-2 pr-2 pl-[30px]',
       },
@@ -119,41 +119,50 @@ const buttonVariants = cva(
     defaultVariants: {
       variant: 'default',
       color: 'primary',
-      size: 'medium',
+      size: 'md',
       hasIcon: false,
     },
   }
 )
 
-const iconWrapperVariants = cva('flex items-center justify-center', {
-  variants: {
-    size: {
-      small: 'w-[18px] h-[18px]',
-      medium: 'w-[30px] h-[30px]',
-      large: 'w-[50px] h-[50px]',
+const iconWrapperVariants = cva(
+  'flex items-center justify-center rounded-full',
+  {
+    variants: {
+      size: {
+        sm: 'w-[18px] h-[18px]',
+        md: 'w-[30px] h-[30px]',
+        lg: 'w-[50px] h-[50px]',
+      },
+      color: {
+        primary: 'bg-accent text-white',
+        secondary: 'bg-bluishgray text-secondary',
+        neutral: 'bg-white text-primary',
+      },
+      variant: {
+        default: '',
+        outline: '',
+        tertiary: 'bg-primary! text-white!',
+      },
     },
-    variant: {
-      default: 'bg-white/20 rounded',
-      outline: 'bg-transparent',
-      tertiary: 'bg-transparent',
+    defaultVariants: {
+      size: 'md',
+      variant: 'default',
+      color: 'primary',
     },
-  },
-  defaultVariants: {
-    size: 'medium',
-    variant: 'default',
-  },
-})
+  }
+)
 
 const iconVariants = cva('', {
   variants: {
     size: {
-      small: 'w-3 h-3',
-      medium: 'w-4 h-4',
-      large: 'w-6 h-6',
+      sm: 'w-3 h-3',
+      md: 'w-4 h-4',
+      lg: 'w-6 h-6',
     },
   },
   defaultVariants: {
-    size: 'medium',
+    size: 'md',
   },
 })
 
@@ -179,26 +188,26 @@ export type ButtonProps = LinkButtonProps | ButtonElementProps
 export function Button({
   variant = 'default',
   color = 'primary',
-  size = 'medium',
+  size = 'md',
   hasIcon = false,
-  children,
-  url,
   isExternal = false,
   className,
+  url,
+  children,
   ...props
 }: ButtonProps) {
   let gapClass = ''
-  if (size === 'large') {
+  if (size === 'lg') {
     gapClass = 'gap-4'
-  } else if (hasIcon && variant !== 'tertiary') {
+  } else if (hasIcon) {
     gapClass = 'gap-2.5'
   }
 
   const buttonContent = (
     <span className={`flex items-center ${gapClass}`}>
       <span>{children}</span>
-      {hasIcon && (
-        <span className={iconWrapperVariants({ size, variant })}>
+      {hasIcon && variant !== 'outline' && (
+        <span className={iconWrapperVariants({ size, variant, color })}>
           <ArrowTopRight className={iconVariants({ size })} />
         </span>
       )}

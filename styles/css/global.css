@@ -83,3 +83,10 @@ html.screenshot {
     opacity: 0 !important;
   }
 }
+
+.wrapper {
+  width: 100%;
+  max-width: 1440px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
