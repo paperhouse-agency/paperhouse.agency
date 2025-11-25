@@ -16,7 +16,7 @@ interface WrapperProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Wrapper({
   children,
-  theme = 'dark',
+  theme = 'light',
   className,
   lenis = true,
   webgl,
