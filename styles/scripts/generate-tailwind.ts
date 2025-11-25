@@ -19,6 +19,10 @@ export function generateTailwind({
   | 'themes'
   | 'typography'
 >) {
+  // Source directive for Tailwind v4
+  const source = `/** Source scanning **/
+@source "../../**/*.{ts,tsx,js,jsx}";`
+
   // Theme
   const theme = `/** Custom theme **/
 @theme {
@@ -135,5 +139,5 @@ ${Object.keys(themes)
   )
   .join('\n')}`
 
-  return [theme, themeOverwrites, utilities, variants].join('\n')
+  return [source, theme, themeOverwrites, utilities, variants].join('\n')
 }
