@@ -75,7 +75,7 @@
 	font-weight: 400;
 	line-height: 100%;
 	letter-spacing: 0em;
-	@apply text-96;
+	font-size: 96px;
 }
 @utility heading-2 {
   font-family: var(--font-heading);
@@ -83,7 +83,7 @@
 	font-weight: 400;
 	line-height: 100%;
 	letter-spacing: 0em;
-	@apply text-72;
+	font-size: 72px;
 }
 @utility heading-3 {
   font-family: var(--font-heading);
@@ -91,7 +91,7 @@
 	font-weight: 400;
 	line-height: 100%;
 	letter-spacing: 0em;
-	@apply text-48;
+	font-size: 48px;
 }
 @utility heading-4 {
   font-family: var(--font-heading);
@@ -99,7 +99,7 @@
 	font-weight: 400;
 	line-height: 100%;
 	letter-spacing: 0em;
-	@apply text-32;
+	font-size: 32px;
 }
 @utility heading-5 {
   font-family: var(--font-heading);
@@ -107,7 +107,7 @@
 	font-weight: 400;
 	line-height: 100%;
 	letter-spacing: 0em;
-	@apply text-24;
+	font-size: 24px;
 }
 @utility heading-6 {
   font-family: var(--font-heading);
@@ -115,7 +115,7 @@
 	font-weight: 400;
 	line-height: 100%;
 	letter-spacing: 0em;
-	@apply text-20;
+	font-size: 20px;
 }
 @utility body-large {
   font-family: var(--font-body);
@@ -123,7 +123,7 @@
 	font-weight: 400;
 	line-height: 162.5%;
 	letter-spacing: 0em;
-	@apply text-18;
+	font-size: 18px;
 }
 @utility body {
   font-family: var(--font-body);
@@ -131,7 +131,7 @@
 	font-weight: 400;
 	line-height: 162.5%;
 	letter-spacing: 0em;
-	@apply text-16;
+	font-size: 16px;
 }
 @utility body-small {
   font-family: var(--font-body);
@@ -139,7 +139,7 @@
 	font-weight: 400;
 	line-height: 162.5%;
 	letter-spacing: 0em;
-	@apply text-14;
+	font-size: 14px;
 }
 @utility mono {
   font-family: var(--font-mono);
@@ -147,7 +147,7 @@
 	font-weight: 400;
 	line-height: 162.5%;
 	letter-spacing: 0em;
-	@apply text-16;
+	font-size: 16px;
 }
 @utility mono-wide {
   font-family: var(--font-mono);
@@ -156,7 +156,7 @@
 	line-height: 162.5%;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	@apply text-14;
+	font-size: 14px;
 }
 
 @utility desktop-only {
