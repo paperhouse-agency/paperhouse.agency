@@ -32,7 +32,7 @@ const meta: Meta<typeof Button> = {
       control: 'boolean',
       description: 'Open link in new tab',
     },
-    content: {
+    children: {
       control: 'text',
       description: 'Button text content',
     },
@@ -49,14 +49,14 @@ type Story = StoryObj<typeof Button>
 // Default Stories
 export const Default: Story = {
   args: {
-    content: 'Click me',
+    children: 'Click me',
     url: '#',
   },
 }
 
 export const WithIcon: Story = {
   args: {
-    content: 'Learn More',
+    children: 'Learn More',
     url: '#',
     hasIcon: true,
   },
@@ -65,7 +65,7 @@ export const WithIcon: Story = {
 // Variants
 export const Tertiary: Story = {
   args: {
-    content: 'View All',
+    children: 'View All',
     url: '#',
     variant: 'tertiary',
   },
@@ -73,7 +73,7 @@ export const Tertiary: Story = {
 
 export const Outline: Story = {
   args: {
-    content: 'Secondary Action',
+    children: 'Secondary Action',
     url: '#',
     variant: 'outline',
   },
@@ -82,7 +82,7 @@ export const Outline: Story = {
 // Colors
 export const Primary: Story = {
   args: {
-    content: 'Primary Button',
+    children: 'Primary Button',
     url: '#',
     color: 'primary',
   },
@@ -90,7 +90,7 @@ export const Primary: Story = {
 
 export const Secondary: Story = {
   args: {
-    content: 'Secondary Button',
+    children: 'Secondary Button',
     url: '#',
     color: 'secondary',
   },
@@ -98,7 +98,7 @@ export const Secondary: Story = {
 
 export const Neutral: Story = {
   args: {
-    content: 'Neutral Button',
+    children: 'Neutral Button',
     url: '#',
     color: 'neutral',
   },
@@ -107,7 +107,7 @@ export const Neutral: Story = {
 // Sizes
 export const Small: Story = {
   args: {
-    content: 'Small Button',
+    children: 'Small Button',
     url: '#',
     size: 'small',
   },
@@ -115,7 +115,7 @@ export const Small: Story = {
 
 export const Medium: Story = {
   args: {
-    content: 'Medium Button',
+    children: 'Medium Button',
     url: '#',
     size: 'medium',
   },
@@ -123,7 +123,7 @@ export const Medium: Story = {
 
 export const Large: Story = {
   args: {
-    content: 'Large Button',
+    children: 'Large Button',
     url: '#',
     size: 'large',
   },
@@ -132,7 +132,7 @@ export const Large: Story = {
 // With Icons
 export const SmallWithIcon: Story = {
   args: {
-    content: 'Small',
+    children: 'Small',
     url: '#',
     size: 'small',
     hasIcon: true,
@@ -141,7 +141,7 @@ export const SmallWithIcon: Story = {
 
 export const MediumWithIcon: Story = {
   args: {
-    content: 'Medium',
+    children: 'Medium',
     url: '#',
     size: 'medium',
     hasIcon: true,
@@ -150,7 +150,7 @@ export const MediumWithIcon: Story = {
 
 export const LargeWithIcon: Story = {
   args: {
-    content: 'Large',
+    children: 'Large',
     url: '#',
     size: 'large',
     hasIcon: true,
@@ -160,7 +160,7 @@ export const LargeWithIcon: Story = {
 // External Link
 export const ExternalLink: Story = {
   args: {
-    content: 'Visit Website',
+    children: 'Visit Website',
     url: 'https://example.com',
     isExternal: true,
     hasIcon: true,
@@ -175,9 +175,9 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Default Variant</h3>
         <div className="flex flex-wrap gap-4">
-          <Button content="Primary" url="#" color="primary" />
-          <Button content="Secondary" url="#" color="secondary" />
-          <Button content="Neutral" url="#" color="neutral" />
+          <Button url="#" color="primary">Primary</Button>
+          <Button url="#" color="secondary">Secondary</Button>
+          <Button url="#" color="neutral">Neutral</Button>
         </div>
       </section>
 
@@ -185,9 +185,9 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Default with Icons</h3>
         <div className="flex flex-wrap gap-4">
-          <Button content="Primary" url="#" color="primary" hasIcon />
-          <Button content="Secondary" url="#" color="secondary" hasIcon />
-          <Button content="Neutral" url="#" color="neutral" hasIcon />
+          <Button url="#" color="primary" hasIcon>Primary</Button>
+          <Button url="#" color="secondary" hasIcon>Secondary</Button>
+          <Button url="#" color="neutral" hasIcon>Neutral</Button>
         </div>
       </section>
 
@@ -195,14 +195,9 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Outline Variant</h3>
         <div className="flex flex-wrap gap-4">
-          <Button content="Primary" url="#" variant="outline" color="primary" />
-          <Button
-            content="Secondary"
-            url="#"
-            variant="outline"
-            color="secondary"
-          />
-          <Button content="Neutral" url="#" variant="outline" color="neutral" />
+          <Button url="#" variant="outline" color="primary">Primary</Button>
+          <Button url="#" variant="outline" color="secondary">Secondary</Button>
+          <Button url="#" variant="outline" color="neutral">Neutral</Button>
         </div>
       </section>
 
@@ -210,27 +205,9 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Outline with Icons</h3>
         <div className="flex flex-wrap gap-4">
-          <Button
-            content="Primary"
-            url="#"
-            variant="outline"
-            color="primary"
-            hasIcon
-          />
-          <Button
-            content="Secondary"
-            url="#"
-            variant="outline"
-            color="secondary"
-            hasIcon
-          />
-          <Button
-            content="Neutral"
-            url="#"
-            variant="outline"
-            color="neutral"
-            hasIcon
-          />
+          <Button url="#" variant="outline" color="primary" hasIcon>Primary</Button>
+          <Button url="#" variant="outline" color="secondary" hasIcon>Secondary</Button>
+          <Button url="#" variant="outline" color="neutral" hasIcon>Neutral</Button>
         </div>
       </section>
 
@@ -238,24 +215,9 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Tertiary Variant (Mono Wide)</h3>
         <div className="flex flex-wrap gap-4">
-          <Button
-            content="Primary"
-            url="#"
-            variant="tertiary"
-            color="primary"
-          />
-          <Button
-            content="Secondary"
-            url="#"
-            variant="tertiary"
-            color="secondary"
-          />
-          <Button
-            content="Neutral"
-            url="#"
-            variant="tertiary"
-            color="neutral"
-          />
+          <Button url="#" variant="tertiary" color="primary">Primary</Button>
+          <Button url="#" variant="tertiary" color="secondary">Secondary</Button>
+          <Button url="#" variant="tertiary" color="neutral">Neutral</Button>
         </div>
       </section>
 
@@ -263,27 +225,9 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Tertiary with Icons</h3>
         <div className="flex flex-wrap gap-4">
-          <Button
-            content="Primary"
-            url="#"
-            variant="tertiary"
-            color="primary"
-            hasIcon
-          />
-          <Button
-            content="Secondary"
-            url="#"
-            variant="tertiary"
-            color="secondary"
-            hasIcon
-          />
-          <Button
-            content="Neutral"
-            url="#"
-            variant="tertiary"
-            color="neutral"
-            hasIcon
-          />
+          <Button url="#" variant="tertiary" color="primary" hasIcon>Primary</Button>
+          <Button url="#" variant="tertiary" color="secondary" hasIcon>Secondary</Button>
+          <Button url="#" variant="tertiary" color="neutral" hasIcon>Neutral</Button>
         </div>
       </section>
 
@@ -291,9 +235,9 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Sizes</h3>
         <div className="flex flex-wrap items-center gap-4">
-          <Button content="Small" url="#" size="small" />
-          <Button content="Medium" url="#" size="medium" />
-          <Button content="Large" url="#" size="large" />
+          <Button url="#" size="small">Small</Button>
+          <Button url="#" size="medium">Medium</Button>
+          <Button url="#" size="large">Large</Button>
         </div>
       </section>
 
@@ -301,9 +245,9 @@ export const AllVariants: Story = {
       <section>
         <h3 className="heading-5 mb-4">Sizes with Icons</h3>
         <div className="flex flex-wrap items-center gap-4">
-          <Button content="Small" url="#" size="small" hasIcon />
-          <Button content="Medium" url="#" size="medium" hasIcon />
-          <Button content="Large" url="#" size="large" hasIcon />
+          <Button url="#" size="small" hasIcon>Small</Button>
+          <Button url="#" size="medium" hasIcon>Medium</Button>
+          <Button url="#" size="large" hasIcon>Large</Button>
         </div>
       </section>
     </div>
@@ -314,10 +258,10 @@ export const AllVariants: Story = {
 export const OnDarkBackground: Story = {
   render: () => (
     <div className="bg-black p-8 space-y-4">
-      <Button content="Primary" url="#" color="primary" />
-      <Button content="With Icon" url="#" color="primary" hasIcon />
-      <Button content="Outline" url="#" variant="outline" color="primary" />
-      <Button content="Tertiary" url="#" variant="tertiary" color="primary" />
+      <Button url="#" color="primary">Primary</Button>
+      <Button url="#" color="primary" hasIcon>With Icon</Button>
+      <Button url="#" variant="outline" color="primary">Outline</Button>
+      <Button url="#" variant="tertiary" color="primary">Tertiary</Button>
     </div>
   ),
 }

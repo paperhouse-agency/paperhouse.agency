@@ -1,10 +1,11 @@
 import { cva, type VariantProps } from 'class-variance-authority'
+import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Link } from '~/components/link'
 import ArrowTopRight from '~/public/arrow-top-right.svg'
 
 const buttonVariants = cva(
   // Base styles
-  'inline-flex items-center justify-center transition-colors',
+  'inline-flex items-center justify-center transition-colors rounded-full',
   {
     variants: {
       variant: {
@@ -76,7 +77,7 @@ const buttonVariants = cva(
         color: 'neutral',
         className: 'text-text',
       },
-      // Size padding for default and outline variants
+      // Size padding for default and outline variants (without icon)
       {
         variant: ['default', 'outline'],
         size: 'small',
@@ -96,6 +97,12 @@ const buttonVariants = cva(
         className: 'px-[30px] py-5',
       },
       // Size padding with icon
+      {
+        variant: ['default', 'outline'],
+        size: 'small',
+        hasIcon: true,
+        className: 'py-1.5 pr-1.5 pl-3',
+      },
       {
         variant: ['default', 'outline'],
         size: 'medium',
@@ -150,22 +157,35 @@ const iconVariants = cva('', {
   },
 })
 
-export interface ButtonProps extends VariantProps<typeof buttonVariants> {
-  content: string
-  url: string
-  isExternal?: boolean
+type BaseButtonProps = VariantProps<typeof buttonVariants> & {
+  children: ReactNode
+  hasIcon?: boolean
   className?: string
 }
+
+type LinkButtonProps = BaseButtonProps & {
+  url: string
+  isExternal?: boolean
+}
+
+type ButtonElementProps = BaseButtonProps &
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    url?: never
+    isExternal?: never
+  }
+
+export type ButtonProps = LinkButtonProps | ButtonElementProps
 
 export function Button({
   variant = 'default',
   color = 'primary',
   size = 'medium',
   hasIcon = false,
-  content,
+  children,
   url,
   isExternal = false,
   className,
+  ...props
 }: ButtonProps) {
   let gapClass = ''
   if (size === 'large') {
@@ -174,20 +194,36 @@ export function Button({
     gapClass = 'gap-2.5'
   }
 
+  const buttonContent = (
+    <span className={`flex items-center ${gapClass}`}>
+      <span>{children}</span>
+      {hasIcon && (
+        <span className={iconWrapperVariants({ size, variant })}>
+          <ArrowTopRight className={iconVariants({ size })} />
+        </span>
+      )}
+    </span>
+  )
+
+  if (url) {
+    return (
+      <Link
+        href={url}
+        className={buttonVariants({ variant, color, size, hasIcon, className })}
+        {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
+      >
+        {buttonContent}
+      </Link>
+    )
+  }
+
   return (
-    <Link
-      href={url}
+    <button
+      type="button"
       className={buttonVariants({ variant, color, size, hasIcon, className })}
-      {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
+      {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
     >
-      <span className={`flex items-center ${gapClass}`}>
-        <span>{content}</span>
-        {hasIcon && (
-          <span className={iconWrapperVariants({ size, variant })}>
-            <ArrowTopRight className={iconVariants({ size })} />
-          </span>
-        )}
-      </span>
-    </Link>
+      {buttonContent}
+    </button>
   )
 }
