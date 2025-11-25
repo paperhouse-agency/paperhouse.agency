@@ -1,31 +1,28 @@
 const colors = {
-  black: '#000000',
+  primary: '#ff4d00',
+  secondary: '#4b749f',
+  accent: '#fa971a',
+  offwhite: '#f9f7f4',
+  bluishgray: '#e8ebef',
+  foreground: '#f9f7f4',
   white: '#ffffff',
-  red: '#e30613',
-  blue: '#0070f3',
-  green: '#00ff88',
-  purple: '#7928ca',
-  pink: '#ff0080',
+  black: '#000000',
+  text: '#000000',
 } as const
 
-const themeNames = ['light', 'dark', 'red'] as const
-const colorNames = ['primary', 'secondary', 'contrast'] as const
+const themeNames = ['light', 'dark'] as const
+const colorNames = ['offwhite', 'bluishgray', 'text'] as const
 
 const themes = {
   light: {
-    primary: colors.white,
-    secondary: colors.black,
-    contrast: colors.red,
+    offwhite: '#f9f7f4',
+    bluishgray: '#e8ebef',
+    text: '#000000',
   },
   dark: {
-    primary: colors.black,
-    secondary: colors.white,
-    contrast: colors.red,
-  },
-  red: {
-    primary: colors.red,
-    secondary: colors.black,
-    contrast: colors.white,
+    offwhite: '#000000',
+    bluishgray: '#1a1a1a',
+    text: '#f9f7f4',
   },
 } as const satisfies Themes
 

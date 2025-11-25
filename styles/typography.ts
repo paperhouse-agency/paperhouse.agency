@@ -1,7 +1,9 @@
 import type { CSSProperties } from 'react'
 
 const fonts = {
-  mono: '--next-font-mono', // this should be the variable name defined in fonts.ts
+  heading: '--font-heading', // Bianco Serif
+  body: '--font-body', // IBM Plex Sans
+  mono: '--font-mono', // PP Neue Montreal Mono
 } as const
 
 const typography: TypeStyles = {

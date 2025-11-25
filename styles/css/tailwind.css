@@ -9,12 +9,15 @@
 	--breakpoint-dt: 800px;
 
   --color-*: initial;
-	--color-primary: #ff4d00;
-	--color-secondary: #4b749f;
-	--color-accent: #fa971a;
-	--color-foreground: #f9f7f4;
 	--color-offwhite: #f9f7f4;
 	--color-bluishgray: #e8ebef;
+	--color-text: #000000;
+  --color-primary: #ff4d00;
+	--color-secondary: #4b749f;
+	--color-accent: #fa971a;
+	--color-offwhite: #f9f7f4;
+	--color-bluishgray: #e8ebef;
+	--color-foreground: #f9f7f4;
 	--color-white: #ffffff;
 	--color-black: #000000;
 	--color-text: #000000;
@@ -27,8 +30,8 @@
 
   --font-*: initial;
   --font-heading: var(--font-heading);
-  --font-body: var(--font-body);
-  --font-mono: var(--font-mono);
+	--font-body: var(--font-body);
+	--font-mono: var(--font-mono);
 
   --ease-*: initial;
   --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
@@ -66,16 +69,14 @@
   
 
 /** Custom static utilities **/
-@utility font-heading {
-  font-family: var(--font-heading);
-}
-
-@utility font-body {
-  font-family: var(--font-body);
-}
-
-@utility font-mono {
+@utility test-mono {
   font-family: var(--font-mono);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 90%;
+	letter-spacing: 0em;
+	font-size: calc(((20 * 100) / var(--device-width)) * 1vw);
+	@variant dt { font-size: calc(((24 * 100) / var(--device-width)) * 1vw); }
 }
 
 @utility desktop-only {
@@ -117,7 +118,6 @@
 /** Custom variants **/
 @custom-variant light (&:where([data-theme=light], [data-theme=light *]));
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark *]));
-@custom-variant red (&:where([data-theme=red], [data-theme=red *]));
 
 /** Custom function utilities **/
 @utility dr-text-* {
