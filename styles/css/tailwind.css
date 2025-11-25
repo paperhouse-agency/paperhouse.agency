@@ -69,14 +69,94 @@
   
 
 /** Custom static utilities **/
-@utility test-mono {
+@utility heading-1 {
+  font-family: var(--font-heading);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 100%;
+	letter-spacing: 0em;
+	@apply text-96;
+}
+@utility heading-2 {
+  font-family: var(--font-heading);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 100%;
+	letter-spacing: 0em;
+	@apply text-72;
+}
+@utility heading-3 {
+  font-family: var(--font-heading);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 100%;
+	letter-spacing: 0em;
+	@apply text-48;
+}
+@utility heading-4 {
+  font-family: var(--font-heading);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 100%;
+	letter-spacing: 0em;
+	@apply text-32;
+}
+@utility heading-5 {
+  font-family: var(--font-heading);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 100%;
+	letter-spacing: 0em;
+	@apply text-24;
+}
+@utility heading-6 {
+  font-family: var(--font-heading);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 100%;
+	letter-spacing: 0em;
+	@apply text-20;
+}
+@utility body-large {
+  font-family: var(--font-body);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 162.5%;
+	letter-spacing: 0em;
+	@apply text-18;
+}
+@utility body {
+  font-family: var(--font-body);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 162.5%;
+	letter-spacing: 0em;
+	@apply text-16;
+}
+@utility body-small {
+  font-family: var(--font-body);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 162.5%;
+	letter-spacing: 0em;
+	@apply text-14;
+}
+@utility mono {
   font-family: var(--font-mono);
 	font-style: normal;
 	font-weight: 400;
-	line-height: 90%;
+	line-height: 162.5%;
 	letter-spacing: 0em;
-	font-size: calc(((20 * 100) / var(--device-width)) * 1vw);
-	@variant dt { font-size: calc(((24 * 100) / var(--device-width)) * 1vw); }
+	@apply text-16;
+}
+@utility mono-wide {
+  font-family: var(--font-mono);
+	font-style: normal;
+	font-weight: 400;
+	line-height: 162.5%;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	@apply text-14;
 }
 
 @utility desktop-only {

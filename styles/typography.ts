@@ -7,13 +7,94 @@ const fonts = {
 } as const
 
 const typography: TypeStyles = {
-  'test-mono': {
+  'heading-1': {
+    'font-family': `var(${fonts.heading})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '100%',
+    'letter-spacing': '0em',
+    'font-size': 96,
+  },
+  'heading-2': {
+    'font-family': `var(${fonts.heading})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '100%',
+    'letter-spacing': '0em',
+    'font-size': 72,
+  },
+  'heading-3': {
+    'font-family': `var(${fonts.heading})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '100%',
+    'letter-spacing': '0em',
+    'font-size': 48,
+  },
+  'heading-4': {
+    'font-family': `var(${fonts.heading})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '100%',
+    'letter-spacing': '0em',
+    'font-size': 32,
+  },
+  'heading-5': {
+    'font-family': `var(${fonts.heading})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '100%',
+    'letter-spacing': '0em',
+    'font-size': 24,
+  },
+  'heading-6': {
+    'font-family': `var(${fonts.heading})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '100%',
+    'letter-spacing': '0em',
+    'font-size': 20,
+  },
+  'body-large': {
+    'font-family': `var(${fonts.body})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '162.5%',
+    'letter-spacing': '0em',
+    'font-size': 18,
+  },
+  body: {
+    'font-family': `var(${fonts.body})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '162.5%',
+    'letter-spacing': '0em',
+    'font-size': 16,
+  },
+  'body-small': {
+    'font-family': `var(${fonts.body})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '162.5%',
+    'letter-spacing': '0em',
+    'font-size': 14,
+  },
+  mono: {
     'font-family': `var(${fonts.mono})`,
     'font-style': 'normal',
     'font-weight': 400,
-    'line-height': '90%',
+    'line-height': '162.5%',
     'letter-spacing': '0em',
-    'font-size': { mobile: 20, desktop: 24 },
+    'font-size': 16,
+  },
+  'mono-wide': {
+    'font-family': `var(${fonts.mono})`,
+    'font-style': 'normal',
+    'font-weight': 400,
+    'line-height': '162.5%',
+    'letter-spacing': '0.1em',
+    'text-transform': 'uppercase',
+    'font-size': 14,
   },
 } as const
 
@@ -33,6 +114,7 @@ type TypeStyles = Record<
       | `${number}em`
       | { mobile: `${number}em`; desktop: `${number}em` }
     'font-feature-settings'?: string
+    'text-transform'?: CSSProperties['textTransform']
     'font-size': number | { mobile: number; desktop: number }
   }
 >

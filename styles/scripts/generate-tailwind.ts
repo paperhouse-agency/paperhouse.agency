@@ -66,7 +66,7 @@ ${Object.entries(typography)
     .map(([key, value]) => {
       if (key === 'font-size') {
         if (typeof value === 'number') {
-          return `@apply stext-${value};`
+          return `@apply text-${value};`
         }
 
         return [
