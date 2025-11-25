@@ -8,7 +8,7 @@ export default async function Hubspot() {
   const { form } = await getForm(process.env.NEXT_HUBSPOT_FORM_ID)
 
   return (
-    <Wrapper theme="red" className="font-mono uppercase">
+    <Wrapper theme="light" className="font-mono uppercase">
       <div className="flex flex-col items-center justify-center flex-grow max-dt:spx-16">
         <p className="dr-mb-19 dt:dr-mb-15">subscribe for more Satūs</p>
         <Form

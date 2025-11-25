@@ -16,7 +16,7 @@ export default async function SanityPage() {
   if (!data) return notFound()
 
   return (
-    <Wrapper theme="red" className="uppercase font-mono">
+    <Wrapper theme="light" className="uppercase font-mono">
       <div className="flex items-center justify-center grow max-dt:dr-px-16">
         <SanityTutorial data={data} />
       </div>
