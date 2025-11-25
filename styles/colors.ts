@@ -7,7 +7,7 @@ const colors = {
   foreground: '#f9f7f4',
   white: '#ffffff',
   black: '#000000',
-  text: '#000000',
+  text: '#1a1a1a',
 } as const
 
 const themeNames = ['light', 'dark'] as const
