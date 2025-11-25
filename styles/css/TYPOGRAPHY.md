@@ -8,12 +8,12 @@ All headings use `font-heading` (Bianco Serif Regular) with `leading-none` (auto
 
 | Class | Font Size | Usage |
 |-------|-----------|-------|
-| `heading-1` | 96px | Main page titles |
-| `heading-2` | 72px | Section headings |
-| `heading-3` | 48px | Subsection headings |
-| `heading-4` | 32px | Card/component titles |
-| `heading-5` | 24px | Small headings |
-| `heading-6` | 20px | Smallest headings |
+| `heading-1` | 58px | Main page titles |
+| `heading-2` | 44px | Section headings |
+| `heading-3` | 32px | Subsection headings |
+| `heading-4` | 24px | Card/component titles |
+| `heading-5` | 18px | Small headings |
+| `heading-6` | 16px | Smallest headings |
 
 **Example:**
 ```tsx

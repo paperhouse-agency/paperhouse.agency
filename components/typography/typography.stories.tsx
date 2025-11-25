@@ -21,25 +21,25 @@ const TypographyShowcase = () => {
         <div className="space-y-6">
           <div>
             <p className="font-mono text-xs text-gray-400 mb-2">
-              heading-1 / 96px
+              heading-1 / 58px
             </p>
             <h1 className="heading-1">The quick brown fox</h1>
           </div>
           <div>
             <p className="font-mono text-xs text-gray-400 mb-2">
-              heading-2 / 72px
+              heading-2 / 44px
             </p>
             <h2 className="heading-2">The quick brown fox jumps</h2>
           </div>
           <div>
             <p className="font-mono text-xs text-gray-400 mb-2">
-              heading-3 / 48px
+              heading-3 / 32px
             </p>
             <h3 className="heading-3">The quick brown fox jumps over</h3>
           </div>
           <div>
             <p className="font-mono text-xs text-gray-400 mb-2">
-              heading-4 / 32px
+              heading-4 / 24px
             </p>
             <h4 className="heading-4">
               The quick brown fox jumps over the lazy dog
@@ -47,7 +47,7 @@ const TypographyShowcase = () => {
           </div>
           <div>
             <p className="font-mono text-xs text-gray-400 mb-2">
-              heading-5 / 24px
+              heading-5 / 18px
             </p>
             <h5 className="heading-5">
               The quick brown fox jumps over the lazy dog
@@ -55,7 +55,7 @@ const TypographyShowcase = () => {
           </div>
           <div>
             <p className="font-mono text-xs text-gray-400 mb-2">
-              heading-6 / 20px
+              heading-6 / 16px
             </p>
             <h6 className="heading-6">
               The quick brown fox jumps over the lazy dog
