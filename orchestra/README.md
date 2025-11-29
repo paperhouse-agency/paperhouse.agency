@@ -1,6 +1,6 @@
 # Orchestra
 
-Debug and development tools suite for Satūs.
+Debug and development tools suite for PaperHosue.
 
 ## Features
 

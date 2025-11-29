@@ -17,11 +17,11 @@ export function Navigation() {
   return (
     <nav className="fixed top-safe left-safe z-2 flex flex-col uppercase font-mono">
       <div className="inline-flex">
-        <h1>Satūs</h1>
+        <h1>PaperHouse</h1>
         <span>{pathname}</span>
       </div>
 
-      <ul className="pl-[24px]">
+      <ul className="pl-6">
         {LINKS.map((link) => (
           <li key={link.href}>
             <Link
@@ -30,7 +30,7 @@ export function Navigation() {
                 'link',
                 'relative',
                 pathname === link.href &&
-                  "before:content-['■'] before:absolute before:left-[-16px]"
+                  "before:content-['■'] before:absolute before:left-4"
               )}
             >
               {link.label}

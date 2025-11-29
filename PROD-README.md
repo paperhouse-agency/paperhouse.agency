@@ -1,6 +1,6 @@
-# [PROJECT NAME]
+# PaperHouse
 
-Production documentation for [PROJECT NAME], built with the Satūs framework by [darkroom.engineering](https://darkroom.engineering).
+Production documentation for PaperHouse, built with the Satūs framework by [darkroom.engineering](https://darkroom.engineering).
 
 ## Quick Start
 

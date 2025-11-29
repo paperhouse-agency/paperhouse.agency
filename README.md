@@ -1,12 +1,12 @@
-[![SATUS](./public/afterimage-banner.jpg)](https://github.com/afterimage-agency/afterimage.agency)
+[![PaperHouse](./public/paperhouse-banner.jpg)](https://github.com/paperhouse-agency/paperhouse.agency)
 
-# AfterImage
+# PaperHouse
 
-Afterimage Agency WEbsite
+PaperHouse Agency WEbsite
 
 <!-- [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/darkroomengineering/satus) -->
 
-<!-- > **Note**: This README is for developers working on the Satūs template. For client/team handoff documentation, see [PROD-README.md](PROD-README.md) (replace this README in production projects). -->
+<!-- > **Note**: This README is for developers working on the PaperHouse template. For client/team handoff documentation, see [PROD-README.md](PROD-README.md) (replace this README in production projects). -->
 
 ## Quick Start
 
