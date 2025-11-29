@@ -1,0 +1,38 @@
+{
+  "rules": [
+    {
+      "name": "Project Guidelines - Main",
+      "path": ".cursor/rules/main.mdc",
+      "enabled": true,
+      "description": "Technology stack, React 19.2 features, React Compiler, Image optimization, and cross-cutting concerns"
+    },
+    {
+      "name": "Component Patterns & WebGL",
+      "path": ".cursor/rules/components.mdc",
+      "enabled": true,
+      "description": "React component structure, WebGL/Three.js integration, and Activity component usage"
+    },
+    {
+      "name": "Styling - CSS Modules & Tailwind v4",
+      "path": ".cursor/rules/styling.mdc",
+      "enabled": true,
+      "description": "CSS Modules, Tailwind CSS v4 configuration, responsive design, and custom utilities"
+    },
+    {
+      "name": "Third-Party Integrations",
+      "path": ".cursor/rules/integrations.mdc",
+      "enabled": true,
+      "description": "Sanity CMS, HubSpot, and general integration best practices"
+    },
+    {
+      "name": "Architecture & Best Practices",
+      "path": ".cursor/rules/architecture.mdc",
+      "enabled": true,
+      "description": "State management, routing, performance, security, and code quality patterns"
+    }
+  ],
+  "systemPrompt": "You are working on the PaperHouse project. Always follow the project rules defined in .cursor/rules/ for component patterns, styling, integrations, and architecture. Key principles:\n\n- React Compiler is ENABLED - never use useMemo, useCallback, or React.memo (exception: useRef for object instantiation)\n- Always use @/ path alias for imports\n- Use @/components/image (never next/image) and @/components/link\n- Use 'use client' only when needed (state, effects, browser APIs)\n- CSS-first Tailwind v4 configuration with custom dr-* utilities\n- Import CSS modules as 's'\n- Separate WebGL logic into webgl.tsx files\n- Use <Activity /> for off-screen optimization\n- Gate debug UI components (not auto-stripped)\n- Validate environment variables with @/libs/validate-env\n- Use fetchWithTimeout for external API calls\n- For Sanity: use GROQ defineQuery, SCREAMING_SNAKE_CASE, and proper schema patterns\n- Bun is the package manager\n\nRefer to CLAUDE.md for quick reference on commands and architecture.",
+  "projectName": "PaperHouse",
+  "framework": "next",
+  "packageManager": "bun"
+}
