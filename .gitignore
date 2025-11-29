@@ -48,5 +48,3 @@ certificates
 
 next-env.d.ts
 storybook-static
-
-.claude/*

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Important: Project Rules
 
-**This project has comprehensive coding rules in `.cursor/rules/` that MUST be followed at all times.**
+**This project has comprehensive coding rules in `.claude/rules/` that MUST be followed at all times.**
 
 The rules are organized into 5 focused files (2,020 lines total):
 
@@ -14,7 +14,7 @@ The rules are organized into 5 focused files (2,020 lines total):
 4. **`integrations.mdc`** - Sanity CMS (GROQ queries, schema), HubSpot, API best practices
 5. **`architecture.mdc`** - State management, routing, performance, security, testing, code quality
 
-**Quick reference guide** is in `.cursor/rules/README.md` - consult it to find relevant sections.
+**Quick reference guide** is in `.claude/rules/README.md` - consult it to find relevant sections.
 
 **These rules are automatically loaded via `.clauderc`** - always adhere to them when writing code.
 

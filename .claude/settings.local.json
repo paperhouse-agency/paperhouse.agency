@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun:*)",
+      "Bash(bunx storybook@latest init:*)",
+      "Bash(timeout 10 bun run dev:*)",
+      "Bash(timeout 30 bun run storybook:*)",
+      "Bash(pkill:*)",
+      "Bash(timeout 20 bun run dev:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
