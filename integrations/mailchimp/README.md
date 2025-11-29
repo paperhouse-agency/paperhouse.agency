@@ -45,9 +45,9 @@ CLOUDFLARE_TURNSTILE_SECRET_KEY=your_secret_key_here
 
 ### Contact Form
 ```tsx
-import { Form, Input, Textarea, SubmitButton } from '~/components/form'
-import { Turnstile } from '~/components/turnstile'
-import { mailchimpContactAction } from '~/integrations/mailchimp'
+import { Form, Input, Textarea, SubmitButton } from '@/components/form'
+import { Turnstile } from '@/components/turnstile'
+import { mailchimpContactAction } from '@/integrations/mailchimp'
 
 function ContactForm() {
   return (
@@ -65,9 +65,9 @@ function ContactForm() {
 
 ### Newsletter Subscription
 ```tsx
-import { Form, Input, SubmitButton } from '~/components/form'
-import { Turnstile } from '~/components/turnstile'
-import { mailchimpSubscriptionAction } from '~/integrations/mailchimp'
+import { Form, Input, SubmitButton } from '@/components/form'
+import { Turnstile } from '@/components/turnstile'
+import { mailchimpSubscriptionAction } from '@/integrations/mailchimp'
 
 function NewsletterForm() {
   return (

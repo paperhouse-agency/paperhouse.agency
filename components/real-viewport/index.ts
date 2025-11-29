@@ -1,7 +1,7 @@
 'use client'
 
 import { useLayoutEffect } from 'react'
-import { mutate } from '~/libs/tempus-queue'
+import { mutate } from '@/libs/tempus-queue'
 
 function debounce<T extends (...args: unknown[]) => void>(
   fn: T,

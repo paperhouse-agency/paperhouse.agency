@@ -7,7 +7,7 @@ Satūs comes with GSAP pre-installed. To enable GSAP and ScrollTrigger in your p
 
 ```jsx
 // app/layout.tsx
-import { GSAPRuntime } from '~/components/gsap/runtime'
+import { GSAPRuntime } from '@/components/gsap/runtime'
 
 // inside <body>
 <GSAPRuntime />

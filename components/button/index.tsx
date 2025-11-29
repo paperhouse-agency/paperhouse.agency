@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { Link } from '~/components/link'
-import ArrowTopRight from '~/public/arrow-top-right.svg'
+import { Link } from '@/components/link'
+import ArrowTopRight from '@/public/arrow-top-right.svg'
 
 const buttonVariants = cva(
   // Base styles

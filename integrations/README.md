@@ -16,7 +16,7 @@ Form handling and marketing automation. [Full Documentation →](hubspot/README.
 
 **Quick Example:**
 ```tsx
-import { EmbedHubspotForm } from '~/integrations/hubspot/embed'
+import { EmbedHubspotForm } from '@/integrations/hubspot/embed'
 
 <EmbedHubspotForm formId="your-form-id" />
 ```
@@ -27,8 +27,8 @@ Headless CMS with visual editing. [Full Documentation →](sanity/README.md)
 
 **Quick Example:**
 ```tsx
-import { sanityFetch } from '~/integrations/sanity/live'
-import { RichText } from '~/integrations/sanity'
+import { sanityFetch } from '@/integrations/sanity/live'
+import { RichText } from '@/integrations/sanity'
 
 const { data } = await sanityFetch({ query: pageQuery })
 return <RichText content={data.content} />
@@ -40,7 +40,7 @@ Email marketing and audience building. [Full Documentation →](mailchimp/README
 
 **Quick Example:**
 ```tsx
-import { mailchimpSubscriptionAction } from '~/integrations/mailchimp/action'
+import { mailchimpSubscriptionAction } from '@/integrations/mailchimp/action'
 
 <Form action={mailchimpSubscriptionAction}>
   <Input name="email" type="email" required />
@@ -54,7 +54,7 @@ Transactional emails via Mandrill. [Full Documentation →](mandrill/README.md)
 
 **Quick Example:**
 ```tsx
-import { combinedContactAction } from '~/integrations/mandrill/action'
+import { combinedContactAction } from '@/integrations/mandrill/action'
 
 <Form action={combinedContactAction}>
   <Input name="name" required />
@@ -129,12 +129,12 @@ The template automatically detects which integrations are configured via environ
 Instead of removing integrations entirely, you can conditionally load them based on configuration:
 
 ```tsx
-import { isSanityConfigured } from '~/integrations/check-integration'
+import { isSanityConfigured } from '@/integrations/check-integration'
 
 export default function Page() {
   if (isSanityConfigured()) {
     // Only import Sanity components when configured
-    const { sanityFetch } = await import('~/integrations/sanity/live')
+    const { sanityFetch } = await import('@/integrations/sanity/live')
     return <div>Sanity configured</div>
   }
 
@@ -162,8 +162,8 @@ rm -rf integrations/sanity app/studio app/(pages)/sanity
 
 # Remove from app/layout.tsx:
 # - import { VisualEditing } from 'next-sanity/visual-editing'
-# - import { DisableDraftMode } from '~/integrations/sanity/components/disable-draft-mode'
-# - import { SanityLive } from '~/integrations/sanity/live'
+# - import { DisableDraftMode } from '@/integrations/sanity/components/disable-draft-mode'
+# - import { SanityLive } from '@/integrations/sanity/live'
 # - The related JSX components
 
 # Uninstall dependencies
@@ -240,16 +240,16 @@ Typical bundle size reductions when removing integrations:
 You can use these utilities in your own scripts:
 
 ```typescript
-import { validateEnv } from '~/libs/validate-env'
+import { validateEnv } from '@/libs/validate-env'
 import { 
   getRemovalGuide, 
   printCleanupInstructions,
   REMOVAL_GUIDE 
-} from '~/libs/cleanup-integrations'
+} from '@/libs/cleanup-integrations'
 import { 
   getConfiguredIntegrations,
   getUnconfiguredIntegrations 
-} from '~/integrations/check-integration'
+} from '@/integrations/check-integration'
 
 // Check environment
 const result = validateEnv()

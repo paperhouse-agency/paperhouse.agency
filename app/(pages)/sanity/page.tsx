@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
-import { sanityFetch } from '~/integrations/sanity/live'
-import { pageQuery } from '~/integrations/sanity/queries'
-import { generateSanityMetadata } from '~/libs/metadata'
+import { sanityFetch } from '@/integrations/sanity/live'
+import { pageQuery } from '@/integrations/sanity/queries'
+import { generateSanityMetadata } from '@/libs/metadata'
 import { Wrapper } from '../(components)/wrapper'
 import { SanityTutorial } from './(component)/tutorial'
 

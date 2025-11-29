@@ -162,13 +162,13 @@ const instance = instanceRef.current
 **Always use the custom Image component for all images.**
 
 - **DO NOT use `next/image` directly**
-- Use `~/components/image` for standard images
-- **In WebGL contexts, use `~/webgl/components/image`** which wraps the custom Image component for DOM fallback and WebGL texture integration
+- Use `@/components/image` for standard images
+- **In WebGL contexts, use `@/webgl/components/image`** which wraps the custom Image component for DOM fallback and WebGL texture integration
 
 ```tsx
-import { Image } from '~/components/image'
+import { Image } from '@/components/image'
 // For WebGL:
-import { Image as WebGLImage } from '~/webgl/components/image'
+import { Image as WebGLImage } from '@/webgl/components/image'
 ```
 
 ### Development vs Production
@@ -201,24 +201,24 @@ if (process.env.NODE_ENV === 'development') {
 ## Core Utility Libraries
 
 ### Available Utilities
-- **`~/libs/validate-env`** - Validate required environment variables at runtime
-- **`~/libs/cleanup-integrations`** - Remove unused integration code to optimize bundle size
-- **`~/libs/fetch-with-timeout`** - Resilient API calls with configurable timeouts (5-10s standard)
-- **`~/libs/metadata`** - Centralized SEO and metadata generation for consistent OpenGraph, Twitter cards, etc.
+- **`@/libs/validate-env`** - Validate required environment variables at runtime
+- **`@/libs/cleanup-integrations`** - Remove unused integration code to optimize bundle size
+- **`@/libs/fetch-with-timeout`** - Resilient API calls with configurable timeouts (5-10s standard)
+- **`@/libs/metadata`** - Centralized SEO and metadata generation for consistent OpenGraph, Twitter cards, etc.
 
 ### Usage Examples
 
 ```typescript
 // Validate environment variables
-import { validateEnv } from '~/libs/validate-env'
+import { validateEnv } from '@/libs/validate-env'
 validateEnv(['NEXT_PUBLIC_API_KEY', 'DATABASE_URL'])
 
 // Fetch with timeout
-import { fetchWithTimeout } from '~/libs/fetch-with-timeout'
+import { fetchWithTimeout } from '@/libs/fetch-with-timeout'
 const response = await fetchWithTimeout(url, options, 10000)
 
 // Generate metadata
-import { generateSanityMetadata } from '~/libs/metadata'
+import { generateSanityMetadata } from '@/libs/metadata'
 export async function generateMetadata({ params }) {
   const page = await fetchPage(params.slug)
   return generateSanityMetadata(page)

@@ -109,7 +109,7 @@ export function InteractiveComponent() {
 The `wrapper/` component provides common layout:
 
 ```tsx
-import { Wrapper } from '~/app/(pages)/(components)/wrapper'
+import { Wrapper } from '@/app/(pages)/(components)/wrapper'
 
 export default function Page() {
   return (

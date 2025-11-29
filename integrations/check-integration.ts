@@ -6,11 +6,11 @@
  *
  * Usage:
  * ```ts
- * import { isSanityConfigured } from '~/integrations/check-integration'
+ * import { isSanityConfigured } from '@/integrations/check-integration'
  *
  * if (isSanityConfigured()) {
  *   // Only import and use Sanity code if configured
- *   const { sanityFetch } = await import('~/integrations/sanity/live')
+ *   const { sanityFetch } = await import('@/integrations/sanity/live')
  * }
  * ```
  */

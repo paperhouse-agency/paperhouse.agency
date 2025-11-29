@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import * as Accordion from '~/components/accordion'
+import * as Accordion from '@/components/accordion'
 
 function HeavyContent({ id }: { id: number }) {
   const [mountCount, setMountCount] = useState(0)

@@ -2,7 +2,7 @@
 
 import cn from 'clsx'
 import { usePathname } from 'next/navigation'
-import { Link } from '~/components/link'
+import { Link } from '@/components/link'
 
 const LINKS = [
   { href: '/', label: 'home' },

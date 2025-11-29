@@ -26,7 +26,7 @@ Toggle with `Cmd/Ctrl + O`:
 ## Usage
 
 ```tsx
-import { OrchestraTools } from '~/orchestra'
+import { OrchestraTools } from '@/orchestra'
 
 // Add to app/layout.tsx inside <body>
 <OrchestraTools />
@@ -39,8 +39,8 @@ Tool state persists in `localStorage` and syncs across tabs.
 Use Theatre.js for complex animation sequences:
 
 ```tsx
-import { SheetProvider } from '~/orchestra/theatre'
-import { useTheatreValue } from '~/orchestra/theatre/hooks/use-theatre-value'
+import { SheetProvider } from '@/orchestra/theatre'
+import { useTheatreValue } from '@/orchestra/theatre/hooks/use-theatre-value'
 
 function AnimatedComponent() {
   const opacity = useTheatreValue('opacity', 1)

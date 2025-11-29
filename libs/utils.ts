@@ -1,5 +1,5 @@
 import type { Ref } from 'react'
-import { screens } from '~/styles/config'
+import { screens } from '@/styles/config'
 import { easings } from './easings'
 
 export function desktopVW(value: number, width: number) {

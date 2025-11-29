@@ -212,7 +212,7 @@ async function fetchData(id: string) {
 
 ### State Management
 - **React state** for component-local state
-- **Zustand** for global state (stores in `~/libs/store.ts`)
+- **Zustand** for global state (stores in `@/libs/store.ts`)
 - **Context** for shared UI state (theme, modals)
 
 ### WebGL/Three.js Architecture

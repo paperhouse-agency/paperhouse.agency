@@ -10,8 +10,8 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { HubspotNewsletterAction } from '~/integrations/hubspot/action'
-import { mutate } from '~/libs/tempus-queue'
+import { HubspotNewsletterAction } from '@/integrations/hubspot/action'
+import { mutate } from '@/libs/tempus-queue'
 import s from './form.module.css'
 import { useForm } from './hook'
 

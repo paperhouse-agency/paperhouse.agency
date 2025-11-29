@@ -30,7 +30,7 @@ NEXT_PUBLIC_HUBSPOT_PORTAL_ID=your-portal-id
 Uses HubSpot's form builder and embeds the form with custom styling:
 
 ```tsx
-import { EmbedHubspotForm } from '~/integrations/hubspot/embed'
+import { EmbedHubspotForm } from '@/integrations/hubspot/embed'
 
 function NewsletterSection() {
   return (
@@ -47,8 +47,8 @@ function NewsletterSection() {
 For simple newsletter forms using HubSpot's Forms API:
 
 ```tsx
-import { Form, Input, SubmitButton } from '~/components/form'
-import { HubspotNewsletterAction } from '~/integrations/hubspot/action'
+import { Form, Input, SubmitButton } from '@/components/form'
+import { HubspotNewsletterAction } from '@/integrations/hubspot/action'
 
 function NewsletterForm() {
   return (
@@ -65,7 +65,7 @@ function NewsletterForm() {
 For custom form rendering:
 
 ```tsx
-import { getForm } from '~/integrations/hubspot/fetch-form'
+import { getForm } from '@/integrations/hubspot/fetch-form'
 
 export default async function CustomFormPage() {
   const { form, error } = await getForm('your-form-id')

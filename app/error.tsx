@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Link } from '~/components/link'
+import { Link } from '@/components/link'
 import { Wrapper } from './(pages)/(components)/wrapper'
 
 interface ErrorPageProps {

@@ -31,7 +31,7 @@ import {
   numberWithCommas,
   clamp,
   mapRange
-} from '~/libs/utils'
+} from '@/libs/utils'
 
 // Convert string to URL-friendly slug
 const slug = slugify('Hello World') // 'hello-world'
@@ -51,7 +51,7 @@ import {
   lerp,
   random,
   modulo
-} from '~/libs/utils'
+} from '@/libs/utils'
 
 // Clamp a value between min and max
 const clamped = clamp(150, 0, 100) // 100
@@ -74,7 +74,7 @@ const mod = modulo(-1, 5) // 4
 Zustand-based state management utilities:
 
 ```tsx
-import { createStore } from '~/libs/store'
+import { createStore } from '@/libs/store'
 
 // Create a type-safe store
 const useCounterStore = createStore(
@@ -159,7 +159,7 @@ bun validate:env
 
 ```typescript
 // Import and use in code
-import { validateEnv } from '~/libs/validate-env'
+import { validateEnv } from '@/libs/validate-env'
 
 const result = validateEnv({ silent: false })
 if (!result.valid) {
@@ -184,7 +184,7 @@ import {
   getRemovalGuide, 
   printCleanupInstructions,
   REMOVAL_GUIDE 
-} from '~/libs/cleanup-integrations'
+} from '@/libs/cleanup-integrations'
 
 // Get specific integration removal guide
 const sanityGuide = getRemovalGuide('Sanity')
@@ -198,7 +198,7 @@ printCleanupInstructions()
 Prevent hanging requests with automatic timeout protection:
 
 ```typescript
-import { fetchWithTimeout, fetchJSON } from '~/libs/fetch-with-timeout'
+import { fetchWithTimeout, fetchJSON } from '@/libs/fetch-with-timeout'
 
 // Basic fetch with 10s timeout
 const response = await fetchWithTimeout('https://api.example.com/data', {
@@ -217,7 +217,7 @@ const data = await fetchJSON<{ name: string }>('https://api.example.com/user', {
 Generate consistent metadata for SEO:
 
 ```typescript
-import { generatePageMetadata, generateSanityMetadata } from '~/libs/metadata'
+import { generatePageMetadata, generateSanityMetadata } from '@/libs/metadata'
 
 // For custom pages
 export async function generateMetadata({ params }) {
@@ -245,10 +245,10 @@ export async function generateMetadata({ params }) {
 Import utilities directly from their respective files:
 
 ```typescript
-import { slugify, numberWithCommas, clamp, mapRange  } from '~/libs/utils'
-import { useStore } from '~/libs/store'
-import { validateEnv } from '~/libs/validate-env'
-import { getRemovalGuide } from '~/libs/cleanup-integrations'
-import { fetchWithTimeout } from '~/libs/fetch-with-timeout'
-import { generatePageMetadata } from '~/libs/metadata'
+import { slugify, numberWithCommas, clamp, mapRange  } from '@/libs/utils'
+import { useStore } from '@/libs/store'
+import { validateEnv } from '@/libs/validate-env'
+import { getRemovalGuide } from '@/libs/cleanup-integrations'
+import { fetchWithTimeout } from '@/libs/fetch-with-timeout'
+import { generatePageMetadata } from '@/libs/metadata'
 ```

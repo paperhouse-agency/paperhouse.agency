@@ -3,10 +3,10 @@
 import { type Rect, useLazyState, useWindowSize } from 'hamo'
 import { useLenis } from 'lenis/react'
 import { useCallback, useEffect, useEffectEvent, useRef } from 'react'
-import { useTransform } from '~/hooks/use-transform'
-import { clamp, mapRange } from '~/libs/utils'
-import { useOrchestra } from '~/orchestra'
-import { useMinimap } from '~/orchestra/minimap'
+import { useTransform } from '@/hooks/use-transform'
+import { clamp, mapRange } from '@/libs/utils'
+import { useOrchestra } from '@/orchestra'
+import { useMinimap } from '@/orchestra/minimap'
 
 // @refresh reset
 

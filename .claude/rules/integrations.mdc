@@ -112,7 +112,7 @@ Every `document` and `object` schema type should:
 Always add `data-sanity` attributes for visual editing. Use SanityContextProvider for document access. Implement proper draft mode handling. Import from `/integrations/sanity` directory.
 
 ```typescript
-import { useSanityContext, RichText } from '~/integrations/sanity'
+import { useSanityContext, RichText } from '@/integrations/sanity'
 
 export function MyComponent() {
   const { document } = useSanityContext()
@@ -129,12 +129,12 @@ export function MyComponent() {
 ```
 
 ### Data Fetching
-Use proper perspective for draft vs published content. Implement caching strategies for performance. Handle errors gracefully with try-catch. Import from `/integrations/sanity` directory. Use `~/libs/metadata` helpers for SEO optimization.
+Use proper perspective for draft vs published content. Implement caching strategies for performance. Handle errors gracefully with try-catch. Import from `/integrations/sanity` directory. Use `@/libs/metadata` helpers for SEO optimization.
 
 ```typescript
 // In integrations/sanity/queries.ts
 import { client } from './client'
-import { generateSanityMetadata } from '~/libs/metadata'
+import { generateSanityMetadata } from '@/libs/metadata'
 
 export async function fetchSanityPage(slug: string, isDraftMode = false) {
   try {
@@ -211,8 +211,8 @@ export const POST_QUERY = defineQuery(`*[
 Use ISR for static content with revalidation. Implement proper cache invalidation via webhooks. Optimize images with proper sizing. Use consolidated imports for better tree-shaking. Use metadata helpers for consistent SEO.
 
 ```typescript
-import { urlForImage } from '~/integrations/sanity'
-import { generateSanityMetadata } from '~/libs/metadata'
+import { urlForImage } from '@/integrations/sanity'
+import { generateSanityMetadata } from '@/libs/metadata'
 
 // Use ISR for published content
 export const revalidate = 3600
@@ -323,7 +323,7 @@ export async function submitToHubspot(formData: FormData) {
 Implement proper consent management. Handle errors gracefully.
 
 ```typescript
-import { HubspotNewsletterAction } from '~/integrations/hubspot/action'
+import { HubspotNewsletterAction } from '@/integrations/hubspot/action'
 ```
 
 ---
@@ -334,10 +334,10 @@ import { HubspotNewsletterAction } from '~/integrations/hubspot/action'
 - Never commit API keys
 - Use `.env.local` for development
 - Document required variables in `.env.example`
-- Use `~/libs/validate-env` for runtime validation
+- Use `@/libs/validate-env` for runtime validation
 
 ```typescript
-import { validateEnv } from '~/libs/validate-env'
+import { validateEnv } from '@/libs/validate-env'
 
 // Validate required env vars on startup
 validateEnv(['NEXT_PUBLIC_API_KEY', 'API_SECRET'])
@@ -350,7 +350,7 @@ validateEnv(['NEXT_PUBLIC_API_KEY', 'API_SECRET'])
 - Implement proper error handling and retry logic
 
 ```typescript
-import { fetchWithTimeout } from '~/libs/fetch-with-timeout'
+import { fetchWithTimeout } from '@/libs/fetch-with-timeout'
 
 // HubSpot: 8 seconds
 const response = await fetchWithTimeout(url, options, 8000)
@@ -399,8 +399,8 @@ const ProductSchema = z.object({
 - Implement rate limiting where necessary
 
 ### Integration Management
-- Use `~/libs/cleanup-integrations` to remove unused integration code
-- Check integration usage with `~/integrations/check-integration`
+- Use `@/libs/cleanup-integrations` to remove unused integration code
+- Check integration usage with `@/integrations/check-integration`
 - Keep only active integrations to optimize bundle size
 
 ## Webhook Handling

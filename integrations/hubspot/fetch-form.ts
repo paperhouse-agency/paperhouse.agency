@@ -1,5 +1,5 @@
 import type { Client } from '@hubspot/api-client'
-import { fetchWithTimeout } from '~/libs/fetch-with-timeout'
+import { fetchWithTimeout } from '@/libs/fetch-with-timeout'
 
 type HubspotFormResponse = Awaited<
   ReturnType<Client['marketing']['forms']['formsApi']['getById']>

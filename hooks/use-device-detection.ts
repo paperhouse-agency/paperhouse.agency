@@ -1,5 +1,5 @@
 import { useMediaQuery } from 'hamo'
-import { breakpoints } from '~/styles/config'
+import { breakpoints } from '@/styles/config'
 
 export function useDeviceDetection() {
   const breakpoint = breakpoints.dt

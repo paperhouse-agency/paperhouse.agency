@@ -165,9 +165,9 @@ Add webhook endpoints to automatically sync contact submissions with your CRM sy
 Uses both Mailchimp and Mandrill simultaneously:
 
 ```tsx
-import { combinedContactAction } from '~/integrations/mandrill'
-import { Form, Input, Textarea, SubmitButton } from '~/components/form'
-import { Turnstile } from '~/components/turnstile'
+import { combinedContactAction } from '@/integrations/mandrill'
+import { Form, Input, Textarea, SubmitButton } from '@/components/form'
+import { Turnstile } from '@/components/turnstile'
 
 function ContactForm() {
   return (
@@ -188,7 +188,7 @@ function ContactForm() {
 Uses only Mandrill for email relay:
 
 ```tsx
-import { mandrillContactAction } from '~/integrations/mandrill'
+import { mandrillContactAction } from '@/integrations/mandrill'
 
 function SimpleContactForm() {
   return (
@@ -204,7 +204,7 @@ function SimpleContactForm() {
 Uses only Mailchimp for audience building:
 
 ```tsx
-import { mailchimpContactAction } from '~/integrations/mailchimp'
+import { mailchimpContactAction } from '@/integrations/mailchimp'
 
 function MailchimpOnlyForm() {
   return (

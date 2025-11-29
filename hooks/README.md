@@ -17,7 +17,7 @@ Custom React hooks for common functionality.
 Detects device type and characteristics to adapt components for different devices.
 
 ```tsx
-import { useDeviceDetection } from '~/hooks/use-device-detection'
+import { useDeviceDetection } from '@/hooks/use-device-detection'
 
 function ResponsiveComponent() {
   const { isMobile, isTablet, isDesktop, isTouch } = useDeviceDetection()
@@ -43,7 +43,7 @@ function ResponsiveComponent() {
 Automatically tracks and reports Core Web Vitals metrics to analytics services (Google Analytics if available, and Vercel Analytics if installed).
 
 ```tsx
-import { usePerformance } from '~/hooks/use-performance'
+import { usePerformance } from '@/hooks/use-performance'
 
 // Add to your root layout or app component
 function App() {
@@ -57,7 +57,7 @@ function App() {
 Prefetches routes when elements become visible in the viewport.
 
 ```tsx
-import { usePrefetch } from '~/hooks/use-prefetch'
+import { usePrefetch } from '@/hooks/use-prefetch'
 
 function ProductCard({ href }: { href: string }) {
   const prefetchRef = usePrefetch(href)
@@ -76,7 +76,7 @@ Provides scroll-based animation and trigger functionality synchronized with GSAP
 
 ```tsx
 import { useRect } from 'hamo/use-rect'
-import { useScrollTrigger } from '~/hooks/use-scroll-trigger'
+import { useScrollTrigger } from '@/hooks/use-scroll-trigger'
 
 function ScrollAnimation() {
   const [setRectRef, rect] = useRect()
@@ -106,7 +106,7 @@ function ScrollAnimation() {
 Manages element transformations and animations with GSAP, providing a declarative way to handle complex animations.
 
 ```tsx
-import { TransformProvider } from '~/hooks/use-transform'
+import { TransformProvider } from '@/hooks/use-transform'
 
 function AnimatedElement() {
   const transformProviderRef = useRef<TransformRef>(null)
@@ -172,9 +172,9 @@ These hooks are designed to work seamlessly with:
 Import hooks directly from this directory:
 
 ```typescript
-import { useDeviceDetection } from '~/hooks/use-device-detection'
-import { usePerformance } from '~/hooks/use-performance'
-import { usePrefetch } from '~/hooks/use-prefetch'
-import { useScrollTrigger } from '~/hooks/use-scroll-trigger'
-import { useTransform } from '~/hooks/use-transform'
+import { useDeviceDetection } from '@/hooks/use-device-detection'
+import { usePerformance } from '@/hooks/use-performance'
+import { usePrefetch } from '@/hooks/use-prefetch'
+import { useScrollTrigger } from '@/hooks/use-scroll-trigger'
+import { useTransform } from '@/hooks/use-transform'
 ```

@@ -1,7 +1,7 @@
 'use server'
 
-import type { ErrorField, FormState } from '~/components/form/types'
-import { fetchWithTimeout } from '~/libs/fetch-with-timeout'
+import type { ErrorField, FormState } from '@/components/form/types'
+import { fetchWithTimeout } from '@/libs/fetch-with-timeout'
 import { validateFormWithTurnstile } from '../mailchimp/turnstile'
 
 export interface ContactData {

@@ -32,11 +32,11 @@ Reusable UI components for the application.
 ## Usage
 
 ```tsx
-import { Link } from '~/components/link'
-import { Form, Input, SubmitButton } from '~/components/form'
-import { Image } from '~/components/image'
-import { GSAPRuntime } from '~/components/gsap/runtime'
-import { Accordion } from '~/components/accordion'
+import { Link } from '@/components/link'
+import { Form, Input, SubmitButton } from '@/components/form'
+import { Image } from '@/components/image'
+import { GSAPRuntime } from '@/components/gsap/runtime'
+import { Accordion } from '@/components/accordion'
 
 // Link automatically detects external URLs
 <Link href="/about">Internal</Link>
@@ -51,8 +51,8 @@ import { Accordion } from '~/components/accordion'
 
 ## Best Practices
 
-- **Images**: Always use `~/components/image`, never `next/image`
-- **Links**: Use `~/components/link` for smart prefetching
+- **Images**: Always use `@/components/image`, never `next/image`
+- **Links**: Use `@/components/link` for smart prefetching
 - **GSAP**: Add `<GSAPRuntime />` in layout for ScrollTrigger + Lenis
 - **Styling**: Use CSS modules (import as `s`) + Tailwind utilities
 

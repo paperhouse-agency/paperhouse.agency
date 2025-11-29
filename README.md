@@ -122,9 +122,9 @@ Supports any Next.js-compatible platform: Vercel, Netlify, AWS Amplify, Google C
 ## Important Notes
 
 **Images & Links**
-- ✅ Always use `~/components/link` (auto-detects external, smart prefetch)
-- ✅ Always use `~/components/image` for DOM (never `next/image`)
-- ✅ Use `~/webgl/components/image` in WebGL contexts
+- ✅ Always use `@/components/link` (auto-detects external, smart prefetch)
+- ✅ Always use `@/components/image` for DOM (never `next/image`)
+- ✅ Use `@/webgl/components/image` in WebGL contexts
 
 **GSAP & Animation**
 - Add `<GSAPRuntime />` in `app/layout.tsx` for ScrollTrigger + Lenis
