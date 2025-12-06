@@ -18,9 +18,4 @@ const rootcss = [banner, root]
 await Bun.write('./styles/css/tailwind.css', tailwindcss.join('\n\n'))
 await Bun.write('./styles/css/root.css', rootcss.join('\n\n'))
 
-console.log(
-  Bun.color('green', 'ansi'),
-  '✓',
-  Bun.color('black', 'ansi'),
-  'Style config generated successfully'
-)
+console.log('\x1b[32m✓\x1b[0m Style config generated successfully')
