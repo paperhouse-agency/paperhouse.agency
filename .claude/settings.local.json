@@ -9,7 +9,8 @@
       "Bash(timeout 20 bun run dev:*)",
       "Bash(chmod:*)",
       "Bash(/Users/xianmalik/gh/paperhouse.agency/convert-imports.sh)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

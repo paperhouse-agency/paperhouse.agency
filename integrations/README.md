@@ -6,7 +6,6 @@ This directory contains integrations with external services and APIs used throug
 
 - `hubspot/` - HubSpot forms and marketing ([Documentation](hubspot/README.md))
 - `mailchimp/` - Email marketing ([Documentation](mailchimp/README.md))
-- `mandrill/` - Transactional emails ([Documentation](mandrill/README.md))
 - `sanity/` - Headless CMS ([Documentation](sanity/README.md))
 - `check-integration.ts` - Integration detection utilities
 
@@ -48,22 +47,6 @@ import { mailchimpSubscriptionAction } from '@/integrations/mailchimp/action'
 </Form>
 ```
 
-## Mandrill Integration
-
-Transactional emails via Mandrill. [Full Documentation →](mandrill/README.md)
-
-**Quick Example:**
-```tsx
-import { combinedContactAction } from '@/integrations/mandrill/action'
-
-<Form action={combinedContactAction}>
-  <Input name="name" required />
-  <Input name="email" type="email" required />
-  <Input name="subject" required />
-  <Textarea name="message" required />
-  <SubmitButton>Send</SubmitButton>
-</Form>
-```
 
 ## Environment Variables
 
@@ -82,11 +65,6 @@ SANITY_API_WRITE_TOKEN="your-write-token"
 MAILCHIMP_API_KEY=your-api-key
 MAILCHIMP_SERVER_PREFIX=us1
 MAILCHIMP_AUDIENCE_ID=your-audience-id
-
-# Mandrill
-MANDRILL_API_KEY=your-api-key
-MANDRILL_FROM_EMAIL=noreply@example.com
-MANDRILL_TO_EMAIL=contact@example.com
 
 # Cloudflare Turnstile (optional, for bot protection)
 NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY=your-site-key
@@ -146,7 +124,6 @@ export default function Page() {
 - `isSanityConfigured()`
 - `isHubSpotConfigured()`
 - `isMailchimpConfigured()`
-- `isMandrillConfigured()`
 - `isAnalyticsConfigured()`
 - `isTurnstileConfigured()`
 
@@ -187,13 +164,6 @@ bun remove @hubspot/api-client
 rm -rf integrations/mailchimp
 ```
 
-#### 4. Mandrill
-
-```bash
-# Remove directory
-rm -rf integrations/mandrill
-```
-
 #### 5. Google Analytics
 
 ```bash
@@ -231,9 +201,8 @@ Typical bundle size reductions when removing integrations:
 | Sanity | ~150-200KB (includes Studio, visual editing) |
 | HubSpot | ~30-50KB (API client) |
 | Mailchimp | ~10-20KB |
-| Mandrill | ~10-20KB |
 
-**Total potential savings**: 250-360KB+ depending on which integrations you remove.
+**Total potential savings**: 230-320KB+ depending on which integrations you remove.
 
 ### Programmatic Usage
 

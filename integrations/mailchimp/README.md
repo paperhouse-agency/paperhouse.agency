@@ -2,8 +2,6 @@
 
 This integration provides contact form submission and newsletter subscription functionality using Mailchimp's Marketing API with **invisible Cloudflare Turnstile** spam protection.
 
-> **💡 Note**: For contact forms, we recommend using the **[Combined Contact Solution](../mandrill/README.md)** that uses both Mailchimp (audience building) and Mandrill (email notifications) for optimal results.
-
 ## Features
 
 - **Contact Form Integration**: Automatically adds contact form submissions to your Mailchimp audience with relevant tags and notes

@@ -79,26 +79,6 @@ const ENV_VARIABLES: EnvValidation[] = [
     integration: 'Mailchimp',
   },
 
-  // Mandrill
-  {
-    name: 'MANDRILL_API_KEY',
-    required: false,
-    description: 'Mandrill API key',
-    integration: 'Mandrill',
-  },
-  {
-    name: 'MANDRILL_FROM_EMAIL',
-    required: false,
-    description: 'Mandrill sender email address',
-    integration: 'Mandrill',
-  },
-  {
-    name: 'MANDRILL_TO_EMAIL',
-    required: false,
-    description: 'Mandrill recipient email address',
-    integration: 'Mandrill',
-  },
-
   // Cloudflare Turnstile
   {
     name: 'NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY',

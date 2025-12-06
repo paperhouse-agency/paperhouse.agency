@@ -50,14 +50,6 @@ export function isMailchimpConfigured(): boolean {
 }
 
 /**
- * Check if Mandrill is configured
- * Requires: MANDRILL_API_KEY
- */
-export function isMandrillConfigured(): boolean {
-  return Boolean(process.env.MANDRILL_API_KEY)
-}
-
-/**
  * Check if Google Analytics is configured
  * Requires: NEXT_PUBLIC_GOOGLE_ANALYTICS or NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID
  */
@@ -88,7 +80,6 @@ export function getConfiguredIntegrations(): string[] {
   if (isSanityConfigured()) integrations.push('Sanity')
   if (isHubSpotConfigured()) integrations.push('HubSpot')
   if (isMailchimpConfigured()) integrations.push('Mailchimp')
-  if (isMandrillConfigured()) integrations.push('Mandrill')
   if (isTurnstileConfigured()) integrations.push('Turnstile')
 
   return integrations
@@ -103,7 +94,6 @@ export function getUnconfiguredIntegrations(): string[] {
   if (!isSanityConfigured()) integrations.push('Sanity')
   if (!isHubSpotConfigured()) integrations.push('HubSpot')
   if (!isMailchimpConfigured()) integrations.push('Mailchimp')
-  if (!isMandrillConfigured()) integrations.push('Mandrill')
   if (!isTurnstileConfigured()) integrations.push('Turnstile')
 
   return integrations

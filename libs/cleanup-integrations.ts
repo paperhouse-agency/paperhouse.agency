@@ -29,11 +29,6 @@ export const REMOVAL_GUIDE: Record<string, RemovalGuide> = {
     pages: [],
     notes: 'Remove Mailchimp-related form handlers',
   },
-  Mandrill: {
-    dirs: ['integrations/mandrill'],
-    pages: [],
-    notes: 'Remove Mandrill-related form handlers',
-  },
   Turnstile: {
     dirs: [],
     pages: [],
