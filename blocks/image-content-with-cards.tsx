@@ -44,7 +44,7 @@ export function ImageContentWithCards({
   image,
 }: ImageContentWithCardsProps) {
   return (
-    <section className="py-15 bg-bluishgray">
+    <section className="py-15 px-5 bg-bluishgray">
       <div className="wrapper mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-15 items-center">
           {/* Left side - Image (hidden on mobile) */}

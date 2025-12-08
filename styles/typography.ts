@@ -75,7 +75,7 @@ const typography: TypeStyles = {
     'font-family': `var(${fonts.body})`,
     'font-style': 'normal',
     'font-weight': 400,
-    'line-height': '100%',
+    'line-height': '125%',
     'letter-spacing': '0em',
     'font-size': 12,
   },

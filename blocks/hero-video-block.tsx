@@ -8,7 +8,7 @@ export function HeroVideoBlock() {
   const [isPlaying, setIsPlaying] = useState(false)
 
   return (
-    <div className="wrapper mx-auto py-24">
+    <div className="wrapper mx-auto py-24 px-5">
       <div className="grid grid-cols-2">
         <ContentWithButton
           headingType="h1"

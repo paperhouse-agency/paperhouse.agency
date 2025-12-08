@@ -78,7 +78,7 @@ export function ContentWithButton({
         headingType,
         {
           className: cn(
-            'mb-6',
+            'mt-3',
             preheadingContent ? 'order-2' : 'order-1',
             headingClassName || 'heading-2'
           ),
@@ -91,7 +91,7 @@ export function ContentWithButton({
         createElement(
           preheadingType,
           {
-            className: 'mono-wide text-primary uppercase order-1 mb-3',
+            className: 'mono-wide text-primary uppercase order-1',
           },
           preheadingContent
         )}
@@ -100,7 +100,7 @@ export function ContentWithButton({
       {bodyContent && (
         <p
           className={cn(
-            'body-large text-text/60 pb-6',
+            'body-large text-text/60 mt-6 pb-6',
             preheadingContent ? 'order-3' : 'order-2',
             bodyClassName
           )}
@@ -111,12 +111,7 @@ export function ContentWithButton({
 
       {/* Buttons ordered last */}
       {buttons && buttons.length > 0 && (
-        <div
-          className={cn(
-            'flex items-center justify-start gap-5',
-            preheadingContent ? 'order-4' : 'order-3'
-          )}
-        >
+        <div className={cn('flex items-center justify-start gap-5 order-last')}>
           {buttons.map((button, buttonIndex) => (
             <Button
               key={`button-${buttonIndex}-${button.label}`}

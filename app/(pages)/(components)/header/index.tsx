@@ -1,8 +1,8 @@
 'use client'
 
+import { Navigation } from '@/app/(pages)/(components)/navigation'
 import { Button } from '@/components/button'
 import { Image } from '@/components/image'
-import { Navigation } from '@/app/(pages)/(components)/navigation'
 
 export function Header() {
   return (

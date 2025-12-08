@@ -4,8 +4,8 @@ import type { ComponentProps } from 'react'
 import type { ThemeName } from '@/styles/config'
 import { Canvas } from '@/webgl/components/canvas'
 import { Footer } from '../footer'
-import { Lenis } from '../lenis'
 import { Header } from '../header'
+import { Lenis } from '../lenis'
 import { Theme } from '../theme'
 
 interface WrapperProps extends React.HTMLAttributes<HTMLDivElement> {
