@@ -5,7 +5,7 @@ import type { ThemeName } from '@/styles/config'
 import { Canvas } from '@/webgl/components/canvas'
 import { Footer } from '../footer'
 import { Lenis } from '../lenis'
-import { Navigation } from '../navigation'
+import { Header } from '../header'
 import { Theme } from '../theme'
 
 interface WrapperProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,7 +25,7 @@ export function Wrapper({
   return (
     <Theme theme={theme} global>
       {webgl && <Canvas root {...(typeof webgl === 'object' && webgl)} />}
-      <Navigation />
+      <Header />
       <main className={cn('relative flex flex-col grow', className)} {...props}>
         {children}
       </main>

@@ -5,33 +5,23 @@ import { usePathname } from 'next/navigation'
 import { Link } from '@/components/link'
 
 const LINKS = [
-  { href: '/', label: 'home' },
-  { href: '/r3f', label: 'r3f' },
-  { href: '/sanity', label: 'sanity' },
-  { href: '/hubspot', label: 'hubspot' },
+  { href: '/', label: 'HOME' },
+  { href: '/about', label: 'ABOUT US' },
+  { href: '/services', label: 'SERVICES' },
+  { href: '/blog', label: 'BLOG' },
 ]
 
 export function Navigation() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed top-safe left-safe z-2 flex flex-col uppercase font-mono">
-      <div className="inline-flex">
-        <h1>PaperHouse</h1>
-        <span>{pathname}</span>
-      </div>
-
-      <ul className="pl-6">
+    <nav className="flex items-center">
+      <ul className="flex items-center gap-8 mono">
         {LINKS.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
-              className={cn(
-                'link',
-                'relative',
-                pathname === link.href &&
-                  "before:content-['■'] before:absolute before:left-4"
-              )}
+              className={cn('link', pathname === link.href && 'underline')}
             >
               {link.label}
             </Link>

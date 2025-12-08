@@ -10,7 +10,8 @@
       "Bash(chmod:*)",
       "Bash(/Users/xianmalik/gh/paperhouse.agency/convert-imports.sh)",
       "Bash(find:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

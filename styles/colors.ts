@@ -17,7 +17,7 @@ const themes = {
   light: {
     offwhite: '#f9f7f4',
     bluishgray: '#e8ebef',
-    text: '#000000',
+    text: '#1A1A1A',
   },
   dark: {
     offwhite: '#000000',
