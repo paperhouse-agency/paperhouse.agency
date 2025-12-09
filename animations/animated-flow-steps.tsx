@@ -39,16 +39,38 @@ export function AnimatedFlowSteps({
       // Set initial states - all cards hidden
       gsap.set(cardsRef.current, {
         opacity: 0,
-        x: 50,
       })
 
       gsap.set(lineRef.current, {
-        scaleX: 0.2,
+        scaleX: 0,
         transformOrigin: 'left center',
       })
 
+      // Calculate actual dimensions
+      const gridContainer = cardsRef.current[0]?.parentElement?.parentElement
+      if (!gridContainer) return
+
+      const containerWidth = gridContainer.offsetWidth
+      const gapSize = 20 // 20px gap between cards
+      const totalGaps = (steps.length - 1) * gapSize // 3 gaps for 4 cards = 60px
+      const totalCardsWidth = containerWidth - totalGaps
+      const cardWidth = totalCardsWidth / steps.length
+
+      // Calculate scale values for each card position
+      const getCardEndScale = (index: number) => {
+        // Card width * number of cards + gaps before this card
+        const width = cardWidth * (index + 1) + gapSize * index
+        return width / containerWidth
+      }
+
+      const getGapEndScale = (index: number) => {
+        // Add one gap width to the card end position
+        const width = cardWidth * (index + 1) + gapSize * (index + 1)
+        return width / containerWidth
+      }
+
       // Create master timeline with pinning
-      // Each step gets 150% viewport height of scroll distance
+      // Each step gets 120% viewport height of scroll distance
       const scrollDistance = steps.length * 120
 
       const tl = gsap.timeline({
@@ -72,44 +94,58 @@ export function AnimatedFlowSteps({
         },
       })
 
-      // Animate first card immediately when section is pinned
+      // Animate first card
+      tl.to(cardsRef.current[0], {
+        opacity: 1,
+        duration: 0.4,
+        ease: 'power2.out',
+      })
+
+      // Line jumps to first card end, then animates gap
       tl.to(
-        cardsRef.current[0],
+        lineRef.current,
         {
-          opacity: 1,
-          x: 0,
-          duration: 0.5,
-          ease: 'power2.out',
+          scaleX: getCardEndScale(0),
+          duration: 0.05,
+          ease: 'none',
         },
-        0
+        '>'
       )
 
-      // Animate remaining cards with staggered timing
+      tl.to(lineRef.current, {
+        scaleX: getGapEndScale(0),
+        duration: 0.15,
+        ease: 'power1.inOut',
+      })
+
+      // Animate remaining cards
       for (let i = 1; i < steps.length; i++) {
-        const startProgress = i / steps.length
-
         // Fade in card
-        tl.to(
-          cardsRef.current[i],
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.3,
-            ease: 'power2.out',
-          },
-          startProgress
-        )
+        tl.to(cardsRef.current[i], {
+          opacity: 1,
+          duration: 0.4,
+          ease: 'power2.out',
+        })
 
-        // Grow line by 20% (0.2 base + 0.2 per card)
+        // Line instantly jumps to this card's end
         tl.to(
           lineRef.current,
           {
-            scaleX: 0.2 + (i + 1) * 0.2,
-            duration: 0.3,
-            ease: 'power2.inOut',
+            scaleX: getCardEndScale(i),
+            duration: 0.05,
+            ease: 'none',
           },
-          startProgress
+          '>'
         )
+
+        // Then animate the gap (only if not the last card)
+        if (i < steps.length - 1) {
+          tl.to(lineRef.current, {
+            scaleX: getGapEndScale(i),
+            duration: 0.15,
+            ease: 'power1.inOut',
+          })
+        }
       }
     },
     { scope: sectionRef, dependencies: [steps.length] }
