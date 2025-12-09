@@ -1,9 +1,9 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
+import { AnimatedCardsGrid } from '@/animations/animated-cards-grid'
 import { ContentWithButton } from '@/components/content-with-button'
 import { Image } from '@/components/image'
-import { AnimatedCardsGrid } from './animated-cards-grid'
 
 export interface ButtonData {
   label: string
