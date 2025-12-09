@@ -1,7 +1,9 @@
+'use client'
+
 import type { LucideIcon } from 'lucide-react'
 import { ContentWithButton } from '@/components/content-with-button'
-import { IconContentCard } from '@/components/icon-content-card'
 import { Image } from '@/components/image'
+import { AnimatedCardsGrid } from './animated-cards-grid'
 
 export interface ButtonData {
   label: string
@@ -67,18 +69,8 @@ export function ImageContentWithCards({
               buttons={buttons}
             />
 
-            {/* Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {cards.map((card) => (
-                <IconContentCard
-                  key={card.heading}
-                  icon={card.icon}
-                  heading={card.heading}
-                  content={card.content}
-                  alternate={card.alternate}
-                />
-              ))}
-            </div>
+            {/* Animated Cards Grid */}
+            <AnimatedCardsGrid cards={cards} />
           </div>
         </div>
       </div>
