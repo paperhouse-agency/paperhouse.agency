@@ -58,6 +58,7 @@ export function FlowStepsBlock({
                   heading={`${step.number}. ${step.heading}`}
                   content={step.content}
                   alternate={step.alternate}
+                  headingClassName="mt-3.5"
                 />
               </div>
             ))}

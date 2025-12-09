@@ -79,7 +79,7 @@ export function ContentWithButton({
         {
           className: cn(
             'mt-3',
-            preheadingContent ? 'order-2' : 'order-1',
+            preheadingContent ? 'order-2' : 'order-first',
             headingClassName || 'heading-2'
           ),
         },
@@ -91,7 +91,7 @@ export function ContentWithButton({
         createElement(
           preheadingType,
           {
-            className: 'mono-wide text-primary uppercase order-1',
+            className: 'mono-wide text-primary uppercase order-first',
           },
           preheadingContent
         )}

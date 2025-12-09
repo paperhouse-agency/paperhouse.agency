@@ -25,7 +25,7 @@ export function HeroVideoBlock() {
             },
           ]}
         />
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-end">
           <div className="relative w-[450px] h-[300px] rounded-[20px] overflow-hidden">
             {!isPlaying ? (
               <button

@@ -5,6 +5,7 @@ interface IconContentCardProps {
   heading: string
   content: string
   alternate?: boolean
+  headingClassName?: string
 }
 
 export function IconContentCard({
@@ -12,6 +13,7 @@ export function IconContentCard({
   heading,
   content,
   alternate = false,
+  headingClassName,
 }: IconContentCardProps) {
   return (
     <div
@@ -23,14 +25,14 @@ export function IconContentCard({
         <Icon
           size={24}
           className={`transition-colors duration-300 ${
-            alternate ? 'text-secondary' : 'text-text'
+            alternate ? 'text-secondary' : 'text-text/60'
           }`}
         />
       </div>
       <h5
         className={`heading-5 transition-colors duration-300 ${
           alternate ? 'text-offwhite' : 'text-text'
-        }`}
+        } ${headingClassName || ''}`}
       >
         {heading}
       </h5>

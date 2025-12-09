@@ -32,19 +32,16 @@ export default function Home() {
             icon: Lightbulb,
             heading: 'Innovation',
             content: 'Breaking boundaries with creative solutions.',
-            alternate: true,
           },
           {
             icon: Crosshair,
             heading: 'Precision',
             content: 'Pixel-perfect designs and flawlessly scalable code.',
-            alternate: true,
           },
           {
             icon: Handshake,
             heading: 'Partnership',
             content: 'Your vision, our execution—concept to launch.',
-            alternate: true,
           },
         ]}
         image={{
