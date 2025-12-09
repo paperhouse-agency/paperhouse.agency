@@ -38,6 +38,42 @@ import { AnimatedCardsGrid } from '@/animations/animated-cards-grid'
 **Props:**
 - `cards`: Array of `CardData` objects (icon, heading, content, alternate)
 
+---
+
+### AnimatedFlowSteps
+**File:** `animated-flow-steps.tsx`
+
+Progressive scroll-based reveal of flow step cards with animated connecting line.
+
+**Features:**
+- Full-screen pinned section during scroll
+- First card visible on entry with 20% line width
+- Subsequent cards fade in from right to left as you scroll
+- Line grows by 25% for each card (20% → 45% → 70% → 95% → 120%)
+- Active card dynamically receives alternate styling
+- Section unpins after all cards are revealed
+
+**Usage:**
+```tsx
+import { AnimatedFlowSteps } from '@/animations/animated-flow-steps'
+
+<AnimatedFlowSteps
+  steps={[
+    { icon: MyIcon, number: '01', heading: 'Step 1', content: 'Description' }
+  ]}
+/>
+```
+
+**Props:**
+- `steps`: Array of `FlowStepCard` objects (icon, number, heading, content, alternate)
+
+**Technical Details:**
+- Uses ScrollTrigger with `pin: true`, `pinSpacing: true`, and `scrub: 1`
+- Duration: `steps.length * 150%` of scroll distance (150% viewport height per card)
+- Active index updates dynamically based on scroll progress
+- Only the currently active card receives `alternate={true}` styling
+- Smooth scroll integration via Lenis
+
 ## Creating New Animation Modules
 
 1. Create a new file in this directory

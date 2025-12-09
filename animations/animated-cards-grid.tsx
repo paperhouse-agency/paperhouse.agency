@@ -35,7 +35,7 @@ export function AnimatedCardsGrid({ cards }: AnimatedCardsGridProps) {
             start: 'top 80%',
             end: 'top 20%',
             toggleActions: 'play none none reverse',
-            markers: process.env.NODE_ENV === 'development',
+            // markers: process.env.NODE_ENV === 'development',
           },
         })
         .to(cardsRef.current, {
