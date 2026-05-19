@@ -1,5 +1,12 @@
 import type { Metadata } from 'next'
 
+/**
+ * Metadata Generation Utilities
+ *
+ * Helpers to generate consistent metadata across pages,
+ * reducing duplication and ensuring SEO best practices.
+ */
+
 interface GenerateMetadataOptions {
   title?: string
   description?: string
@@ -22,6 +29,24 @@ interface GenerateMetadataOptions {
 const APP_BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL ?? 'https://localhost:3000'
 
+/**
+ * Generate complete metadata object for pages
+ *
+ * @example
+ * ```ts
+ * export async function generateMetadata({ params }) {
+ *   const page = await fetchPage(params.slug)
+ *
+ *   return generatePageMetadata({
+ *     title: page.metadata?.title || page.title,
+ *     description: page.metadata?.description,
+ *     image: { url: page.metadata?.image?.asset?.url },
+ *     url: `/page/${params.slug}`,
+ *     noIndex: page.metadata?.noIndex,
+ *   })
+ * }
+ * ```
+ */
 export function generatePageMetadata(
   options: GenerateMetadataOptions
 ): Metadata {
@@ -98,4 +123,62 @@ export function generatePageMetadata(
   }
 
   return metadata
+}
+
+/**
+ * Generate metadata specifically for Sanity CMS pages
+ *
+ * @example
+ * ```ts
+ * export async function generateMetadata({ params }) {
+ *   const { data } = await sanityFetch({ query: pageQuery, params })
+ *
+ *   return generateSanityMetadata({
+ *     document: data,
+ *     url: `/sanity/${params.slug}`,
+ *   })
+ * }
+ * ```
+ */
+export function generateSanityMetadata(options: {
+  document: {
+    title?: string
+    metadata?: {
+      title?: string
+      description?: string
+      keywords?: string[]
+      image?: { asset?: { url?: string } }
+      noIndex?: boolean
+    }
+    _updatedAt?: string
+    publishedAt?: string
+  }
+  url?: string
+  type?: 'website' | 'article'
+}): Metadata {
+  const { document, url, type = 'website' } = options
+  const metadata = document.metadata
+
+  if (!metadata) {
+    // Fallback to basic metadata if none provided
+    return generatePageMetadata({
+      title: document.title,
+      url,
+      type,
+    })
+  }
+
+  return generatePageMetadata({
+    title: metadata.title || document.title,
+    description: metadata.description,
+    keywords: metadata.keywords,
+    image: {
+      url: metadata.image?.asset?.url,
+    },
+    url,
+    noIndex: metadata.noIndex,
+    type,
+    publishedTime: document.publishedAt,
+    modifiedTime: document._updatedAt,
+  })
 }
