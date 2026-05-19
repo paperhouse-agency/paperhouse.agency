@@ -1,18 +1,14 @@
 import type { Metadata, Viewport } from 'next'
-import { cookies, draftMode } from 'next/headers'
-import { VisualEditing } from 'next-sanity/visual-editing'
+import { cookies } from 'next/headers'
 import type { PropsWithChildren } from 'react'
 import { ReactTempus } from 'tempus/react'
 import { MaintenanceScreen } from '@/components/maintenance'
 import { RealViewport } from '@/components/real-viewport'
-import { DisableDraftMode } from '@/integrations/sanity/components/disable-draft-mode'
 import AppData from '@/package.json'
 import { themes } from '@/styles/colors'
 import '@/styles/css/index.css'
 
 import { GSAPRuntime } from '@/components/gsap/runtime'
-import { isSanityConfigured } from '@/integrations/check-integration'
-import { SanityLive } from '@/integrations/sanity/live'
 import { OrchestraTools } from '@/orchestra'
 import { fontsVariable } from '@/styles/fonts'
 
@@ -84,9 +80,6 @@ export const viewport: Viewport = {
 }
 
 export default async function Layout({ children }: PropsWithChildren) {
-  const { isEnabled: isDraftMode } = await draftMode()
-  const sanityConfigured = isSanityConfigured()
-
   // Maintenance mode — checked server-side, no client exposure
   const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true'
   const bypassSecret = process.env.MAINTENANCE_BYPASS_SECRET
@@ -127,17 +120,8 @@ export default async function Layout({ children }: PropsWithChildren) {
         {/* Animation framework */}
         <GSAPRuntime />
 
-        {/* RAF management - lightweight, but don't patch in draft mode to avoid conflicts */}
-        <ReactTempus patch={!isDraftMode} />
-
-        {/* Visual editing - only in draft mode and if Sanity is configured */}
-        {sanityConfigured && isDraftMode && (
-          <>
-            <VisualEditing />
-            <DisableDraftMode />
-            <SanityLive />
-          </>
-        )}
+        {/* RAF management */}
+        <ReactTempus patch />
       </body>
     </html>
   )

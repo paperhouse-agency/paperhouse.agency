@@ -14,11 +14,6 @@ interface RemovalGuide {
 }
 
 export const REMOVAL_GUIDE: Record<string, RemovalGuide> = {
-  Sanity: {
-    dirs: ['integrations/sanity', 'app/studio'],
-    pages: ['app/(pages)/sanity'],
-    notes: 'Also remove Sanity imports from app/layout.tsx',
-  },
   HubSpot: {
     dirs: ['integrations/hubspot'],
     pages: ['app/(pages)/hubspot'],

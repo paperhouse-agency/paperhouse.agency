@@ -98,10 +98,6 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'assets.darkroom.engineering',
       },
-      {
-        protocol: 'https',
-        hostname: 'cdn.sanity.io',
-      },
     ],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
     qualities: [90],
