@@ -13,6 +13,7 @@ import { FlowStepsBlock } from '@/blocks/flow-steps-block'
 import { HeroVideoBlock } from '@/blocks/hero-video-block'
 import { ImageContentWithCards } from '@/blocks/image-content-with-cards'
 import { SolutionsBlock } from '@/blocks/solutions-block'
+import { RecentWorksBlock } from '@/blocks/recent-works-block'
 import { CoreValuesBlock } from '@/blocks/core-values-block'
 import { Wrapper } from '../(components)/wrapper'
 
@@ -128,6 +129,43 @@ export default function Home() {
             heading: 'Launch & Evolve',
             content:
               'Your product enters the world with confidence. We manage deployment, hosting, optimization, and ongoing updates. After launch, we monitor usage, adapt quickly, and refine the experience based on real data. Like releasing a finely folded paper plane, this phase ensures growth, and continuous improvement.',
+          },
+        ]}
+      />
+      <RecentWorksBlock
+        preheadingContent="KNOWLEDGE BASE"
+        headingContent="Some of our recent <span>Articles!</span>"
+        bodyContent="Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide."
+        articles={[
+          {
+            image: {
+              src: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=440&h=293&fit=crop',
+              alt: 'React performance optimization',
+            },
+            heading: 'React Performance Optimization: 5 Patterns That Actually Matter',
+            content:
+              'Not all performance tips are created equal. We break down the React optimization patterns that deliver real-world improvements—from code splitting strategies to state management decisions that scale with your application.',
+            ctaUrl: '/blog/react-performance',
+          },
+          {
+            image: {
+              src: 'https://images.unsplash.com/photo-1586717799252-bd134ad00e26?w=440&h=293&fit=crop',
+              alt: 'UX and design thinking',
+            },
+            heading: 'The Hidden Cost of Bad UX: Why Design-First Development Wins',
+            content:
+              "Poor user experience doesn't just frustrate customers—it bleeds revenue. Learn how integrating design thinking into your development process reduces technical debt, speeds up iterations, and creates products users actually love.",
+            ctaUrl: '/blog/design-first-development',
+          },
+          {
+            image: {
+              src: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?w=440&h=293&fit=crop',
+              alt: 'Figma to production workflow',
+            },
+            heading: 'From Figma to Production: Bridging the Designer-Developer Gap',
+            content:
+              "Design handoffs shouldn't feel like a game of telephone. Discover the workflows, tools, and communication patterns that turn design systems into living, breathing codebases without losing the vision along the way.",
+            ctaUrl: '/blog/figma-to-production',
           },
         ]}
       />

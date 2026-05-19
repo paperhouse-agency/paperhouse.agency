@@ -39,7 +39,7 @@ export function SolutionsBlock({ headingContent, bodyContent, cards }: Solutions
     <section className="py-15 px-5">
       <div className="wrapper mx-auto">
         <div className="flex flex-col items-center text-center gap-2.5 mb-15">
-          <h2 className="heading-2">{parseHeading(headingContent)}</h2>
+          <h2 className="heading-2 text-text">{parseHeading(headingContent)}</h2>
           {bodyContent && (
             <p className="body-large text-text/60 max-w-[640px]">{bodyContent}</p>
           )}
@@ -64,7 +64,7 @@ export function SolutionsBlock({ headingContent, bodyContent, cards }: Solutions
                 {card.ctaLabel}
               </Link>
 
-              <div className="relative w-full aspect-[413/260] rounded overflow-hidden mt-auto">
+              <div className="relative w-full aspect-[413/260] rounded-lg overflow-hidden mt-auto">
                 <Image src={card.image.src} alt={card.image.alt} fill className="object-cover" />
               </div>
             </div>
