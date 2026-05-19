@@ -12,6 +12,7 @@ import {
 import { FlowStepsBlock } from '@/blocks/flow-steps-block'
 import { HeroVideoBlock } from '@/blocks/hero-video-block'
 import { ImageContentWithCards } from '@/blocks/image-content-with-cards'
+import { SolutionsBlock } from '@/blocks/solutions-block'
 import { CoreValuesBlock } from '@/blocks/core-values-block'
 import { Wrapper } from '../(components)/wrapper'
 
@@ -51,6 +52,48 @@ export default function Home() {
           src: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=690&h=750&fit=crop',
           alt: 'Digital growth and business strategy',
         }}
+      />
+      <SolutionsBlock
+        headingContent="Three steps for your <span>Digital Growth!</span>"
+        bodyContent="Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide."
+        cards={[
+          {
+            label: 'DESIGN',
+            heading: 'Brand Identity',
+            content:
+              'Crafting visual systems and brand experiences that resonate with your audience and stand the test of time',
+            ctaLabel: 'See Design Process →',
+            ctaUrl: '/services/design',
+            image: {
+              src: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=413&h=260&fit=crop',
+              alt: 'Brand Identity design work',
+            },
+          },
+          {
+            label: 'DEVELOP',
+            heading: 'Digital Products',
+            content:
+              'Building scalable, high-performance applications with modern frameworks and clean, maintainable code',
+            ctaLabel: 'View Technologies →',
+            ctaUrl: '/services/develop',
+            image: {
+              src: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=413&h=260&fit=crop',
+              alt: 'Digital product development',
+            },
+          },
+          {
+            label: 'GROW',
+            heading: 'Strategic Launch',
+            content:
+              'From SEO optimization to analytics integration—ensuring your digital presence delivers real business impact',
+            ctaLabel: 'Explore Impact →',
+            ctaUrl: '/services/grow',
+            image: {
+              src: 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=413&h=260&fit=crop',
+              alt: 'Strategic growth and analytics',
+            },
+          },
+        ]}
       />
       <FlowStepsBlock
         preheadingContent="HOW IT WORKS"
