@@ -18,6 +18,20 @@ The rules are organized into 5 focused files (2,020 lines total):
 
 **These rules are automatically loaded via `.clauderc`** - always adhere to them when writing code.
 
+## Design System
+
+**`design.md` is the single source of truth for all UI/design decisions. ALWAYS read and follow it when writing any component, block, or style.**
+
+It covers:
+- Color tokens (never use raw hex — use `text-primary`, `bg-bluishgray`, etc.)
+- Typography classes (`heading-1` through `heading-6`, `body-large`, `body`, `body-small`, `mono-wide`)
+- Fonts: Bianco Serif (headings), IBM Plex Sans (body), PP Neue Montreal Mono (labels)
+- Spacing and layout conventions (`py-15 px-5`, `wrapper mx-auto`, `dt:` breakpoint only)
+- Button component API with all variant/color/size combinations
+- Card patterns, shadow, border radius standards
+- Responsive rules (mobile-first, `dt:` only — never `md:`, `lg:`, etc.)
+- Block authoring conventions
+
 ## Commands
 
 ### Development
