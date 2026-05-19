@@ -1,3 +1,4 @@
+import { writeFileSync } from 'node:fs'
 import * as config from '../config'
 import { generateRoot } from './generate-root'
 import { generateScale } from './generate-scale'
@@ -15,7 +16,7 @@ const banner = `/*
 const tailwindcss = [banner, tailwind, scale]
 const rootcss = [banner, root]
 
-await Bun.write('./styles/css/tailwind.css', tailwindcss.join('\n\n'))
-await Bun.write('./styles/css/root.css', rootcss.join('\n\n'))
+writeFileSync('./styles/css/tailwind.css', tailwindcss.join('\n\n'))
+writeFileSync('./styles/css/root.css', rootcss.join('\n\n'))
 
 console.log('\x1b[32m✓\x1b[0m Style config generated successfully')

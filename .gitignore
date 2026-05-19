@@ -40,6 +40,7 @@ yarn-error.log*
 .eslintcache
 
 .env*.local
+.env*.production
 
 .npmrc
 
