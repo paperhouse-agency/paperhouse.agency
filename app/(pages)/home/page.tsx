@@ -12,6 +12,7 @@ import {
 import { FlowStepsBlock } from '@/blocks/flow-steps-block'
 import { HeroVideoBlock } from '@/blocks/hero-video-block'
 import { ImageContentWithCards } from '@/blocks/image-content-with-cards'
+import { CoreValuesBlock } from '@/blocks/core-values-block'
 import { Wrapper } from '../(components)/wrapper'
 
 export default function Home() {
@@ -87,6 +88,7 @@ export default function Home() {
           },
         ]}
       />
+      <CoreValuesBlock />
       {/* <div className="block h-screen w-full" /> */}
     </Wrapper>
   )
