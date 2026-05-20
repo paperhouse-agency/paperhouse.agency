@@ -15,6 +15,8 @@ import { ImageContentWithCards } from '@/blocks/image-content-with-cards'
 import { SolutionsBlock } from '@/blocks/solutions-block'
 import { RecentWorksBlock } from '@/blocks/recent-works-block'
 import { CoreValuesBlock } from '@/blocks/core-values-block'
+import { ImpactMetricsBlock } from '@/blocks/impact-metrics-block'
+import { ContactUsBlock } from '@/blocks/contact-us-block'
 import { Wrapper } from '../(components)/wrapper'
 
 export default function Home() {
@@ -170,7 +172,34 @@ export default function Home() {
         ]}
       />
       <CoreValuesBlock />
-      {/* <div className="block h-screen w-full" /> */}
+      <ImpactMetricsBlock
+        metrics={{
+          large: {
+            value: '500+',
+            heading: 'Creative Works',
+            content: "We begin by uncovering insights that shape your product's direction.",
+          },
+          image1: {
+            src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop',
+            alt: 'Creative studio workspace',
+          },
+          medium: {
+            value: '95%',
+            heading: 'Client Satisfaction Rate',
+            content: "We begin by uncovering insights that shape your product's direction.",
+          },
+          small: {
+            value: '+20%',
+            heading: 'Average Revenue Growth',
+            content: "We begin by uncovering insights that shape your product's direction.",
+          },
+          image2: {
+            src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=300&fit=crop',
+            alt: 'Modern conference room',
+          },
+        }}
+      />
+      <ContactUsBlock />
     </Wrapper>
   )
 }
