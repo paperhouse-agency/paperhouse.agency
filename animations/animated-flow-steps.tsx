@@ -29,6 +29,8 @@ export function AnimatedFlowSteps({
 
   useGSAP(
     () => {
+      cardsRef.current = cardsRef.current.slice(0, steps.length)
+
       if (
         !(sectionRef.current && lineRef.current) ||
         cardsRef.current.length === 0

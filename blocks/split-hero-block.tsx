@@ -1,7 +1,7 @@
 'use client'
 
-import Image from 'next/image'
 import { useState } from 'react'
+import { Image } from '@/components/image'
 import { ContentWithButton } from '@/components/content-with-button'
 
 export function SplitHeroBlock() {
@@ -38,6 +38,7 @@ export function SplitHeroBlock() {
                   alt="Video poster"
                   width={450}
                   height={300}
+                  priority
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -54,6 +55,7 @@ export function SplitHeroBlock() {
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
+                loading="lazy"
                 className="w-full h-full"
               />
             )}

@@ -1,9 +1,14 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import type { LucideIcon } from 'lucide-react'
-import { AnimatedCardsGrid } from '@/animations/animated-cards-grid'
 import { ContentWithButton } from '@/components/content-with-button'
 import { Image } from '@/components/image'
+
+const AnimatedCardsGrid = dynamic(
+  () => import('@/animations/animated-cards-grid').then((m) => m.AnimatedCardsGrid),
+  { ssr: false },
+)
 
 export interface ButtonData {
   label: string
@@ -55,6 +60,7 @@ export function ImageContentCardsBlock({
               src={image.src}
               alt={image.alt}
               fill
+              priority
               className="object-cover"
             />
           </div>
