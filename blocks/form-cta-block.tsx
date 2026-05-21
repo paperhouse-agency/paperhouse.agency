@@ -3,17 +3,17 @@
 import { useState } from 'react'
 import { Button } from '@/components/button'
 
-export interface ContactUsBlockProps {
+export interface FormCtaBlockProps {
   headingLine1?: string
   headingLine2?: string
   bodyContent?: string
 }
 
-export function ContactUsBlock({
+export function FormCtaBlock({
   headingLine1 = "Have a project?",
   headingLine2 = "Let's",
   bodyContent = 'Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide.',
-}: ContactUsBlockProps) {
+}: FormCtaBlockProps) {
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

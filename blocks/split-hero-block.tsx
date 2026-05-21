@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { ContentWithButton } from '@/components/content-with-button'
 
-export function HeroVideoBlock() {
+export function SplitHeroBlock() {
   const [isPlaying, setIsPlaying] = useState(false)
 
   return (

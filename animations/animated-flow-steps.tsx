@@ -4,7 +4,7 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useRef } from 'react'
-import type { FlowStepCard } from '@/blocks/flow-steps-block'
+import type { NumberedStepCard } from '@/blocks/numbered-steps-block'
 import { ContentWithButton } from '@/components/content-with-button'
 import { IconContentCard } from '@/components/icon-content-card'
 
@@ -14,7 +14,7 @@ interface AnimatedFlowStepsProps {
   preheadingContent?: string
   headingContent: string
   bodyContent: string
-  steps: FlowStepCard[]
+  steps: NumberedStepCard[]
 }
 
 export function AnimatedFlowSteps({

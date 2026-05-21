@@ -1,7 +1,7 @@
 import { Link } from '@/components/link'
 import { Image } from '@/components/image'
 
-export interface SolutionCard {
+export interface FeatureCard {
   label: string
   heading: string
   content: string
@@ -13,10 +13,10 @@ export interface SolutionCard {
   }
 }
 
-export interface SolutionsBlockProps {
+export interface FeatureCardsBlockProps {
   headingContent: string
   bodyContent?: string
-  cards: SolutionCard[]
+  cards: FeatureCard[]
 }
 
 function parseHeading(content: string) {
@@ -34,7 +34,7 @@ function parseHeading(content: string) {
   })
 }
 
-export function SolutionsBlock({ headingContent, bodyContent, cards }: SolutionsBlockProps) {
+export function FeatureCardsBlock({ headingContent, bodyContent, cards }: FeatureCardsBlockProps) {
   return (
     <section className="py-15 px-5">
       <div className="wrapper mx-auto">

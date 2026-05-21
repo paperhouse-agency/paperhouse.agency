@@ -3,7 +3,7 @@
 import type { LucideIcon } from 'lucide-react'
 import { AnimatedFlowSteps } from '@/animations/animated-flow-steps'
 
-export interface FlowStepCard {
+export interface NumberedStepCard {
   icon: LucideIcon
   number: string
   heading: string
@@ -11,19 +11,19 @@ export interface FlowStepCard {
   alternate?: boolean
 }
 
-export interface FlowStepsBlockProps {
+export interface NumberedStepsBlockProps {
   preheadingContent?: string
   headingContent: string
   bodyContent: string
-  steps: FlowStepCard[]
+  steps: NumberedStepCard[]
 }
 
-export function FlowStepsBlock({
+export function NumberedStepsBlock({
   preheadingContent,
   headingContent,
   bodyContent,
   steps,
-}: FlowStepsBlockProps) {
+}: NumberedStepsBlockProps) {
   return (
     <AnimatedFlowSteps
       preheadingContent={preheadingContent}

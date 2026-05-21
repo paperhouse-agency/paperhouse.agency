@@ -4,7 +4,7 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useRef } from 'react'
-import type { CardData } from '@/blocks/image-content-with-cards'
+import type { CardData } from '@/blocks/image-content-cards-block'
 import { IconContentCard } from '@/components/icon-content-card'
 
 gsap.registerPlugin(ScrollTrigger)

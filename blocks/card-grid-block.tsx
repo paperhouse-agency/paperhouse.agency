@@ -1,7 +1,7 @@
 import { Button } from '@/components/button'
 import { Image } from '@/components/image'
 
-export interface RecentWorksArticle {
+export interface CardGridArticle {
   image: {
     src: string
     alt: string
@@ -11,11 +11,11 @@ export interface RecentWorksArticle {
   ctaUrl?: string
 }
 
-export interface RecentWorksBlockProps {
+export interface CardGridBlockProps {
   preheadingContent?: string
   headingContent: string
   bodyContent?: string
-  articles: RecentWorksArticle[]
+  articles: CardGridArticle[]
 }
 
 function parseHeading(content: string) {
@@ -33,12 +33,12 @@ function parseHeading(content: string) {
   })
 }
 
-export function RecentWorksBlock({
+export function CardGridBlock({
   preheadingContent,
   headingContent,
   bodyContent,
   articles,
-}: RecentWorksBlockProps) {
+}: CardGridBlockProps) {
   return (
     <section className="py-15 px-5">
       <div className="wrapper mx-auto">

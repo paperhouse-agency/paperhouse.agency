@@ -9,21 +9,21 @@ import {
   Search,
   Shuffle,
 } from 'lucide-react'
-import { FlowStepsBlock } from '@/blocks/flow-steps-block'
-import { HeroVideoBlock } from '@/blocks/hero-video-block'
-import { ImageContentWithCards } from '@/blocks/image-content-with-cards'
-import { SolutionsBlock } from '@/blocks/solutions-block'
-import { RecentWorksBlock } from '@/blocks/recent-works-block'
-import { CoreValuesBlock } from '@/blocks/core-values-block'
-import { ImpactMetricsBlock } from '@/blocks/impact-metrics-block'
-import { ContactUsBlock } from '@/blocks/contact-us-block'
+import { NumberedStepsBlock } from '@/blocks/numbered-steps-block'
+import { SplitHeroBlock } from '@/blocks/split-hero-block'
+import { ImageContentCardsBlock } from '@/blocks/image-content-cards-block'
+import { FeatureCardsBlock } from '@/blocks/feature-cards-block'
+import { CardGridBlock } from '@/blocks/card-grid-block'
+import { ImageTextSplitBlock } from '@/blocks/image-text-split-block'
+import { BentoStatsBlock } from '@/blocks/bento-stats-block'
+import { FormCtaBlock } from '@/blocks/form-cta-block'
 import { Wrapper } from '../(components)/wrapper'
 
 export default function Home() {
   return (
     <Wrapper lenis={{}}>
-      <HeroVideoBlock />
-      <ImageContentWithCards
+      <SplitHeroBlock />
+      <ImageContentCardsBlock
         preheadingContent="ABOUT PAPERHOUSE"
         headingType="h2"
         headingContent="Three steps for your <span>Digital Growth!</span>"
@@ -56,7 +56,7 @@ export default function Home() {
           alt: 'Digital growth and business strategy',
         }}
       />
-      <SolutionsBlock
+      <FeatureCardsBlock
         headingContent="Three steps for your <span>Digital Growth!</span>"
         bodyContent="Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide."
         cards={[
@@ -98,7 +98,7 @@ export default function Home() {
           },
         ]}
       />
-      <FlowStepsBlock
+      <NumberedStepsBlock
         preheadingContent="HOW IT WORKS"
         headingContent="Four phases to bring your \n<span>concept to launch</span>"
         bodyContent="From discovery and design to development and deployment. Precision, collaboration, and innovation at every phase. We transform your ideas through a proven process."
@@ -134,7 +134,7 @@ export default function Home() {
           },
         ]}
       />
-      <RecentWorksBlock
+      <CardGridBlock
         preheadingContent="KNOWLEDGE BASE"
         headingContent="Some of our recent <span>Articles!</span>"
         bodyContent="Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide."
@@ -171,8 +171,8 @@ export default function Home() {
           },
         ]}
       />
-      <CoreValuesBlock />
-      <ImpactMetricsBlock
+      <ImageTextSplitBlock />
+      <BentoStatsBlock
         metrics={{
           large: {
             value: '500+',
@@ -199,7 +199,7 @@ export default function Home() {
           },
         }}
       />
-      <ContactUsBlock />
+      <FormCtaBlock />
     </Wrapper>
   )
 }

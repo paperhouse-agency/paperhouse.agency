@@ -26,7 +26,7 @@ export interface ImageData {
   alt: string
 }
 
-export interface ImageContentWithCardsProps {
+export interface ImageContentCardsBlockProps {
   preheadingContent?: string
   headingType?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   headingContent: string
@@ -36,7 +36,7 @@ export interface ImageContentWithCardsProps {
   image: ImageData
 }
 
-export function ImageContentWithCards({
+export function ImageContentCardsBlock({
   preheadingContent,
   headingType = 'h2',
   headingContent,
@@ -44,7 +44,7 @@ export function ImageContentWithCards({
   buttons,
   cards,
   image,
-}: ImageContentWithCardsProps) {
+}: ImageContentCardsBlockProps) {
   return (
     <section className="py-15 px-5 bg-bluishgray">
       <div className="wrapper mx-auto">

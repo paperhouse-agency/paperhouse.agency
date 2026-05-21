@@ -11,7 +11,7 @@ export interface MetricImageCard {
   alt: string
 }
 
-export interface ImpactMetricsBlockProps {
+export interface BentoStatsBlockProps {
   preheadingContent?: string
   metrics: {
     large: MetricCard
@@ -22,10 +22,10 @@ export interface ImpactMetricsBlockProps {
   }
 }
 
-export function ImpactMetricsBlock({
+export function BentoStatsBlock({
   preheadingContent = 'OUR TRACK RECORD',
   metrics,
-}: ImpactMetricsBlockProps) {
+}: BentoStatsBlockProps) {
   return (
     <section className="py-15 px-5">
       <div className="wrapper mx-auto">

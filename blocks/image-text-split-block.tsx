@@ -3,7 +3,7 @@
 import { Button } from '@/components/button'
 import { Image } from '@/components/image'
 
-export function CoreValuesBlock() {
+export function ImageTextSplitBlock() {
   return (
     <section className="py-20 px-5 bg-[#F8F7F5]">
       <div className="wrapper mx-auto max-w-7xl">
