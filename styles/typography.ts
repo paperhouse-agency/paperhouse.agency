@@ -13,7 +13,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '120%',
     'letter-spacing': '0em',
-    'font-size': 58,
+    'font-size': { mobile: 32, desktop: 58 },
   },
   'heading-2': {
     'font-family': `var(${fonts.heading})`,
@@ -21,7 +21,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '120%',
     'letter-spacing': '0em',
-    'font-size': 44,
+    'font-size': { mobile: 26, desktop: 44 },
   },
   'heading-3': {
     'font-family': `var(${fonts.heading})`,
@@ -29,7 +29,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '120%',
     'letter-spacing': '0em',
-    'font-size': 32,
+    'font-size': { mobile: 22, desktop: 32 },
   },
   'heading-4': {
     'font-family': `var(${fonts.heading})`,
@@ -37,7 +37,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '120%',
     'letter-spacing': '0em',
-    'font-size': 24,
+    'font-size': { mobile: 18, desktop: 24 },
   },
   'heading-5': {
     'font-family': `var(${fonts.heading})`,
@@ -45,7 +45,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '120%',
     'letter-spacing': '0em',
-    'font-size': 18,
+    'font-size': { mobile: 15, desktop: 18 },
   },
   'heading-6': {
     'font-family': `var(${fonts.heading})`,
@@ -53,7 +53,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '120%',
     'letter-spacing': '0em',
-    'font-size': 16,
+    'font-size': { mobile: 14, desktop: 16 },
   },
   'body-large': {
     'font-family': `var(${fonts.body})`,
@@ -61,7 +61,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '130%',
     'letter-spacing': '0em',
-    'font-size': 20,
+    'font-size': { mobile: 17, desktop: 20 },
   },
   body: {
     'font-family': `var(${fonts.body})`,
@@ -69,7 +69,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '125%',
     'letter-spacing': '0em',
-    'font-size': 16,
+    'font-size': { mobile: 15, desktop: 16 },
   },
   'body-small': {
     'font-family': `var(${fonts.body})`,
@@ -85,7 +85,7 @@ const typography: TypeStyles = {
     'font-weight': 400,
     'line-height': '100%',
     'letter-spacing': '0em',
-    'font-size': 14,
+    'font-size': { mobile: 13, desktop: 14 },
   },
   'mono-wide': {
     'font-family': `var(${fonts.mono})`,
@@ -94,7 +94,7 @@ const typography: TypeStyles = {
     'line-height': '125%',
     'letter-spacing': '0.1em',
     'text-transform': 'uppercase',
-    'font-size': 16,
+    'font-size': { mobile: 13, desktop: 16 },
   },
 } as const
 
