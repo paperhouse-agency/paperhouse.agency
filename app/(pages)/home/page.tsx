@@ -18,6 +18,7 @@ import { ImageTextSplitBlock } from '@/blocks/image-text-split-block'
 import { BentoStatsBlock } from '@/blocks/bento-stats-block'
 import { FormCtaBlock } from '@/blocks/form-cta-block'
 import { PeopleGridBlock } from '@/blocks/people-grid-block'
+import { NewsletterBlock } from '@/blocks/newsletter-block'
 import { Wrapper } from '../(components)/wrapper'
 
 export default function Home() {
@@ -206,6 +207,7 @@ export default function Home() {
           },
         }}
       />
+      <NewsletterBlock />
       <PeopleGridBlock
         headingContent="Our Talented <span>Team Members!</span>"
         bodyContent="Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide."
