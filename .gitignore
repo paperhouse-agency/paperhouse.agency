@@ -49,3 +49,6 @@ certificates
 
 next-env.d.ts
 storybook-static
+
+# Claude Code local settings
+.claude/settings.local.json
