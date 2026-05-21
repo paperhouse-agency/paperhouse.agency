@@ -10,7 +10,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { HubspotNewsletterAction } from '@/integrations/hubspot/action'
+import { hubspotNewsletterAction } from '@/integrations/hubspot/action'
 import { mutate } from '@/libs/tempus-queue'
 import s from './form.module.css'
 import { useForm } from './hook'
@@ -158,5 +158,5 @@ export function Messages({ className }: { className?: string }) {
 }
 
 const formsActions = {
-  HubspotNewsletterAction: HubspotNewsletterAction,
+  HubspotNewsletterAction: hubspotNewsletterAction,
 }

@@ -37,17 +37,6 @@ export function isHubSpotConfigured(): boolean {
   )
 }
 
-/**
- * Check if Mailchimp is configured
- * Requires: MAILCHIMP_API_KEY, MAILCHIMP_SERVER_PREFIX, and MAILCHIMP_AUDIENCE_ID
- */
-export function isMailchimpConfigured(): boolean {
-  return Boolean(
-    process.env.MAILCHIMP_API_KEY &&
-      process.env.MAILCHIMP_SERVER_PREFIX &&
-      process.env.MAILCHIMP_AUDIENCE_ID
-  )
-}
 
 /**
  * Check if Google Analytics is configured
@@ -79,7 +68,6 @@ export function getConfiguredIntegrations(): string[] {
 
   if (isSanityConfigured()) integrations.push('Sanity')
   if (isHubSpotConfigured()) integrations.push('HubSpot')
-  if (isMailchimpConfigured()) integrations.push('Mailchimp')
   if (isTurnstileConfigured()) integrations.push('Turnstile')
 
   return integrations
@@ -93,7 +81,6 @@ export function getUnconfiguredIntegrations(): string[] {
 
   if (!isSanityConfigured()) integrations.push('Sanity')
   if (!isHubSpotConfigured()) integrations.push('HubSpot')
-  if (!isMailchimpConfigured()) integrations.push('Mailchimp')
   if (!isTurnstileConfigured()) integrations.push('Turnstile')
 
   return integrations

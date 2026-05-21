@@ -3,7 +3,7 @@
 import { useActionState } from 'react'
 import Script from 'next/script'
 import { Button } from '@/components/button'
-import { mailchimpSubscriptionAction } from '@/integrations/mailchimp'
+import { hubspotNewsletterAction } from '@/integrations/hubspot/action'
 import type { FormState } from '@/components/form/types'
 
 const initialState: FormState = { status: 0, message: '', inputs: {}, errors: new Map() }
@@ -27,7 +27,7 @@ export function NewsletterBlock({
   bodyContent = 'Get the latest insights on design, development, and digital growth delivered straight to your inbox.',
 }: NewsletterBlockProps) {
   const [state, formAction, isPending] = useActionState(
-    mailchimpSubscriptionAction,
+    hubspotNewsletterAction,
     initialState
   )
 

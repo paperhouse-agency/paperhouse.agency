@@ -24,16 +24,10 @@ export const REMOVAL_GUIDE: Record<string, RemovalGuide> = {
     pages: ['app/(pages)/hubspot'],
     notes: 'Uninstall: @hubspot/api-client',
   },
-  Mailchimp: {
-    dirs: ['integrations/mailchimp'],
-    pages: [],
-    notes: 'Remove Mailchimp-related form handlers',
-  },
   Turnstile: {
-    dirs: [],
+    dirs: ['integrations/turnstile.ts'],
     pages: [],
-    notes:
-      'Remove Turnstile validation from integrations/mailchimp/turnstile.ts',
+    notes: 'Remove Turnstile widget from form blocks and delete integrations/turnstile.ts',
   },
   Analytics: {
     dirs: [],
