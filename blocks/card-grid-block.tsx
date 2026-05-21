@@ -20,16 +20,16 @@ export interface CardGridBlockProps {
 
 function parseHeading(content: string) {
   const parts = content.split(/(<span>.*?<\/span>)/g).filter(Boolean)
-  return parts.map((part, i) => {
+  return parts.map((part) => {
     if (part.startsWith('<span>') && part.endsWith('</span>')) {
       const text = part.replace('<span>', '').replace('</span>', '')
       return (
-        <span key={i} className="text-primary">
+        <span key={part} className="text-primary">
           {text}
         </span>
       )
     }
-    return <span key={i}>{part}</span>
+    return <span key={part}>{part}</span>
   })
 }
 
@@ -46,14 +46,19 @@ export function CardGridBlock({
           {preheadingContent && (
             <p className="mono-wide text-primary">{preheadingContent}</p>
           )}
-          <h2 className="heading-2 text-text">{parseHeading(headingContent)}</h2>
+          <h2 className="heading-2 text-text">
+            {parseHeading(headingContent)}
+          </h2>
           {bodyContent && (
             <p className="body-large text-text max-w-1/2 mb-3">{bodyContent}</p>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {articles.map((article, i) => (
-              <div key={i} className="flex flex-col gap-5 items-start">
+            {articles.map((article) => (
+              <div
+                key={article.heading}
+                className="flex flex-col gap-5 items-start"
+              >
                 <div className="relative w-full aspect-[440/293] rounded-lg overflow-hidden shrink-0">
                   <Image
                     src={article.image.src}
@@ -65,7 +70,9 @@ export function CardGridBlock({
 
                 <div className="flex flex-col gap-2.5 w-full">
                   <h3 className="heading-4 text-text">{article.heading}</h3>
-                  <p className="body text-text/60 line-clamp-3">{article.content}</p>
+                  <p className="body text-text/60 line-clamp-3">
+                    {article.content}
+                  </p>
                 </div>
 
                 <Button

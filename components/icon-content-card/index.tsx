@@ -23,7 +23,9 @@ export function IconContentCard({
           : 'bg-white border-text/60 hover:border-primary hover:shadow-[0_4px_24px_0px_color-mix(in_srgb,var(--color-primary)_20%,transparent)]'
       }`}
     >
-      <div className={`flex items-center justify-center w-12 h-12 rounded-full ${alternate ? 'bg-white/10' : 'bg-bluishgray'}`}>
+      <div
+        className={`flex items-center justify-center w-12 h-12 rounded-full ${alternate ? 'bg-white/10' : 'bg-bluishgray'}`}
+      >
         <Icon
           size={24}
           className={alternate ? 'text-offwhite' : 'text-text/60'}

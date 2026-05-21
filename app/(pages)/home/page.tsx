@@ -144,7 +144,8 @@ export default function Home() {
               src: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=440&h=293&fit=crop',
               alt: 'React performance optimization',
             },
-            heading: 'React Performance Optimization: 5 Patterns That Actually Matter',
+            heading:
+              'React Performance Optimization: 5 Patterns That Actually Matter',
             content:
               'Not all performance tips are created equal. We break down the React optimization patterns that deliver real-world improvements—from code splitting strategies to state management decisions that scale with your application.',
             ctaUrl: '/blog/react-performance',
@@ -154,7 +155,8 @@ export default function Home() {
               src: 'https://images.unsplash.com/photo-1586717799252-bd134ad00e26?w=440&h=293&fit=crop',
               alt: 'UX and design thinking',
             },
-            heading: 'The Hidden Cost of Bad UX: Why Design-First Development Wins',
+            heading:
+              'The Hidden Cost of Bad UX: Why Design-First Development Wins',
             content:
               "Poor user experience doesn't just frustrate customers—it bleeds revenue. Learn how integrating design thinking into your development process reduces technical debt, speeds up iterations, and creates products users actually love.",
             ctaUrl: '/blog/design-first-development',
@@ -164,7 +166,8 @@ export default function Home() {
               src: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?w=440&h=293&fit=crop',
               alt: 'Figma to production workflow',
             },
-            heading: 'From Figma to Production: Bridging the Designer-Developer Gap',
+            heading:
+              'From Figma to Production: Bridging the Designer-Developer Gap',
             content:
               "Design handoffs shouldn't feel like a game of telephone. Discover the workflows, tools, and communication patterns that turn design systems into living, breathing codebases without losing the vision along the way.",
             ctaUrl: '/blog/figma-to-production',
@@ -177,7 +180,8 @@ export default function Home() {
           large: {
             value: '500+',
             heading: 'Creative Works',
-            content: "We begin by uncovering insights that shape your product's direction.",
+            content:
+              "We begin by uncovering insights that shape your product's direction.",
           },
           image1: {
             src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop',
@@ -186,12 +190,14 @@ export default function Home() {
           medium: {
             value: '95%',
             heading: 'Client Satisfaction Rate',
-            content: "We begin by uncovering insights that shape your product's direction.",
+            content:
+              "We begin by uncovering insights that shape your product's direction.",
           },
           small: {
             value: '+20%',
             heading: 'Average Revenue Growth',
-            content: "We begin by uncovering insights that shape your product's direction.",
+            content:
+              "We begin by uncovering insights that shape your product's direction.",
           },
           image2: {
             src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=300&fit=crop',

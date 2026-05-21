@@ -42,7 +42,9 @@ export function BentoStatsBlock({
         <div className="grid grid-cols-1 dt:grid-cols-3 gap-5 dt:h-[600px] dt:[grid-template-rows:repeat(2,1fr)]">
           {/* Col 1 — tall accent stat (spans both rows) */}
           <div className="bg-accent rounded-[12px] p-5 flex flex-col justify-between text-offwhite min-h-[280px] dt:min-h-0 dt:col-start-1 dt:row-start-1 dt:row-span-2">
-            <p className="font-body text-[64px] leading-none">{metrics.large.value}</p>
+            <p className="font-body text-[64px] leading-none">
+              {metrics.large.value}
+            </p>
             <div className="flex flex-col gap-2.5">
               <p className="heading-4 text-offwhite">{metrics.large.heading}</p>
               <p className="body text-offwhite/80">{metrics.large.content}</p>
@@ -62,9 +64,13 @@ export function BentoStatsBlock({
 
           {/* Col 2 Row 2 — secondary stat */}
           <div className="bg-secondary rounded-[12px] p-5 flex flex-col justify-between text-offwhite min-h-[200px] dt:min-h-0 dt:col-start-2 dt:row-start-2">
-            <p className="font-body text-[64px] leading-none">{metrics.medium.value}</p>
+            <p className="font-body text-[64px] leading-none">
+              {metrics.medium.value}
+            </p>
             <div className="flex flex-col gap-2.5">
-              <p className="heading-4 text-offwhite">{metrics.medium.heading}</p>
+              <p className="heading-4 text-offwhite">
+                {metrics.medium.heading}
+              </p>
               <p className="body text-offwhite/80">{metrics.medium.content}</p>
             </div>
           </div>

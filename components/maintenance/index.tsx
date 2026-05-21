@@ -1,3 +1,5 @@
+import { Link } from '@/components/link'
+
 export function MaintenanceScreen() {
   return (
     <main className="relative min-h-screen bg-offwhite flex flex-col items-center justify-center px-5">
@@ -29,12 +31,12 @@ export function MaintenanceScreen() {
         {/* Contact */}
         <p className="body text-text/60">
           Need something urgent?{' '}
-          <a
+          <Link
             href="mailto:hello@paperhouse.agency"
             className="text-primary underline underline-offset-4 hover:text-primary/80 transition-colors duration-300"
           >
             hello@paperhouse.agency
-          </a>
+          </Link>
         </p>
       </div>
 
