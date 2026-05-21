@@ -17,6 +17,7 @@ import { CardGridBlock } from '@/blocks/card-grid-block'
 import { ImageTextSplitBlock } from '@/blocks/image-text-split-block'
 import { BentoStatsBlock } from '@/blocks/bento-stats-block'
 import { FormCtaBlock } from '@/blocks/form-cta-block'
+import { PeopleGridBlock } from '@/blocks/people-grid-block'
 import { Wrapper } from '../(components)/wrapper'
 
 export default function Home() {
@@ -204,6 +205,48 @@ export default function Home() {
             alt: 'Modern conference room',
           },
         }}
+      />
+      <PeopleGridBlock
+        headingContent="Our Talented <span>Team Members!</span>"
+        bodyContent="Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide."
+        members={[
+          {
+            name: 'Malik Zubayer Ul Haider',
+            role: 'Founder, Partner & Tech Lead',
+            image: {
+              src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop',
+              alt: 'Malik Zubayer Ul Haider',
+            },
+            ctaUrl: '/team/malik',
+          },
+          {
+            name: 'Team Member',
+            role: 'Chief Marketing Officer',
+            image: {
+              src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=800&fit=crop',
+              alt: 'Chief Marketing Officer',
+            },
+            ctaUrl: '/team/cmo',
+          },
+          {
+            name: 'Team Member',
+            role: 'Chief Operating Officer',
+            image: {
+              src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=800&fit=crop',
+              alt: 'Chief Operating Officer',
+            },
+            ctaUrl: '/team/coo',
+          },
+          {
+            name: 'Team Member',
+            role: 'Lead Designer',
+            image: {
+              src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=800&fit=crop',
+              alt: 'Lead Designer',
+            },
+            ctaUrl: '/team/designer',
+          },
+        ]}
       />
       <FormCtaBlock />
     </Wrapper>
