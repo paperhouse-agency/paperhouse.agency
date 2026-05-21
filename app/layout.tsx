@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from 'next'
-import { cookies, draftMode } from 'next/headers'
+import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import type { PropsWithChildren } from 'react'
 import { ReactTempus } from 'tempus/react'
-import { MaintenanceScreen } from '@/components/maintenance'
 import { RealViewport } from '@/components/real-viewport'
 import { DisableDraftMode } from '@/integrations/sanity/components/disable-draft-mode'
 import AppData from '@/package.json'
@@ -86,25 +85,6 @@ export const viewport: Viewport = {
 export default async function Layout({ children }: PropsWithChildren) {
   const { isEnabled: isDraftMode } = await draftMode()
   const sanityConfigured = isSanityConfigured()
-
-  // Maintenance mode — checked server-side, no client exposure
-  const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true'
-  const bypassSecret = process.env.MAINTENANCE_BYPASS_SECRET
-  const cookieStore = await cookies()
-  const hasBypass =
-    !!bypassSecret &&
-    cookieStore.get('maintenance_bypass')?.value === bypassSecret
-
-  if (isMaintenanceMode && !hasBypass) {
-    return (
-      <html lang="en" dir="ltr" className={fontsVariable} suppressHydrationWarning>
-        <body>
-          <RealViewport />
-          <MaintenanceScreen />
-        </body>
-      </html>
-    )
-  }
 
   return (
     <html
