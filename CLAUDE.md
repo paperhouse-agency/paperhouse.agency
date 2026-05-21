@@ -36,40 +36,40 @@ It covers:
 
 ### Development
 ```bash
-bun dev                    # Start dev server with style watcher
-bun dev:https              # Start dev with HTTPS (experimental)
-bun build                  # Build for production (runs setup:styles first)
-bun start                  # Start production server
+pnpm dev                    # Start dev server with style watcher
+pnpm dev:https              # Start dev with HTTPS (experimental)
+pnpm build                  # Build for production (runs setup:styles first)
+pnpm start                  # Start production server
 ```
 
 ### Code Quality
 ```bash
-bun lint                   # Run Biome linter
-bun lint:fix               # Auto-fix linting issues
-bun format                 # Format code with Biome
-bun typecheck              # Run TypeScript type checking
+pnpm lint                   # Run Biome linter
+pnpm lint:fix               # Auto-fix linting issues
+pnpm format                 # Format code with Biome
+pnpm typecheck              # Run TypeScript type checking
 ```
 
 ### Utilities
 ```bash
-bun setup:styles           # Generate Tailwind utilities and theme
-bun validate:env           # Check environment variables
-bun cleanup:integrations   # List unused integrations for removal
+pnpm setup:styles           # Generate Tailwind utilities and theme
+pnpm validate:env           # Check environment variables
+pnpm cleanup:integrations   # List unused integrations for removal
 ```
 
 ### Sanity CMS
 ```bash
-bun sanity:schema-extract  # Extract Sanity schema
-bun sanity:typegen         # Generate TypeScript types from Sanity schema
+pnpm sanity:schema-extract  # Extract Sanity schema
+pnpm sanity:typegen         # Generate TypeScript types from Sanity schema
 ```
 
 ### Analysis & Testing
 ```bash
-bun build:analyze          # Analyze bundle size
-bun build:profile          # Profile build performance
-bun lighthouse             # Run Lighthouse on localhost:3000
-bun storybook              # Start Storybook on port 6006
-bun build-storybook        # Build Storybook for production
+pnpm build:analyze          # Analyze bundle size
+pnpm build:profile          # Profile build performance
+pnpm lighthouse             # Run Lighthouse on localhost:3000
+pnpm storybook              # Start Storybook on port 6006
+pnpm build-storybook        # Build Storybook for production
 ```
 
 ## Architecture
@@ -80,7 +80,7 @@ bun build-storybook        # Build Storybook for production
 - **TypeScript** with strict mode
 - **Tailwind CSS 4.1.15** with CSS-first configuration
 - **Biome 2.2.7** for linting and formatting
-- **Bun** as JavaScript runtime and package manager
+- **pnpm** as package manager
 
 ### Project Structure
 ```
@@ -254,7 +254,7 @@ async function fetchData(id: string) {
 - **Sanity CMS**: Headless CMS with draft mode
   - Requires `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_WRITE_TOKEN`
   - Draft mode routes: `/api/draft-mode/enable`, `/api/draft-mode/disable`
-  - Run `bun sanity:typegen` after schema changes
+  - Run `pnpm sanity:typegen` after schema changes
 - **HubSpot**: Forms integration
   - Requires `HUBSPOT_ACCESS_TOKEN`, `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`
 
@@ -268,14 +268,14 @@ async function fetchData(id: string) {
 - Strict TypeScript mode enabled
 - Avoid `any` types
 - Use `import type` for type-only imports
-- Validate environment variables with `bun validate:env`
+- Validate environment variables with `pnpm validate:env`
 
 ### Performance Best Practices
 - Server components by default
 - Code splitting with `next/dynamic` for heavy components
 - Use `<Activity />` for off-screen optimization
-- Check bundle impact of new dependencies (`bun build:analyze`)
-- Run `bun cleanup:integrations` to identify removable integrations
+- Check bundle impact of new dependencies (`pnpm build:analyze`)
+- Run `pnpm cleanup:integrations` to identify removable integrations
 
 ### Security
 - Never commit API keys (use `.env.local`)
@@ -298,11 +298,11 @@ async function fetchData(id: string) {
 - Use conventional commits
 - DO NOT use `--force` without permission
 - DO NOT skip hooks (`--no-verify`) unless requested
-- Run `bun lint` before committing
+- Run `pnpm lint` before committing
 
 ### Package Manager
-- **Always use Bun** for all package operations
-- `bun install`, `bun add`, `bun remove`
+- **Always use pnpm** for all package operations
+- `pnpm install`, `pnpm add`, `pnpm remove`
 
 ## Critical Rules from .cursor/rules/
 
