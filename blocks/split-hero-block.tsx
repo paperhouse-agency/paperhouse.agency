@@ -36,10 +36,9 @@ export function SplitHeroBlock() {
                 <Image
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=450&h=300&fit=crop"
                   alt="Video poster"
-                  width={450}
-                  height={300}
+                  fill
                   priority
-                  className="w-full h-full object-cover"
+                  className="object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-20 h-20 rounded-full bg-text/60 flex items-center justify-center group-hover:scale-110 transition-transform">

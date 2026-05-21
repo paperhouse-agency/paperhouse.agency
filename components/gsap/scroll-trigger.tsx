@@ -8,9 +8,7 @@ import { useEffect, useEffectEvent } from 'react'
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(GSAPScrollTrigger)
   GSAPScrollTrigger.clearScrollMemory('manual')
-  GSAPScrollTrigger.defaults({
-    markers: process.env.NODE_ENV === 'development',
-  })
+  GSAPScrollTrigger.defaults({})
 }
 
 export function ScrollTrigger() {
