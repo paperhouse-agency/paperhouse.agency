@@ -40,9 +40,9 @@ export function CardGridBlock({
   articles,
 }: CardGridBlockProps) {
   return (
-    <section className="py-15 px-5">
+    <section className="py-15 dt:px-5">
       <div className="wrapper mx-auto">
-        <div className="bg-white rounded-[12px] shadow-[4px_4px_5px_rgba(0,0,0,0.05)] p-10 flex flex-col gap-2.5">
+        <div className="bg-white -mx-5 dt:mx-0 dt:rounded-[12px] dt:shadow-[4px_4px_5px_rgba(0,0,0,0.05)] px-5 py-10 dt:p-10 flex flex-col gap-2.5">
           {preheadingContent && (
             <p className="mono-wide text-primary">{preheadingContent}</p>
           )}
@@ -50,10 +50,10 @@ export function CardGridBlock({
             {parseHeading(headingContent)}
           </h2>
           {bodyContent && (
-            <p className="body-large text-text max-w-1/2 mb-3">{bodyContent}</p>
+            <p className="body-large text-text dt:max-w-1/2 mb-3">{bodyContent}</p>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 dt:grid-cols-3 gap-5">
             {articles.map((article) => (
               <div
                 key={article.heading}
