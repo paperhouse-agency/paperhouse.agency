@@ -6,8 +6,9 @@ import { ContentWithButton } from '@/components/content-with-button'
 import { Image } from '@/components/image'
 
 const AnimatedCardsGrid = dynamic(
-  () => import('@/animations/animated-cards-grid').then((m) => m.AnimatedCardsGrid),
-  { ssr: false },
+  () =>
+    import('@/animations/animated-cards-grid').then((m) => m.AnimatedCardsGrid),
+  { ssr: false }
 )
 
 export interface ButtonData {

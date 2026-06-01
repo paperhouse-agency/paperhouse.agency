@@ -8,7 +8,10 @@ import { ContentWithButton } from '@/components/content-with-button'
 function VideoEmbed({
   isPlaying,
   onPlay,
-}: { isPlaying: boolean; onPlay: () => void }) {
+}: {
+  isPlaying: boolean
+  onPlay: () => void
+}) {
   if (isPlaying) {
     return (
       <iframe
@@ -60,12 +63,20 @@ export function SplitHeroBlock() {
           bodyContent="We help brands and company in marketing solution. As a cause-led digital marketing and brand agency, we harness the power of technology and creativity to drive positive feedback."
           buttons={[
             { label: 'Schedule a call', size: 'lg' },
-            { label: 'Explore Projects', size: 'lg', color: 'neutral', hasIcon: true },
+            {
+              label: 'Explore Projects',
+              size: 'lg',
+              color: 'neutral',
+              hasIcon: true,
+            },
           ]}
         />
         <div className="flex items-center justify-end">
           <div className="relative w-[450px] h-[300px] rounded-[20px] overflow-hidden">
-            <VideoEmbed isPlaying={isPlaying} onPlay={() => setIsPlaying(true)} />
+            <VideoEmbed
+              isPlaying={isPlaying}
+              onPlay={() => setIsPlaying(true)}
+            />
           </div>
         </div>
       </div>
@@ -80,9 +91,9 @@ export function SplitHeroBlock() {
           Dhaka
         </h1>
         <p className="body-large text-text/60">
-          We help brands and company in marketing solution. As a cause-led digital
-          marketing and brand agency, we harness the power of technology and
-          creativity to drive positive feedback.
+          We help brands and company in marketing solution. As a cause-led
+          digital marketing and brand agency, we harness the power of technology
+          and creativity to drive positive feedback.
         </p>
         <div className="flex flex-row items-center gap-4">
           <Button size="md">Schedule a call</Button>

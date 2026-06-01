@@ -27,7 +27,8 @@ export const REMOVAL_GUIDE: Record<string, RemovalGuide> = {
   Turnstile: {
     dirs: ['integrations/turnstile.ts'],
     pages: [],
-    notes: 'Remove Turnstile widget from form blocks and delete integrations/turnstile.ts',
+    notes:
+      'Remove Turnstile widget from form blocks and delete integrations/turnstile.ts',
   },
   Analytics: {
     dirs: [],

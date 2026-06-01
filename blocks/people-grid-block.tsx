@@ -43,7 +43,9 @@ export function PeopleGridBlock({
           {preheadingContent && (
             <p className="mono-wide text-primary">{preheadingContent}</p>
           )}
-          <h2 className="heading-2 text-text">{parseHeading(headingContent)}</h2>
+          <h2 className="heading-2 text-text">
+            {parseHeading(headingContent)}
+          </h2>
           {bodyContent && (
             <p className="body-large text-text/60 max-w-xl">{bodyContent}</p>
           )}
@@ -51,7 +53,10 @@ export function PeopleGridBlock({
 
         <div className="grid grid-cols-1 dt:grid-cols-4 gap-5">
           {members.map((member, i) => (
-            <div key={`${member.name}-${i}`} className="flex flex-col gap-5 items-start">
+            <div
+              key={`${member.name}-${i}`}
+              className="flex flex-col gap-5 items-start"
+            >
               <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden">
                 <Image
                   src={member.image.src}
@@ -66,7 +71,13 @@ export function PeopleGridBlock({
                 <p className="body-large text-text/60">{member.role}</p>
               </div>
 
-              <Button variant="tertiary" color="primary" size="sm" hasIcon url={member.ctaUrl}>
+              <Button
+                variant="tertiary"
+                color="primary"
+                size="sm"
+                hasIcon
+                url={member.ctaUrl}
+              >
                 READ MORE
               </Button>
             </div>

@@ -37,7 +37,6 @@ export function isHubSpotConfigured(): boolean {
   )
 }
 
-
 /**
  * Check if Google Analytics is configured
  * Requires: NEXT_PUBLIC_GOOGLE_ANALYTICS or NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID

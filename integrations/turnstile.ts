@@ -33,7 +33,10 @@ export async function validateTurnstile(
       return { isValid: false, errors: ['security_verification_failed_'] }
     }
 
-    const data = (await response.json()) as { success: boolean; 'error-codes'?: string[] }
+    const data = (await response.json()) as {
+      success: boolean
+      'error-codes'?: string[]
+    }
     return data.success
       ? { isValid: true, errors: [] }
       : { isValid: false, errors: ['access_denied_'] }

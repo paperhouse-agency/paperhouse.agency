@@ -15,7 +15,9 @@ async function submitToHubspot(
 ): Promise<{ ok: boolean }> {
   const portalId = process.env.NEXT_PUBLIC_HUBSPOT_PORTAL_ID
   if (!(portalId && formId)) {
-    throw new Error('Missing HubSpot configuration: NEXT_PUBLIC_HUBSPOT_PORTAL_ID or form ID')
+    throw new Error(
+      'Missing HubSpot configuration: NEXT_PUBLIC_HUBSPOT_PORTAL_ID or form ID'
+    )
   }
 
   const response = await fetchWithTimeout(
@@ -61,13 +63,28 @@ export async function hubspotNewsletterAction(
     ])
 
     if (!ok) {
-      return { status: 500, message: 'subscription_failed_', errors: new Map(), inputs: { email } }
+      return {
+        status: 500,
+        message: 'subscription_failed_',
+        errors: new Map(),
+        inputs: { email },
+      }
     }
 
-    return { status: 200, message: 'subscription_successful_', errors: new Map(), inputs: {} }
+    return {
+      status: 200,
+      message: 'subscription_successful_',
+      errors: new Map(),
+      inputs: {},
+    }
   } catch (error) {
     console.error('HubSpot newsletter error:', error)
-    return { status: 500, message: 'subscription_failed_', errors: new Map(), inputs: { email } }
+    return {
+      status: 500,
+      message: 'subscription_failed_',
+      errors: new Map(),
+      inputs: { email },
+    }
   }
 }
 
@@ -77,7 +94,10 @@ export async function hubspotContactAction(
 ): Promise<ContactFormState> {
   const turnstile = await validateFormWithTurnstile(formData)
   if (!turnstile.isValid) {
-    return { status: 'error', message: 'Security verification failed. Please try again.' }
+    return {
+      status: 'error',
+      message: 'Security verification failed. Please try again.',
+    }
   }
 
   const fullName = formData.get('fullName')?.toString().trim() ?? ''
@@ -86,7 +106,7 @@ export async function hubspotContactAction(
   const budget = formData.get('budget')?.toString().trim() ?? ''
   const referral = formData.get('referral')?.toString().trim() ?? ''
 
-  if (!((fullName && email) && message)) {
+  if (!(fullName && email && message)) {
     return { status: 'error', message: 'Please fill in all required fields.' }
   }
 
@@ -104,18 +124,28 @@ export async function hubspotContactAction(
     { name: 'message', value: message },
   ]
   if (budget) fields.push({ name: 'budget', value: budget })
-  if (referral) fields.push({ name: 'how_did_you_hear_about_us_', value: referral })
+  if (referral)
+    fields.push({ name: 'how_did_you_hear_about_us_', value: referral })
 
   try {
-    const { ok } = await submitToHubspot(process.env.NEXT_HUBSPOT_CONTACT_FORM_ID, fields)
+    const { ok } = await submitToHubspot(
+      process.env.NEXT_HUBSPOT_CONTACT_FORM_ID,
+      fields
+    )
 
     if (!ok) {
-      return { status: 'error', message: 'Something went wrong. Please try again.' }
+      return {
+        status: 'error',
+        message: 'Something went wrong. Please try again.',
+      }
     }
 
     return { status: 'success', message: '' }
   } catch (error) {
     console.error('HubSpot contact error:', error)
-    return { status: 'error', message: 'Something went wrong. Please try again.' }
+    return {
+      status: 'error',
+      message: 'Something went wrong. Please try again.',
+    }
   }
 }

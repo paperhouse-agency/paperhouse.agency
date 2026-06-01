@@ -50,7 +50,9 @@ export function CardGridBlock({
             {parseHeading(headingContent)}
           </h2>
           {bodyContent && (
-            <p className="body-large text-text dt:max-w-1/2 mb-3">{bodyContent}</p>
+            <p className="body-large text-text dt:max-w-1/2 mb-3">
+              {bodyContent}
+            </p>
           )}
 
           <div className="grid grid-cols-1 dt:grid-cols-3 gap-5">

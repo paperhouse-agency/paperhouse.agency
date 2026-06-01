@@ -6,7 +6,12 @@ import { Button } from '@/components/button'
 import { hubspotNewsletterAction } from '@/integrations/hubspot/action'
 import type { FormState } from '@/components/form/types'
 
-const initialState: FormState = { status: 0, message: '', inputs: {}, errors: new Map() }
+const initialState: FormState = {
+  status: 0,
+  message: '',
+  inputs: {},
+  errors: new Map(),
+}
 
 const errorMessages: Record<string, string> = {
   email_required_: 'Please enter your email address.',
@@ -36,7 +41,8 @@ export function NewsletterBlock({
   const turnstileError = state.errors?.get('turnstile')?.message
   const serverError =
     state.status === 500
-      ? (errorMessages[state.message] ?? 'Something went wrong. Please try again.')
+      ? (errorMessages[state.message] ??
+        'Something went wrong. Please try again.')
       : null
 
   return (
@@ -61,7 +67,10 @@ export function NewsletterBlock({
               </p>
             </div>
           ) : (
-            <form action={formAction} className="flex flex-col items-center gap-5 w-full max-w-lg">
+            <form
+              action={formAction}
+              className="flex flex-col items-center gap-5 w-full max-w-lg"
+            >
               <div className="flex flex-col dt:flex-row gap-3 w-full">
                 <input
                   type="email"
@@ -78,7 +87,7 @@ export function NewsletterBlock({
                   size="md"
                   hasIcon
                   disabled={isPending}
-                  className='body!'
+                  className="body!"
                 >
                   {isPending ? 'Subscribing...' : 'Subscribe'}
                 </Button>
@@ -86,14 +95,18 @@ export function NewsletterBlock({
 
               <div
                 className="cf-turnstile"
-                data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY}
+                data-sitekey={
+                  process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
+                }
                 data-theme="light"
               />
 
               {(emailError || turnstileError || serverError) && (
                 <p className="body-small text-red-500">
                   {emailError && (errorMessages[emailError] ?? emailError)}
-                  {!emailError && turnstileError && 'Security verification failed. Please try again.'}
+                  {!emailError &&
+                    turnstileError &&
+                    'Security verification failed. Please try again.'}
                   {!(emailError || turnstileError) && serverError}
                 </p>
               )}

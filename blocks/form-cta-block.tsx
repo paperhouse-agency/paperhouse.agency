@@ -19,7 +19,10 @@ export function FormCtaBlock({
   headingLine2 = "Let's",
   bodyContent = 'Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide.',
 }: FormCtaBlockProps) {
-  const [state, formAction, isPending] = useActionState(contactFormAction, initialState)
+  const [state, formAction, isPending] = useActionState(
+    contactFormAction,
+    initialState
+  )
 
   let submitLabel = 'Send Message'
   if (isPending) submitLabel = 'Sending...'
@@ -87,7 +90,9 @@ export function FormCtaBlock({
 
               <div
                 className="cf-turnstile"
-                data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY}
+                data-sitekey={
+                  process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
+                }
                 data-theme="dark"
               />
 
