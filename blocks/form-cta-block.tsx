@@ -31,9 +31,9 @@ export function FormCtaBlock({
         src="https://challenges.cloudflare.com/turnstile/v0/api.js"
         strategy="lazyOnload"
       />
-      <section className="py-15 px-5">
+      <section className="py-15 bg-text dt:bg-transparent dt:px-5">
         <div className="wrapper mx-auto">
-          <div className="bg-text rounded-[12px] p-10 grid grid-cols-1 dt:grid-cols-2 gap-10 dt:gap-[220px]">
+          <div className="dt:bg-text dt:rounded-[12px] px-5 py-0 dt:p-10 grid grid-cols-1 dt:grid-cols-2 gap-10 dt:gap-[220px]">
             {/* Left: Heading + description */}
             <div className="flex flex-col gap-5 justify-center">
               <h2 className="heading-2 text-offwhite">
