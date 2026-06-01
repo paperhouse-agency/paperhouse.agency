@@ -75,7 +75,7 @@ ${Object.entries(typography)
 
         return [
           `font-size: ${scalingCalc(value.mobile)};`,
-          `@variant dt { font-size: ${scalingCalc(value.desktop)}; }`,
+          `@variant dt { font-size: ${value.desktop}px; }`,
         ].join('\n\t')
       }
 
