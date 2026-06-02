@@ -54,9 +54,8 @@ export function ImageContentCardsBlock({
   return (
     <section className="py-15 px-5 bg-bluishgray">
       <div className="wrapper mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-15 items-center">
-          {/* Left side - Image (hidden on mobile) */}
-          <div className="hidden md:block relative w-full aspect-690/750">
+        <div className="grid grid-cols-1 dt:grid-cols-2 gap-15 items-center">
+          <div className="hidden dt:block relative w-full aspect-[690/750]">
             <Image
               src={image.src}
               alt={image.alt}
@@ -66,7 +65,6 @@ export function ImageContentCardsBlock({
             />
           </div>
 
-          {/* Right side - Content and Cards */}
           <div className="flex flex-col gap-15">
             <ContentWithButton
               preheadingContent={preheadingContent}
@@ -76,7 +74,6 @@ export function ImageContentCardsBlock({
               buttons={buttons}
             />
 
-            {/* Animated Cards Grid */}
             <AnimatedCardsGrid cards={cards} />
           </div>
         </div>

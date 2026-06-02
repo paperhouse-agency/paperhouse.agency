@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "dev",
-      "runtimeExecutable": "bun",
-      "runtimeArgs": ["dev"],
+      "runtimeExecutable": "C:\\Users\\venom\\AppData\\Local\\ms-playwright-go\\1.57.0\\node.exe",
+      "runtimeArgs": ["C:\\gh\\paperhouse.agency\\node_modules\\next\\dist\\bin\\next", "dev", "--port", "3000", "--turbopack"],
       "port": 3000,
       "autoPort": true
     }
