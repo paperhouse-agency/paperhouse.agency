@@ -3,6 +3,7 @@ import type { NextConfig } from 'next'
 import './libs/validate-env.ts'
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['tempus'],
   reactStrictMode: true,
   reactCompiler: true,
   poweredByHeader: false,
