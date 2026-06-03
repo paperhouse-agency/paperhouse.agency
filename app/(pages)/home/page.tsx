@@ -37,7 +37,7 @@ export default function Home() {
       <ImageContentCardsBlock
         preheadingContent="ABOUT PAPERHOUSE"
         headingType="h2"
-        headingContent="We fold ideas into <span>digital reality.</span>"
+        headingContent="Three steps for your <span>Digital Growth.</span>"
         bodyContent="A creative and development studio blending design, code, and storytelling — built to help brands grow in the digital space."
         buttons={[
           {
@@ -127,7 +127,7 @@ export default function Home() {
             number: '01',
             heading: 'Insight & Discovery',
             content:
-              "We begin by understanding your product's direction. Through research, interviews, and market analysis, we identify opportunities and clarify goals — like unrolling a fresh sheet of paper to reveal possibilities.",
+              "We begin by uncovering insights that shape your product’s direction. Through research, interviews, and market analysis, we identify opportunities, clarify goals, and build a shared vision. This step lays the foundation for everything ahead—like unfolding a fresh sheet of paper to reveal possibilities within your idea.",
             alternate: true,
           },
           {
@@ -135,21 +135,21 @@ export default function Home() {
             number: '02',
             heading: 'Concept & Craft',
             content:
-              'Here ideas take structured form. We develop concepts, moodboards, wireframes, and user journeys that shape how the product will look, feel, and function.',
+              'Here, ideas begin to take structured form. We develop concepts, moodboards, wireframes, and user journeys that shape how the product will look, feel, and function. Every fold adds detail and intention, turning raw insights into a refined creative blueprint ready for a seamless transition into engineering.',
           },
           {
             icon: Code,
             number: '03',
             heading: 'Build & Engineer',
             content:
-              'This is where vision becomes working reality. Our engineering team creates scalable, reliable systems with clean code, automation, and thorough testing.',
+              'This is where vision becomes working reality. Our engineering team creates scalable, reliable systems with clean code, automation, and thorough testing. Features are shaped carefully—like precise origami—ensuring stability, performance, and long-term resilience. Crafted with excellence.',
           },
           {
             icon: Plane,
             number: '04',
             heading: 'Launch & Evolve',
             content:
-              'Your product enters the world with confidence. We manage deployment, hosting, optimization, and ongoing updates — monitoring usage and refining based on real data.',
+              'Your product enters the world with confidence. We manage deployment, hosting, optimization, and ongoing updates. After launch, we monitor usage, adapt quickly, and refine the experience based on real data. Like releasing a finely folded paper plane, this phase ensures growth, and continuous improvement.',
           },
         ]}
       />
@@ -291,17 +291,17 @@ export default function Home() {
           {
             question: 'How long does a typical project take?',
             answer:
-              'Most projects range from 4 to 16 weeks depending on scope. A brand identity project typically takes 4–6 weeks, while a full product build can run 3–4 months. We'll give you a clear timeline in the discovery phase.',
+              'Most projects range from 4 to 16 weeks depending on scope. A brand identity project typically takes 4–6 weeks, while a full product build can run 3–4 months. We\'ll give you a clear timeline in the discovery phase.',
           },
           {
             question: 'Do you work with startups or established businesses?',
             answer:
-              'Both. We've worked with early-stage startups finding their footing and established companies looking to rebrand or scale. What matters to us is the ambition behind the project.',
+              'Both. We\'ve worked with early-stage startups finding their footing and established companies looking to rebrand or scale. What matters to us is the ambition behind the project.',
           },
           {
             question: 'What does your process look like?',
             answer:
-              'We follow four phases: Insight & Discovery, Concept & Craft, Build & Engineer, and Launch & Evolve. Each phase ends with a clear checkpoint so you're always in the loop and in control.',
+              'We follow four phases: Insight & Discovery, Concept & Craft, Build & Engineer, and Launch & Evolve. Each phase ends with a clear checkpoint so you\'re always in the loop and in control.',
           },
           {
             question: 'How do I get started?',

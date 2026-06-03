@@ -10,7 +10,7 @@ export interface CtaManifestoBlockProps {
 
 export function CtaManifestoBlock({
   preheadingContent = 'READY TO START?',
-  headingLine1 = 'Let's build something',
+  headingLine1 = 'Let\'s build something',
   headingLine2 = 'worth talking about.',
   primaryCta = { label: 'Schedule a Call', url: '/contact' },
   secondaryCta = { label: 'See Our Work', url: '/work' },
