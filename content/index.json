@@ -1,0 +1,25 @@
+{
+  "id": "e6b41872-b6f7-4ec2-9ee5-d2678d31d693",
+  "title": "Home",
+  "slug": "index",
+  "status": "draft",
+  "seo": {},
+  "blocks": [
+    {
+      "_id": "ab8c0ed2-d48b-4a1b-826d-72c5853f9bfc",
+      "_type": "image-content-cards",
+      "preheadingContent": "",
+      "headingType": "h2",
+      "headingContent": "",
+      "bodyContent": "",
+      "buttons": [],
+      "cards": [],
+      "image": {
+        "src": "",
+        "alt": ""
+      }
+    }
+  ],
+  "createdAt": "2026-06-03T19:09:29.750Z",
+  "updatedAt": "2026-06-04T04:01:12.744Z"
+}

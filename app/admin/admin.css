@@ -1,0 +1,481 @@
+/* ── Reset & Base ──────────────────────────────────────────────────────────── */
+.admin * {
+  box-sizing: border-box;
+}
+
+.admin {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  background: #f7f7f5;
+  min-height: 100vh;
+}
+
+.admin h1 { font-size: 20px; font-weight: 600; margin: 0 0 1.5rem; }
+.admin h2 { font-size: 16px; font-weight: 600; margin: 0 0 1rem; }
+.admin h3 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #888; margin: 0 0 0.75rem; }
+
+.admin p { margin: 0 0 0.75rem; color: #555; }
+
+.admin a { color: #1a1a1a; text-decoration: none; }
+.admin a:hover { text-decoration: underline; }
+
+/* ── Nav ───────────────────────────────────────────────────────────────────── */
+.admin-nav {
+  background: #fff;
+  border-bottom: 1px solid #e8e8e6;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 52px;
+}
+
+.admin-nav-brand {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  margin-right: 0.5rem;
+}
+
+.admin-nav-link {
+  font-size: 13px;
+  color: #666;
+  text-decoration: none;
+  padding: 2px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.admin-nav-link:hover {
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+.admin-nav-link.active {
+  color: #1a1a1a;
+  border-bottom-color: #1a1a1a;
+}
+
+/* ── Main content ──────────────────────────────────────────────────────────── */
+.admin-main {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Card ──────────────────────────────────────────────────────────────────── */
+.admin-card {
+  background: #fff;
+  border: 1px solid #e8e8e6;
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+/* ── Form fields ───────────────────────────────────────────────────────────── */
+.admin label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin input,
+.admin textarea,
+.admin select {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.admin input:focus,
+.admin textarea:focus,
+.admin select:focus {
+  border-color: #1a1a1a;
+}
+
+.admin textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.admin .form-row {
+  margin-bottom: 1rem;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.admin button[type='submit'],
+.admin button[data-variant] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.admin button[type='submit'],
+.admin button[data-variant='primary'] {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+
+.admin button[type='submit']:hover,
+.admin button[data-variant='primary']:hover {
+  background: #333;
+  border-color: #333;
+}
+
+.admin button[data-variant='secondary'] {
+  background: #fff;
+  color: #1a1a1a;
+  border-color: #ddd;
+}
+
+.admin button[data-variant='secondary']:hover {
+  background: #f7f7f5;
+  border-color: #bbb;
+}
+
+.admin button[data-variant='danger'] {
+  background: #fff;
+  color: #c0392b;
+  border-color: #e8c8c5;
+}
+
+.admin button[data-variant='danger']:hover {
+  background: #fdf3f2;
+  border-color: #c0392b;
+}
+
+.admin button[type='submit']:disabled,
+.admin button[data-variant]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Table ─────────────────────────────────────────────────────────────────── */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e8e8e6;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.admin-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  border-bottom: 1px solid #e8e8e6;
+  background: #fafaf8;
+}
+
+.admin-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0ee;
+  color: #1a1a1a;
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background: #fafaf8;
+}
+
+/* ── Status badge ──────────────────────────────────────────────────────────── */
+.admin-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-badge-draft {
+  background: #f0f0ee;
+  color: #888;
+}
+
+.admin-badge-published {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* ── Page editor layout ────────────────────────────────────────────────────── */
+/* Full-bleed breakout from admin-main's max-width + padding */
+.editor-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0;
+  height: calc(100vh - 52px);
+  overflow: hidden;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-top: -2rem;
+  margin-bottom: -2rem;
+}
+
+.editor-palette {
+  border-right: 1px solid #e8e8e6;
+  background: #fff;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.editor-palette-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background: #fff;
+  border: 1px solid #e8e8e6;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  font-size: 13px;
+  font-family: inherit;
+  color: #333;
+  cursor: grab;
+  transition: box-shadow 0.12s, border-color 0.12s, transform 0.1s;
+  user-select: none;
+}
+
+.editor-palette-btn:hover {
+  border-color: #c8c8c4;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.06);
+  color: #1a1a1a;
+}
+
+.editor-palette-btn:active {
+  cursor: grabbing;
+}
+
+.editor-palette-btn--dragging {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  transform: rotate(1.5deg);
+  opacity: 0.9;
+}
+
+.editor-palette-icon {
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.editor-canvas {
+  background: #f7f7f5;
+  padding: 1.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.editor-canvas-meta {
+  background: #fff;
+  border: 1px solid #e8e8e6;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.editor-canvas-meta input {
+  border: 1px solid #e8e8e6;
+}
+
+.editor-tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid #e8e8e6;
+  margin-bottom: 0.75rem;
+  background: #fff;
+  padding: 0 1rem;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid #e8e8e6;
+  border-bottom: none;
+}
+
+.editor-tab {
+  padding: 10px 0;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  color: #888;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.editor-tab:hover { color: #1a1a1a; }
+.editor-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+
+.editor-block-list {
+  background: #fff;
+  border: 1px solid #e8e8e6;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  min-height: 80px;
+}
+
+.editor-block-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0ee;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.editor-block-item:last-child { border-bottom: none; }
+.editor-block-item:hover { background: #fafaf8; }
+.editor-block-item.selected { background: #f0f4ff; border-bottom-color: #dce6ff; }
+
+.editor-block-drag {
+  color: #ccc;
+  cursor: grab;
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.editor-block-label {
+  flex: 1;
+  font-size: 13px;
+  color: #444;
+}
+
+/* Grouped action buttons */
+.editor-block-actions {
+  display: flex;
+  border: 1px solid #e8e8e6;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.editor-block-actions button {
+  background: #fff;
+  border: none;
+  border-left: 1px solid #e8e8e6;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 3px 8px;
+  line-height: 1;
+  transition: background 0.1s, color 0.1s;
+}
+
+.editor-block-actions button:first-child {
+  border-left: none;
+}
+
+.editor-block-actions button:hover {
+  background: #f7f7f5;
+  color: #1a1a1a;
+}
+
+.editor-block-actions button:last-child:hover {
+  background: #fdf3f2;
+  color: #c0392b;
+}
+
+/* Inline collapsible fields panel — renders below selected block */
+.editor-block-fields {
+  background: #f7f8ff;
+  border-bottom: 1px solid #dce6ff;
+  padding: 1.25rem 1.25rem 1.25rem 2.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.25rem;
+}
+
+.editor-block-fields .form-row {
+  margin-bottom: 0;
+}
+
+.editor-block-fields .form-row-full {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+.editor-save-bar {
+  font-size: 12px;
+  color: #aaa;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+/* ── Login page ────────────────────────────────────────────────────────────── */
+.admin-login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f7f5;
+}
+
+.admin-login-box {
+  background: #fff;
+  border: 1px solid #e8e8e6;
+  border-radius: 8px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 360px;
+}
+
+.admin-login-box h1 {
+  font-size: 18px;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Misc ──────────────────────────────────────────────────────────────────── */
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.admin-slug {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  color: #888;
+}
+
+.admin-error { color: #c0392b; font-size: 13px; margin-top: 4px; }
+.admin-muted { color: #888; font-size: 12px; }

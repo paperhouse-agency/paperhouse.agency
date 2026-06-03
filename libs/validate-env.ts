@@ -59,6 +59,20 @@ const ENV_VARIABLES: EnvValidation[] = [
     integration: 'HubSpot',
   },
 
+  // CMS
+  {
+    name: 'CMS_SESSION_SECRET',
+    required: false,
+    description: 'iron-session AES-256-GCM key (32+ chars)',
+    integration: 'CMS',
+  },
+  {
+    name: 'BLOB_READ_WRITE_TOKEN',
+    required: false,
+    description: 'Vercel Blob read/write token',
+    integration: 'CMS',
+  },
+
   // Mailchimp
   {
     name: 'MAILCHIMP_API_KEY',
