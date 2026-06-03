@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useMemo } from 'react'
 import _Stats from 'stats-gl'
 import { useTempus } from 'tempus/react'

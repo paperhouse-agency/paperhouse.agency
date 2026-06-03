@@ -1,5 +1,4 @@
-import { Button } from '@/components/button'
-import { Image } from '@/components/image'
+import { TeamCard } from '@/components/molecules/team-card'
 
 export interface TeamMember {
   name: string
@@ -53,34 +52,7 @@ export function PeopleGridBlock({
 
         <div className="grid grid-cols-1 dt:grid-cols-4 gap-5">
           {members.map((member, i) => (
-            <div
-              key={`${member.name}-${i}`}
-              className="flex flex-col gap-5 items-start"
-            >
-              <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden">
-                <Image
-                  src={member.image.src}
-                  alt={member.image.alt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2.5 flex-1">
-                <p className="heading-4 text-text">{member.name}</p>
-                <p className="body-large text-text/60">{member.role}</p>
-              </div>
-
-              <Button
-                variant="tertiary"
-                color="primary"
-                size="sm"
-                hasIcon
-                url={member.ctaUrl}
-              >
-                READ MORE
-              </Button>
-            </div>
+            <TeamCard key={`${member.name}-${i}`} {...member} />
           ))}
         </div>
       </div>

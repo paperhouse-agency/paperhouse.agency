@@ -1,5 +1,4 @@
-import { Button } from '@/components/button'
-import { Image } from '@/components/image'
+import { ArticleCard } from '@/components/molecules/article-card'
 
 export interface CardGridArticle {
   image: {
@@ -57,36 +56,7 @@ export function CardGridBlock({
 
           <div className="grid grid-cols-1 dt:grid-cols-3 gap-5">
             {articles.map((article) => (
-              <div
-                key={article.heading}
-                className="flex flex-col gap-5 items-start"
-              >
-                <div className="relative w-full aspect-[440/293] rounded-lg overflow-hidden shrink-0">
-                  <Image
-                    src={article.image.src}
-                    alt={article.image.alt}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2.5 w-full">
-                  <h3 className="heading-4 text-text">{article.heading}</h3>
-                  <p className="body text-text/60 line-clamp-3">
-                    {article.content}
-                  </p>
-                </div>
-
-                <Button
-                  variant="tertiary"
-                  color="primary"
-                  size="sm"
-                  hasIcon
-                  url={article.ctaUrl}
-                >
-                  READ MORE
-                </Button>
-              </div>
+              <ArticleCard key={article.heading} {...article} />
             ))}
           </div>
         </div>

@@ -71,6 +71,9 @@ importers:
       react-dom:
         specifier: ^19.2.0
         version: 19.2.6(react@19.2.6)
+      stats-gl:
+        specifier: ^2.4.2
+        version: 2.4.2(@types/three@0.180.0)(three@0.180.0)
       tempus:
         specifier: 1.0.0-dev.15
         version: 1.0.0-dev.15(react@19.2.6)

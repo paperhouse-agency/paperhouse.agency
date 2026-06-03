@@ -48,6 +48,7 @@
     "postprocessing": "^6.37.8",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "stats-gl": "^2.4.2",
     "tempus": "1.0.0-dev.15",
     "three": "^0.180.0",
     "tunnel-rat": "^0.1.2",

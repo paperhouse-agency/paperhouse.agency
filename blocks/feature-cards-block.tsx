@@ -1,5 +1,4 @@
-import { Link } from '@/components/link'
-import { Image } from '@/components/image'
+import { FeatureContentCard } from '@/components/molecules/feature-content-card'
 
 export interface FeatureCard {
   label: string
@@ -14,6 +13,7 @@ export interface FeatureCard {
 }
 
 export interface FeatureCardsBlockProps {
+  preheadingContent?: string
   headingContent: string
   bodyContent?: string
   cards: FeatureCard[]
@@ -35,6 +35,7 @@ function parseHeading(content: string) {
 }
 
 export function FeatureCardsBlock({
+  preheadingContent,
   headingContent,
   bodyContent,
   cards,
@@ -43,6 +44,9 @@ export function FeatureCardsBlock({
     <section className="py-15 px-5">
       <div className="wrapper mx-auto">
         <div className="flex flex-col items-center text-center gap-2.5 mb-15">
+          {preheadingContent && (
+            <p className="mono-wide text-primary">{preheadingContent}</p>
+          )}
           <h2 className="heading-2 text-text">
             {parseHeading(headingContent)}
           </h2>
@@ -53,34 +57,9 @@ export function FeatureCardsBlock({
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 dt:grid-cols-3 gap-5">
           {cards.map((card) => (
-            <div
-              key={card.label}
-              className="bg-white rounded-lg shadow-[4px_4px_5px_rgba(0,0,0,0.05)] p-5 flex flex-col items-center gap-5"
-            >
-              <div className="flex flex-col gap-2.5 text-center w-full">
-                <p className="mono-wide text-primary">{card.label}</p>
-                <h3 className="heading-3 text-text">{card.heading}</h3>
-                <p className="body text-text/60">{card.content}</p>
-              </div>
-
-              <Link
-                href={card.ctaUrl}
-                className="inline-flex items-center justify-center border border-text rounded-full px-3 py-1.5 body-small text-text whitespace-nowrap shrink-0"
-              >
-                {card.ctaLabel}
-              </Link>
-
-              <div className="relative w-full aspect-[413/260] rounded-lg overflow-hidden mt-auto">
-                <Image
-                  src={card.image.src}
-                  alt={card.image.alt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
+            <FeatureContentCard key={card.label} {...card} />
           ))}
         </div>
       </div>
