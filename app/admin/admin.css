@@ -384,6 +384,19 @@
 .editor-save-saving { color: #aaa; }
 .editor-save-ok { color: #7ab87a; }
 .editor-save-error { color: #c0392b; }
+.editor-save-dirty { color: #b08a3e; }
+
+.editor-save-btn {
+  font-weight: 600;
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
+.editor-save-btn:hover:not(:disabled) {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
 
 .editor-meta-preview {
   padding: 4px 10px;

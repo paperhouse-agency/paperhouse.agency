@@ -44,6 +44,7 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
     redo,
     save,
     isSaving,
+    isDirty,
     lastSaved,
     saveError,
     history,
@@ -64,7 +65,6 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
       const mod = e.ctrlKey || e.metaKey
       if (mod && e.key === 's') {
         e.preventDefault()
-        if (saveTimer) clearTimeout(saveTimer)
         save()
         return
       }
@@ -176,11 +176,21 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
               <div className="editor-meta-actions">
                 <span className="editor-save-status">
                   {isSaving && <span className="editor-save-saving">Saving…</span>}
-                  {!isSaving && lastSaved && <span className="editor-save-ok">Saved {lastSaved.toLocaleTimeString()}</span>}
-                  {saveError && <span className="editor-save-error">{saveError}</span>}
+                  {!isSaving && saveError && <span className="editor-save-error">{saveError}</span>}
+                  {!isSaving && !saveError && isDirty && <span className="editor-save-dirty">Unsaved changes</span>}
+                  {!isSaving && !saveError && !isDirty && lastSaved && <span className="editor-save-ok">Saved {lastSaved.toLocaleTimeString()}</span>}
                 </span>
                 <button type="button" className="editor-meta-icon-btn" disabled={!canUndo} onClick={undo} title="Undo (Ctrl+Z)">↩</button>
                 <button type="button" className="editor-meta-icon-btn" disabled={!canRedo} onClick={redo} title="Redo (Ctrl+Shift+Z)">↪</button>
+                <button
+                  type="button"
+                  className="editor-meta-icon-btn editor-save-btn"
+                  disabled={isSaving || !isDirty}
+                  onClick={save}
+                  title="Save (Ctrl+S)"
+                >
+                  {isSaving ? 'Saving…' : 'Save'}
+                </button>
                 <span className={`admin-badge admin-badge-${page.status}`}>{page.status}</span>
                 <button
                   type="button"
@@ -308,9 +318,6 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
     </DndContext>
   )
 }
-
-// Module-level reference to saveTimer so the keydown handler can cancel it
-const saveTimer: ReturnType<typeof setTimeout> | null = null
 
 function PaletteItem({
   entry,

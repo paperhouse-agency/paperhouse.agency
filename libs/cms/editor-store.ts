@@ -8,6 +8,7 @@ interface EditorState {
   isSaving: boolean
   lastSaved: Date | null
   saveError: string | null
+  isDirty: boolean
   history: CmsPage[]
   historyIndex: number
 }
@@ -28,17 +29,7 @@ interface EditorActions {
   save: () => Promise<void>
 }
 
-let saveTimer: ReturnType<typeof setTimeout> | null = null
-
-function scheduleSave(get: () => EditorState & EditorActions) {
-  if (saveTimer) clearTimeout(saveTimer)
-  saveTimer = setTimeout(() => {
-    get().save()
-  }, 500)
-}
-
 function pushHistory(state: EditorState, currentPage: CmsPage): Pick<EditorState, 'history' | 'historyIndex'> {
-  // Truncate forward history on new change
   const newHistory = [...state.history.slice(0, state.historyIndex + 1), currentPage].slice(-MAX_HISTORY)
   return { history: newHistory, historyIndex: newHistory.length - 1 }
 }
@@ -48,49 +39,45 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
   isSaving: false,
   lastSaved: null,
   saveError: null,
+  isDirty: false,
   history: [],
   historyIndex: -1,
 
-  setPage: (page) => set({ page, history: [], historyIndex: -1 }),
+  setPage: (page) => set({ page, history: [], historyIndex: -1, isDirty: false, lastSaved: null, saveError: null }),
 
   setTitle: (title) => {
     const { page } = get()
     if (!page) return
     const hist = pushHistory(get(), page)
-    set({ page: { ...page, title }, ...hist })
-    scheduleSave(get)
+    set({ page: { ...page, title }, ...hist, isDirty: true })
   },
 
   setSlug: (slug) => {
     const { page } = get()
     if (!page) return
     const hist = pushHistory(get(), page)
-    set({ page: { ...page, slug }, ...hist })
-    scheduleSave(get)
+    set({ page: { ...page, slug }, ...hist, isDirty: true })
   },
 
   updateSeo: (seo) => {
     const { page } = get()
     if (!page) return
     const hist = pushHistory(get(), page)
-    set({ page: { ...page, seo: { ...page.seo, ...seo } }, ...hist })
-    scheduleSave(get)
+    set({ page: { ...page, seo: { ...page.seo, ...seo } }, ...hist, isDirty: true })
   },
 
   addBlock: (block) => {
     const { page } = get()
     if (!page) return
     const hist = pushHistory(get(), page)
-    set({ page: { ...page, blocks: [...page.blocks, block] }, ...hist })
-    scheduleSave(get)
+    set({ page: { ...page, blocks: [...page.blocks, block] }, ...hist, isDirty: true })
   },
 
   removeBlock: (id) => {
     const { page } = get()
     if (!page) return
     const hist = pushHistory(get(), page)
-    set({ page: { ...page, blocks: page.blocks.filter((b) => b._id !== id) }, ...hist })
-    scheduleSave(get)
+    set({ page: { ...page, blocks: page.blocks.filter((b) => b._id !== id) }, ...hist, isDirty: true })
   },
 
   updateBlock: (id, data) => {
@@ -103,16 +90,15 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
         blocks: page.blocks.map((b) => (b._id === id ? ({ ...b, ...data } as BlockData) : b)),
       },
       ...hist,
+      isDirty: true,
     })
-    scheduleSave(get)
   },
 
   reorderBlocks: (blocks) => {
     const { page } = get()
     if (!page) return
     const hist = pushHistory(get(), page)
-    set({ page: { ...page, blocks }, ...hist })
-    scheduleSave(get)
+    set({ page: { ...page, blocks }, ...hist, isDirty: true })
   },
 
   toggleStatus: async () => {
@@ -120,14 +106,18 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     if (!page) return
     const newStatus: 'draft' | 'published' = page.status === 'draft' ? 'published' : 'draft'
     const updated: CmsPage = { ...page, status: newStatus }
-    set({ page: updated, isSaving: true })
-    if (saveTimer) clearTimeout(saveTimer)
-    await fetch(`/api/admin/pages/${page.id}`, {
+    set({ page: updated, isSaving: true, saveError: null })
+    const res = await fetch(`/api/admin/pages/${page.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'x-requested-with': 'XMLHttpRequest' },
       body: JSON.stringify(updated),
     })
-    set({ isSaving: false, lastSaved: new Date() })
+    if (res.ok) {
+      set({ isSaving: false, lastSaved: new Date(), isDirty: false })
+    } else {
+      const err = (await res.json()) as { error?: string }
+      set({ isSaving: false, saveError: err.error ?? 'Save failed' })
+    }
   },
 
   duplicateBlock: (id) => {
@@ -136,44 +126,29 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     const idx = page.blocks.findIndex((b) => b._id === id)
     if (idx === -1) return
     const original = page.blocks[idx]
-    const cloned = JSON.parse(JSON.stringify(original)) as BlockData
-    const clone: BlockData = { ...cloned, _id: crypto.randomUUID() }
+    const clone: BlockData = { ...(JSON.parse(JSON.stringify(original)) as BlockData), _id: crypto.randomUUID() }
     const hist = pushHistory(get(), page)
     const newBlocks = [...page.blocks]
     newBlocks.splice(idx + 1, 0, clone)
-    set({ page: { ...page, blocks: newBlocks }, ...hist })
-    scheduleSave(get)
+    set({ page: { ...page, blocks: newBlocks }, ...hist, isDirty: true })
   },
 
   undo: () => {
     const { history, historyIndex, page } = get()
     if (historyIndex < 0 || history.length === 0) return
     const target = history[historyIndex]
-    // Save current page one step forward in "redo" by adjusting index only
-    // We push current page as "future" when going back by reducing the index
-    const newIndex = historyIndex - 1
-    // Restore to the snapshot at historyIndex, shift index back
-    // But we need to keep the current page accessible for redo
-    // Strategy: keep history unchanged, just walk the index
-    // We need to store "current" as part of history too — insert current at historyIndex+1 if not already
     const newHistory = [...history]
-    if (page && (newHistory.length <= historyIndex + 1)) {
-      // insert current page so redo works
+    if (page && newHistory.length <= historyIndex + 1) {
       newHistory.splice(historyIndex + 1, 0, page)
     }
-    set({ page: target, history: newHistory, historyIndex: newIndex })
-    if (saveTimer) clearTimeout(saveTimer)
-    saveTimer = setTimeout(() => get().save(), 500)
+    set({ page: target, history: newHistory, historyIndex: historyIndex - 1, isDirty: true })
   },
 
   redo: () => {
     const { history, historyIndex } = get()
     const nextIndex = historyIndex + 1
     if (nextIndex >= history.length) return
-    const target = history[nextIndex]
-    set({ page: target, historyIndex: nextIndex })
-    if (saveTimer) clearTimeout(saveTimer)
-    saveTimer = setTimeout(() => get().save(), 500)
+    set({ page: history[nextIndex], historyIndex: nextIndex, isDirty: true })
   },
 
   save: async () => {
@@ -183,14 +158,14 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     try {
       const res = await fetch(`/api/admin/pages/${page.id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-requested-with': 'XMLHttpRequest',
-        },
+        headers: { 'Content-Type': 'application/json', 'x-requested-with': 'XMLHttpRequest' },
         body: JSON.stringify({ ...page, updatedAt: new Date().toISOString() }),
       })
-      if (!res.ok) throw new Error('Save failed')
-      set({ isSaving: false, lastSaved: new Date() })
+      if (!res.ok) {
+        const err = (await res.json()) as { error?: string }
+        throw new Error(err.error ?? 'Save failed')
+      }
+      set({ isSaving: false, lastSaved: new Date(), isDirty: false })
     } catch (err) {
       set({ isSaving: false, saveError: err instanceof Error ? err.message : 'Save failed' })
     }

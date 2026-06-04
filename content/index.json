@@ -29,13 +29,6 @@
       }
     },
     {
-      "_id": "4031423e-2990-4465-9ead-347805f52f39",
-      "_type": "section",
-      "backgroundColor": "white",
-      "paddingSize": "sm",
-      "children": []
-    },
-    {
       "_id": "dd0483f8-efd1-4d7d-b19d-4ea0f7e17538",
       "_type": "newsletter",
       "preheadingContent": "",
@@ -52,5 +45,5 @@
     }
   ],
   "createdAt": "2026-06-03T19:09:29.750Z",
-  "updatedAt": "2026-06-04T04:59:02.731Z"
+  "updatedAt": "2026-06-04T05:21:50.711Z"
 }
