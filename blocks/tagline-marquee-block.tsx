@@ -1,3 +1,4 @@
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { Marquee } from '@/components/marquee'
 
 const ITEMS = [
@@ -30,4 +31,16 @@ export function TaglineMarqueeBlock() {
       </Marquee>
     </div>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'tagline-marquee',
+  label: 'Tagline Marquee',
+  icon: 'Repeat',
+  fields: [],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'tagline-marquee',
+  }),
 }

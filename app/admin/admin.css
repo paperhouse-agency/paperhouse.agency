@@ -318,7 +318,6 @@
 .editor-tabs {
   display: flex;
   gap: 1rem;
-  border-bottom: 1px solid #e8e8e6;
   margin-bottom: 0.75rem;
   background: #fff;
   padding: 0 1rem;
@@ -344,11 +343,15 @@
 .editor-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
 
 .editor-block-list {
-  background: #fff;
+  background: transparent;
   border: 1px solid #e8e8e6;
   border-top: none;
   border-radius: 0 0 6px 6px;
   min-height: 80px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .editor-block-item {
@@ -356,14 +359,15 @@
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  border-bottom: 1px solid #f0f0ee;
+  background: #fff;
+  border: 1px solid #e8e8e6;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.1s;
+  transition: background 0.1s, border-color 0.1s;
 }
 
-.editor-block-item:last-child { border-bottom: none; }
-.editor-block-item:hover { background: #fafaf8; }
-.editor-block-item.selected { background: #f0f4ff; border-bottom-color: #dce6ff; }
+.editor-block-item:hover { background: #fafaf8; border-color: #d0d0ce; }
+.editor-block-item.selected { background: #f0f4ff; border-color: #c4d4ff; }
 
 .editor-block-drag {
   color: #ccc;
@@ -417,11 +421,14 @@
 /* Inline collapsible fields panel — renders below selected block */
 .editor-block-fields {
   background: #f7f8ff;
-  border-bottom: 1px solid #dce6ff;
+  border: 1px solid #c4d4ff;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
   padding: 1.25rem 1.25rem 1.25rem 2.75rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem 1.25rem;
+  margin-top: -2px;
 }
 
 .editor-block-fields .form-row {

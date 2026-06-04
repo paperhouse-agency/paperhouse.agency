@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Link } from '@/components/link'
 import {
   DndContext,
   DragOverlay,
@@ -180,14 +181,12 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
               >
                 {page.status === 'draft' ? 'Publish' : 'Unpublish'}
               </button>
-              <a
+              <Link
                 href={`/${page.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
                 style={{ padding: '4px 10px', fontSize: '12px', textDecoration: 'none', border: '1px solid #ddd', borderRadius: '4px', color: '#444', whiteSpace: 'nowrap' }}
               >
                 Preview ↗
-              </a>
+              </Link>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span className="admin-slug">/</span>
@@ -284,7 +283,7 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
 }
 
 // Module-level reference to saveTimer so the keydown handler can cancel it
-let saveTimer: ReturnType<typeof setTimeout> | null = null
+const saveTimer: ReturnType<typeof setTimeout> | null = null
 
 function PaletteItem({
   entry,
@@ -298,7 +297,8 @@ function PaletteItem({
   })
 
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: dnd-kit handles keyboard via attributes
+    // biome-ignore lint/a11y/useKeyWithClickEvents: dnd-kit spreads keyboard handlers via attributes
+    // biome-ignore lint/a11y/noStaticElementInteractions: dnd-kit requires div as draggable root
     <div
       ref={setNodeRef}
       className="editor-palette-btn"
@@ -338,6 +338,7 @@ function SortableBlockItem({
       style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }}
     >
       {/* Block row */}
+      {/* biome-ignore lint/a11y/useSemanticElements: dnd-kit sortable wrapper prevents using <button> here */}
       <div
         className={`editor-block-item${isSelected ? ' selected' : ''}`}
         style={{ opacity: isVisible ? 1 : 0.45 }}

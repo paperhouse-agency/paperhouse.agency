@@ -1,4 +1,5 @@
 'use client'
+import type { BlockSchema } from '@/libs/cms/block-schema'
 
 import { useActionState } from 'react'
 import Script from 'next/script'
@@ -122,4 +123,23 @@ export function NewsletterBlock({
       </section>
     </>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'newsletter',
+  label: 'Newsletter',
+  icon: 'Mail',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text' },
+    { key: 'headingContent', label: 'Heading', type: 'text' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea' },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'newsletter',
+    preheadingContent: '',
+    headingContent: '',
+    bodyContent: '',
+  }),
 }

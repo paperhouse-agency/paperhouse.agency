@@ -1,3 +1,4 @@
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { FeatureContentCard } from '@/components/molecules/feature-content-card'
 
 export interface FeatureCard {
@@ -65,4 +66,37 @@ export function FeatureCardsBlock({
       </div>
     </section>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'feature-cards',
+  label: 'Feature Cards',
+  icon: 'CreditCard',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text' },
+    { key: 'headingContent', label: 'Heading', type: 'text', required: true },
+    { key: 'bodyContent', label: 'Body', type: 'textarea' },
+    {
+      key: 'cards',
+      label: 'Cards',
+      type: 'array',
+      fields: [
+        { key: 'label', label: 'Label', type: 'text', required: true },
+        { key: 'heading', label: 'Heading', type: 'text', required: true },
+        { key: 'content', label: 'Content', type: 'textarea' },
+        { key: 'ctaLabel', label: 'CTA Label', type: 'text', required: true },
+        { key: 'ctaUrl', label: 'CTA URL', type: 'url' },
+        { key: 'image', label: 'Image', type: 'image', required: true },
+      ],
+    },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'feature-cards',
+    preheadingContent: '',
+    headingContent: '',
+    bodyContent: '',
+    cards: [],
+  }),
 }

@@ -1,3 +1,4 @@
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { Marquee } from '@/components/marquee'
 
 const BRANDS = [
@@ -30,4 +31,16 @@ export function BrandsBlock() {
       </Marquee>
     </div>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'brands',
+  label: 'Brands Marquee',
+  icon: 'Star',
+  fields: [],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'brands',
+  }),
 }

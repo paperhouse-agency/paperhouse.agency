@@ -37,7 +37,10 @@ export type LucideIconName = string
 
 export type BlockType =
   | 'bento-stats'
+  | 'brands'
   | 'card-grid'
+  | 'cta-manifesto'
+  | 'faq'
   | 'feature-cards'
   | 'form-cta'
   | 'image-content-cards'
@@ -46,6 +49,7 @@ export type BlockType =
   | 'numbered-steps'
   | 'people-grid'
   | 'split-hero'
+  | 'tagline-marquee'
   | 'section'
 
 export interface BaseBlockData {
@@ -165,6 +169,33 @@ export interface SplitHeroBlockData extends BaseBlockData {
   }>
 }
 
+export interface BrandsBlockData extends BaseBlockData {
+  _type: 'brands'
+}
+
+export interface CtaManifestoBlockData extends BaseBlockData {
+  _type: 'cta-manifesto'
+  preheadingContent?: string
+  headingLine1?: string
+  headingLine2?: string
+  primaryCta?: { label: string; url: string }
+  secondaryCta?: { label: string; url: string }
+}
+
+export interface FaqBlockData extends BaseBlockData {
+  _type: 'faq'
+  preheadingContent?: string
+  headingContent?: string
+  bodyContent?: string
+  ctaLabel?: string
+  ctaUrl?: string
+  items: Array<{ question: string; answer: string }>
+}
+
+export interface TaglineMarqueeBlockData extends BaseBlockData {
+  _type: 'tagline-marquee'
+}
+
 export interface SectionBlockData extends BaseBlockData {
   _type: 'section'
   backgroundColor?: 'offwhite' | 'bluishgray' | 'white' | 'text'
@@ -174,7 +205,10 @@ export interface SectionBlockData extends BaseBlockData {
 
 export type BlockData =
   | BentoStatsBlockData
+  | BrandsBlockData
   | CardGridBlockData
+  | CtaManifestoBlockData
+  | FaqBlockData
   | FeatureCardsBlockData
   | FormCtaBlockData
   | ImageContentCardsBlockData
@@ -183,6 +217,7 @@ export type BlockData =
   | NumberedStepsBlockData
   | PeopleGridBlockData
   | SplitHeroBlockData
+  | TaglineMarqueeBlockData
   | SectionBlockData
 
 export interface CmsPage {

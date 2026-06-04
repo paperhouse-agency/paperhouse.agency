@@ -35,7 +35,7 @@ export default async function PagesPage() {
               <th>File</th>
               <th>Status</th>
               <th>Updated</th>
-              <th></th>
+              <th />
             </tr>
           </thead>
           <tbody>

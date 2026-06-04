@@ -1,3 +1,4 @@
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { Button } from '@/components/button'
 
 export interface CtaManifestoBlockProps {
@@ -38,4 +39,29 @@ export function CtaManifestoBlock({
       </div>
     </section>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'cta-manifesto',
+  label: 'CTA Manifesto',
+  icon: 'Megaphone',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text' },
+    { key: 'headingLine1', label: 'Heading Line 1', type: 'text' },
+    { key: 'headingLine2', label: 'Heading Line 2', type: 'text' },
+    { key: 'primaryCta.label', label: 'Primary CTA Label', type: 'text' },
+    { key: 'primaryCta.url', label: 'Primary CTA URL', type: 'url' },
+    { key: 'secondaryCta.label', label: 'Secondary CTA Label', type: 'text' },
+    { key: 'secondaryCta.url', label: 'Secondary CTA URL', type: 'url' },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'cta-manifesto',
+    preheadingContent: 'READY TO START?',
+    headingLine1: "Let's build something",
+    headingLine2: 'worth talking about.',
+    primaryCta: { label: 'Schedule a Call', url: '/contact' },
+    secondaryCta: { label: 'See Our Work', url: '/work' },
+  }),
 }

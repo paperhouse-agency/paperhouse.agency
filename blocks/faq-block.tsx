@@ -1,4 +1,5 @@
 'use client'
+import type { BlockSchema } from '@/libs/cms/block-schema'
 
 import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/button'
@@ -71,4 +72,37 @@ export function FaqBlock({
       </div>
     </section>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'faq',
+  label: 'FAQ',
+  icon: 'HelpCircle',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text' },
+    { key: 'headingContent', label: 'Heading', type: 'text' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea' },
+    { key: 'ctaLabel', label: 'CTA Label', type: 'text' },
+    { key: 'ctaUrl', label: 'CTA URL', type: 'url' },
+    {
+      key: 'items',
+      label: 'FAQ Items',
+      type: 'array',
+      fields: [
+        { key: 'question', label: 'Question', type: 'text', required: true },
+        { key: 'answer', label: 'Answer', type: 'textarea', required: true },
+      ],
+    },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'faq',
+    preheadingContent: 'KNOWLEDGE BASE',
+    headingContent: 'Questions, answered',
+    bodyContent: '',
+    ctaLabel: 'Get In Touch',
+    ctaUrl: '#contact',
+    items: [],
+  }),
 }

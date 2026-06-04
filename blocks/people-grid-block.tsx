@@ -1,3 +1,4 @@
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { TeamCard } from '@/components/molecules/team-card'
 
 export interface TeamMember {
@@ -58,4 +59,35 @@ export function PeopleGridBlock({
       </div>
     </section>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'people-grid',
+  label: 'People Grid',
+  icon: 'Users',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text' },
+    { key: 'headingContent', label: 'Heading', type: 'text', required: true },
+    { key: 'bodyContent', label: 'Body', type: 'textarea' },
+    {
+      key: 'members',
+      label: 'Members',
+      type: 'array',
+      fields: [
+        { key: 'name', label: 'Name', type: 'text', required: true },
+        { key: 'role', label: 'Role', type: 'text', required: true },
+        { key: 'image', label: 'Image', type: 'image', required: true },
+        { key: 'ctaUrl', label: 'Profile URL', type: 'url' },
+      ],
+    },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'people-grid',
+    preheadingContent: '',
+    headingContent: '',
+    bodyContent: '',
+    members: [],
+  }),
 }

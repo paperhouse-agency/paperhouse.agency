@@ -83,7 +83,7 @@ export async function ensureRootUser(): Promise<void> {
   if (rootEnsured) return
   const rootId = process.env.ROOT_USER_ID
   const rootPass = process.env.ROOT_USER_PASS
-  if (!rootId || !rootPass) return
+  if (!(rootId && rootPass)) return
 
   const users = await readUsers()
   if (users.find((u) => u.email === rootId)) {

@@ -1,3 +1,4 @@
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { ArticleCard } from '@/components/molecules/article-card'
 
 export interface CardGridArticle {
@@ -63,4 +64,35 @@ export function CardGridBlock({
       </div>
     </section>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'card-grid',
+  label: 'Card Grid',
+  icon: 'Grid3X3',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text' },
+    { key: 'headingContent', label: 'Heading', type: 'text', required: true },
+    { key: 'bodyContent', label: 'Body', type: 'textarea' },
+    {
+      key: 'articles',
+      label: 'Articles',
+      type: 'array',
+      fields: [
+        { key: 'image', label: 'Image', type: 'image', required: true },
+        { key: 'heading', label: 'Heading', type: 'text', required: true },
+        { key: 'content', label: 'Content', type: 'textarea' },
+        { key: 'ctaUrl', label: 'CTA URL', type: 'url' },
+      ],
+    },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'card-grid',
+    preheadingContent: '',
+    headingContent: '',
+    bodyContent: '',
+    articles: [],
+  }),
 }
