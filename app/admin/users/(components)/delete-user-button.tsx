@@ -20,7 +20,8 @@ export function DeleteUserButton({ id, name }: { id: string; name: string }) {
     <button
       type="button"
       onClick={handleDelete}
-      data-variant='danger' style={{ fontFamily: 'monospace', fontSize: '14px' }}
+      className="cms-btn cms-btn-ghost"
+      style={{ height: 34, padding: '0 14px', fontSize: 12, color: 'var(--color-primary)', borderColor: 'rgba(255,77,0,0.3)' }}
     >
       Delete
     </button>

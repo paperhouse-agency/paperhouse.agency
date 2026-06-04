@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Link } from '@/components/link'
 
 const RESERVED = ['index', 'api', 'admin', '_next', 'static']
 
@@ -70,90 +71,111 @@ export default function NewPagePage() {
   }
 
   return (
-    <div style={{ maxWidth: '480px' }}>
-      <div className="admin-page-header">
-        <h1 style={{ margin: 0 }}>New page</h1>
-      </div>
-      <div className="admin-card">
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div className="form-row">
-            <label htmlFor="title">Title</label>
-            <input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => handleTitleChange(e.target.value)}
-              required
-              placeholder="My page"
-            />
-          </div>
+    <div className="cms-form-wrap">
+      <Link href="/admin/pages" className="cms-back-link">
+        ← Pages
+      </Link>
+      <h1 className="cms-form-heading">New page</h1>
+      <p className="cms-form-sub">Give it a name — you can add blocks next.</p>
 
-          <div className="form-row">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="cms-card">
+        <div className="cms-card-body">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div className="cms-field">
+              <label htmlFor="title" className="cms-field-label">
+                Title <span className="cms-field-req">*</span>
+              </label>
+              <input
+                id="title"
+                type="text"
+                className="cms-input"
+                value={title}
+                onChange={(e) => handleTitleChange(e.target.value)}
+                required
+                placeholder="e.g. Case Studies"
+                autoFocus
+              />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <input
                 id="is-homepage"
                 type="checkbox"
-                className="f-toggle"
+                className="cms-toggle"
                 checked={isHomepage}
                 onChange={(e) => handleHomepageToggle(e.target.checked)}
               />
-              <label htmlFor="is-homepage" className="f-toggle-label">Set as homepage</label>
+              <label
+                htmlFor="is-homepage"
+                style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--chrome-muted)', cursor: 'pointer' }}
+              >
+                Set as homepage
+              </label>
             </div>
-          </div>
 
-          {!isHomepage && (
-            <div className="form-row">
-              <label htmlFor="slug">Slug</label>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span className="admin-slug" style={{ flexShrink: 0 }}>/</span>
-                <input
-                  id="slug"
-                  type="text"
-                  value={slug}
-                  onChange={(e) => { setSlug(e.target.value); setSlugWarning('') }}
-                  onBlur={(e) => checkSlug(e.target.value)}
-                  required
-                  pattern="[a-z0-9-]+"
-                  placeholder="my-page"
-                  style={{ flex: 1 }}
-                />
+            {!isHomepage && (
+              <div className="cms-field">
+                <label htmlFor="slug" className="cms-field-label">URL slug</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span className="cms-slug-seg">/</span>
+                  <input
+                    id="slug"
+                    type="text"
+                    className={`cms-input${slugWarning ? ' cms-input--error' : ''}`}
+                    value={slug}
+                    onChange={(e) => { setSlug(e.target.value); setSlugWarning('') }}
+                    onBlur={(e) => checkSlug(e.target.value)}
+                    required
+                    pattern="[a-z0-9-]+"
+                    placeholder="my-page"
+                    style={{ flex: 1 }}
+                  />
+                </div>
+                <span className="cms-field-hint">
+                  Saved as content/{slug || 'slug'}.json
+                </span>
+                {slugWarning && (
+                  <span className="cms-error-msg">{slugWarning}</span>
+                )}
               </div>
-              <small className="admin-muted" style={{ marginTop: '4px', display: 'block' }}>
-                Saved as content/{slug || 'slug'}.json
-              </small>
-              {slugWarning && (
-                <small style={{ color: '#c0392b', marginTop: '4px', display: 'block' }}>
-                  {slugWarning}
-                </small>
-              )}
+            )}
+
+            {isHomepage && (
+              <p className="cms-muted-text">
+                Saved as <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>content/index.json</code> — served at <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>/</code>
+              </p>
+            )}
+
+            {error && <p className="cms-error-msg">{error}</p>}
+
+            <div style={{ display: 'flex', gap: 10, paddingTop: 4 }}>
+              <button
+                type="submit"
+                className="cms-btn cms-btn-primary"
+                disabled={loading || !!slugWarning}
+              >
+                {loading ? 'Creating…' : 'Create page'}
+              </button>
+              <button
+                type="button"
+                className="cms-btn cms-btn-ghost"
+                onClick={() => router.push('/admin/pages' as string as never)}
+              >
+                Cancel
+              </button>
             </div>
-          )}
-
-          {isHomepage && (
-            <p className="admin-muted" style={{ margin: 0 }}>
-              Saved as <code>content/index.json</code> — served at <code>/</code>
-            </p>
-          )}
-
-          {error && <p className="admin-error">{error}</p>}
-          <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.25rem' }}>
-            <button type="submit" disabled={loading || !!slugWarning}>
-              {loading ? 'Creating…' : 'Create page'}
-            </button>
-            <button
-              type="button"
-              data-variant="secondary"
-              onClick={() => router.push('/admin/pages' as string as never)}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   )
 }
 
 function slugify(str: string) {
-  return str.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
 }

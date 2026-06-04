@@ -31,7 +31,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = (await req.json()) as Partial<CmsPage>
-  const { title, slug, status, seo, blocks } = body
+  const { title, slug, status, seo, settings, blocks } = body
 
   if (slug !== undefined && slug !== existing.slug) {
     if (await isSlugTaken(slug, existing.id)) {
@@ -39,12 +39,28 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     }
   }
 
+  // Record publishedAt timestamp on first publish
+  const becomingPublished =
+    status === 'published' && existing.status !== 'published'
+  const publishedAt =
+    becomingPublished && !existing.settings?.publishedAt
+      ? new Date().toISOString()
+      : existing.settings?.publishedAt
+
+  const mergedSettings =
+    settings !== undefined
+      ? { ...existing.settings, ...settings, ...(publishedAt ? { publishedAt } : {}) }
+      : publishedAt && !existing.settings?.publishedAt
+        ? { ...existing.settings, publishedAt }
+        : existing.settings
+
   const updated: CmsPage = {
     ...existing,
     ...(title !== undefined && { title }),
     ...(slug !== undefined && { slug }),
     ...(status !== undefined && { status }),
     ...(seo !== undefined && { seo }),
+    ...(mergedSettings !== undefined && { settings: mergedSettings }),
     ...(blocks !== undefined && { blocks }),
     id: existing.id,
     createdAt: existing.createdAt,

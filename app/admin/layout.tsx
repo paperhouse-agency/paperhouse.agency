@@ -4,9 +4,9 @@ import './admin.css'
 
 export default function AdminLayout({ children }: PropsWithChildren) {
   return (
-    <div className="admin">
+    <div className="cms-shell">
       <AdminNav />
-      <main className="admin-main">{children}</main>
+      {children}
     </div>
   )
 }

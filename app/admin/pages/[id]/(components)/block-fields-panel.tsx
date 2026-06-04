@@ -9,14 +9,30 @@ import type { BlockData } from '@/libs/cms/types'
 export function BlockFieldsPanel({ block }: { block: BlockData }) {
   const { updateBlock } = useEditorStore()
   const entry = getBlockEntry(block._type)
-  if (!entry) return <p className="f-empty">Unknown block type: {block._type}</p>
-  if (entry.fields.length === 0) return <p className="f-empty">This block has no configurable fields.</p>
+  if (!entry) {
+    return (
+      <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--chrome-muted)', fontStyle: 'italic' }}>
+        Unknown block type: {block._type}
+      </p>
+    )
+  }
+  if (entry.fields.length === 0) {
+    return (
+      <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--chrome-muted)', fontStyle: 'italic' }}>
+        This block has no configurable fields.
+      </p>
+    )
+  }
 
   function getNestedValue(obj: Record<string, unknown>, path: string[]): unknown {
     return path.reduce((acc, key) => (acc as Record<string, unknown>)?.[key], obj as unknown)
   }
 
-  function setNestedValue(obj: Record<string, unknown>, path: string[], value: unknown): Record<string, unknown> {
+  function setNestedValue(
+    obj: Record<string, unknown>,
+    path: string[],
+    value: unknown,
+  ): Record<string, unknown> {
     const [head, ...rest] = path
     if (rest.length === 0) return { ...obj, [head]: value }
     return { ...obj, [head]: setNestedValue((obj[head] as Record<string, unknown>) ?? {}, rest, value) }
@@ -37,7 +53,7 @@ export function BlockFieldsPanel({ block }: { block: BlockData }) {
   }
 
   return (
-    <div className="f-grid">
+    <div className="cms-field-grid">
       {entry.fields.map((field) => (
         <FieldGroup key={field.key} field={field}>
           <FieldEditor
@@ -53,9 +69,10 @@ export function BlockFieldsPanel({ block }: { block: BlockData }) {
 }
 
 function FieldGroup({ field, children }: { field: FieldDef; children: React.ReactNode }) {
-  const isFullSpan = field.span === 'full' || ['textarea', 'array', 'image', 'blocks'].includes(field.type)
+  const isFullSpan =
+    field.span === 'full' || ['textarea', 'array', 'image', 'blocks'].includes(field.type)
   return (
-    <div className={isFullSpan ? 'f-group f-group-full' : 'f-group'}>
+    <div className={`cms-field${isFullSpan ? ' cms-field-full' : ''}`}>
       {children}
     </div>
   )
@@ -63,16 +80,16 @@ function FieldGroup({ field, children }: { field: FieldDef; children: React.Reac
 
 function FieldLabel({ field, htmlFor }: { field: FieldDef; htmlFor: string }) {
   return (
-    <label htmlFor={htmlFor} className="f-label">
+    <label htmlFor={htmlFor} className="cms-field-label">
       {field.label}
-      {field.required && <span className="f-required">*</span>}
+      {field.required && <span className="cms-field-req">*</span>}
     </label>
   )
 }
 
-function FieldDescription({ field }: { field: FieldDef }) {
+function FieldHint({ field }: { field: FieldDef }) {
   if (!field.description) return null
-  return <p className="f-desc">{field.description}</p>
+  return <span className="cms-field-hint">{field.description}</span>
 }
 
 function FieldEditor({
@@ -101,9 +118,9 @@ function FieldEditor({
             value={(value as string) ?? ''}
             onChange={(e) => onChange(e.target.value)}
             placeholder={field.placeholder}
-            className={isEmpty ? 'f-input-error' : ''}
+            className={`cms-input cms-input--sm${isEmpty ? ' cms-input--error' : ''}`}
           />
-          <FieldDescription field={field} />
+          <FieldHint field={field} />
         </>
       )
 
@@ -117,24 +134,31 @@ function FieldEditor({
             onChange={(e) => onChange(e.target.value)}
             placeholder={field.placeholder}
             rows={3}
-            className={isEmpty ? 'f-input-error' : ''}
+            className={`cms-textarea cms-textarea--sm${isEmpty ? ' cms-input--error' : ''}`}
           />
-          <FieldDescription field={field} />
+          <FieldHint field={field} />
         </>
       )
 
     case 'boolean':
       return (
-        <div className="f-toggle-wrap">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4 }}>
           <input
             type="checkbox"
             id={fieldId}
-            className="f-toggle"
+            className="cms-toggle"
             checked={(value as boolean) ?? false}
             onChange={(e) => onChange(e.target.checked)}
           />
-          <label htmlFor={fieldId} className="f-toggle-label">{field.label}</label>
-          {field.description && <span className="f-desc" style={{ marginTop: 0 }}>{field.description}</span>}
+          <label
+            htmlFor={fieldId}
+            style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--color-text)', cursor: 'pointer' }}
+          >
+            {field.label}
+          </label>
+          {field.description && (
+            <span className="cms-field-hint">{field.description}</span>
+          )}
         </div>
       )
 
@@ -146,14 +170,16 @@ function FieldEditor({
             id={fieldId}
             value={(value as string) ?? field.defaultValue ?? ''}
             onChange={(e) => onChange(e.target.value)}
-            className={isEmpty ? 'f-input-error' : ''}
+            className={`cms-select cms-select--sm${isEmpty ? ' cms-input--error' : ''}`}
           >
             <option value="">— Select —</option>
             {field.options?.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
             ))}
           </select>
-          <FieldDescription field={field} />
+          <FieldHint field={field} />
         </>
       )
 
@@ -161,17 +187,15 @@ function FieldEditor({
       return (
         <>
           <FieldLabel field={field} htmlFor={fieldId} />
-          <div className="f-icon-wrap">
-            <input
-              id={fieldId}
-              type="text"
-              value={(value as string) ?? ''}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder={field.placeholder ?? 'e.g. Star, ArrowRight'}
-              className={isEmpty ? 'f-input-error' : ''}
-            />
-          </div>
-          <p className="f-desc">Lucide icon name in PascalCase</p>
+          <input
+            id={fieldId}
+            type="text"
+            value={(value as string) ?? ''}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={field.placeholder ?? 'e.g. Star, ArrowRight'}
+            className={`cms-input cms-input--sm${isEmpty ? ' cms-input--error' : ''}`}
+          />
+          <span className="cms-field-hint">Lucide icon name in PascalCase</span>
         </>
       )
 
@@ -184,7 +208,7 @@ function FieldEditor({
             alt={(value as { src: string; alt: string })?.alt ?? ''}
             onChange={(src, alt) => onChange({ src, alt })}
           />
-          <FieldDescription field={field} />
+          <FieldHint field={field} />
         </>
       )
 
@@ -192,7 +216,7 @@ function FieldEditor({
       return (
         <>
           <FieldLabel field={field} htmlFor={fieldId} />
-          <FieldDescription field={field} />
+          <FieldHint field={field} />
           <ArrayField
             field={field}
             items={(value as Record<string, unknown>[]) ?? []}
@@ -204,7 +228,9 @@ function FieldEditor({
 
     case 'blocks':
       return (
-        <p className="f-desc" style={{ fontStyle: 'italic' }}>{field.label} — nested block editing coming soon.</p>
+        <p className="cms-field-hint" style={{ fontStyle: 'italic' }}>
+          {field.label} — nested block editing coming soon.
+        </p>
       )
 
     default:
@@ -247,9 +273,9 @@ function ArrayField({
   }
 
   return (
-    <div className="f-array">
+    <div className="cms-array">
       {items.length === 0 && (
-        <p className="f-array-empty">No items yet.</p>
+        <p className="cms-array-empty">No items yet.</p>
       )}
       {items.map((item, i) => (
         <ArrayItem
@@ -268,7 +294,7 @@ function ArrayField({
           }}
         />
       ))}
-      <button type="button" className="f-array-add" onClick={addItem}>
+      <button type="button" className="cms-array-add" onClick={addItem}>
         + Add {field.label}
       </button>
     </div>
@@ -298,24 +324,51 @@ function ArrayItem({
   const preview = getItemPreview(item, subFields)
 
   return (
-    <div className="f-array-item">
-      <div className="f-array-header">
-        <button type="button" className="f-array-toggle" onClick={() => setOpen(!open)}>
-          <span className="f-array-chevron">{open ? '▾' : '▸'}</span>
-          <span className="f-array-num">
-            {index + 1}
-            {preview && <span className="f-array-preview"> — {preview}</span>}
-          </span>
+    <div className="cms-array-item">
+      <div className="cms-array-header">
+        <button
+          type="button"
+          className="cms-array-toggle"
+          onClick={() => setOpen(!open)}
+        >
+          <span className="cms-array-chevron">{open ? '▾' : '▸'}</span>
+          <span className="cms-array-num">Item {index + 1}</span>
+          {preview && (
+            <span className="cms-array-preview-text"> — {preview}</span>
+          )}
         </button>
-        <div className="f-array-actions">
-          <button type="button" title="Move up" disabled={index === 0} onClick={() => onMove(index, index - 1)}>↑</button>
-          <button type="button" title="Move down" disabled={index === total - 1} onClick={() => onMove(index, index + 1)}>↓</button>
-          <button type="button" title="Remove" className="f-array-remove" onClick={onRemove}>×</button>
+        <div className="cms-array-actions">
+          <button
+            type="button"
+            className="cms-array-btn"
+            title="Move up"
+            disabled={index === 0}
+            onClick={() => onMove(index, index - 1)}
+          >
+            ↑
+          </button>
+          <button
+            type="button"
+            className="cms-array-btn"
+            title="Move down"
+            disabled={index === total - 1}
+            onClick={() => onMove(index, index + 1)}
+          >
+            ↓
+          </button>
+          <button
+            type="button"
+            className="cms-array-btn cms-array-btn--remove"
+            title="Remove"
+            onClick={onRemove}
+          >
+            ×
+          </button>
         </div>
       </div>
 
       {open && (
-        <div className="f-array-body">
+        <div className="cms-array-body">
           {subFields.map((subField) => (
             <FieldGroup key={subField.key} field={subField}>
               <FieldEditor
@@ -357,7 +410,11 @@ function ImageField({
     setUploading(true)
     const res = await fetch('/api/admin/images', {
       method: 'POST',
-      headers: { 'Content-Type': file.type, 'x-filename': file.name, 'x-requested-with': 'XMLHttpRequest' },
+      headers: {
+        'Content-Type': file.type,
+        'x-filename': file.name,
+        'x-requested-with': 'XMLHttpRequest',
+      },
       body: file,
     })
     const data = (await res.json()) as { url?: string }
@@ -366,30 +423,39 @@ function ImageField({
   }
 
   return (
-    <div className="f-image">
-      <div className="f-image-thumb">
-        {src
+    <div className="cms-image-field">
+      <div className="cms-image-thumb">
+        {src ? (
           // biome-ignore lint/performance/noImgElement: admin-only thumbnail
-          ? <img src={src} alt={alt} />
-          : <span>No image</span>
-        }
+          <img src={src} alt={alt} />
+        ) : (
+          <span>No img</span>
+        )}
       </div>
-      <div className="f-image-inputs">
+      <div className="cms-image-inputs">
         <input
           type="url"
           value={src}
           onChange={(e) => onChange(e.target.value, alt)}
           placeholder="Image URL"
+          className="cms-input cms-input--sm cms-input--mono"
         />
         <input
           type="text"
           value={alt}
           onChange={(e) => onChange(src, e.target.value)}
           placeholder="Alt text"
+          className="cms-input cms-input--sm"
         />
-        <label className="f-image-upload">
+        <label className="cms-upload-btn">
           {uploading ? 'Uploading…' : 'Upload file'}
-          <input type="file" accept="image/*" onChange={handleFile} disabled={uploading} className="f-file-hidden" />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFile}
+            disabled={uploading}
+            style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}
+          />
         </label>
       </div>
     </div>

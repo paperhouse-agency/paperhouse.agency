@@ -29,8 +29,27 @@ export interface CmsPageSeo {
   title?: string
   description?: string
   keywords?: string[]
-  ogImage?: CmsImage
+  /** URL of the Open Graph / social share image (e.g. "https://example.com/og.jpg") */
+  ogImage?: string
   noIndex?: boolean
+}
+
+export type PageVisibility = 'public' | 'private' | 'password-protected'
+export type PageTemplate = 'default' | 'landing-page' | 'article' | 'contact' | 'blank'
+
+export interface CmsPageSettings {
+  /** Who can view this page */
+  visibility?: PageVisibility
+  /** Layout template for rendering */
+  template?: PageTemplate
+  /** Display name of the content author */
+  author?: string
+  /** BCP-47 language tag, e.g. "en-US" */
+  language?: string
+  /** Slug of the parent page for breadcrumb / nav hierarchy */
+  parentSlug?: string
+  /** ISO timestamp of first publish (set automatically) */
+  publishedAt?: string
 }
 
 export type LucideIconName = string
@@ -228,6 +247,7 @@ export interface CmsPage {
   slug: string
   status: 'draft' | 'published'
   seo: CmsPageSeo
+  settings?: CmsPageSettings
   blocks: BlockData[]
   createdAt: string
   updatedAt: string

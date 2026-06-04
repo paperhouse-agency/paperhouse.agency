@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { BlockData, CmsPage, CmsPageSeo } from './types'
+import type { BlockData, CmsPage, CmsPageSeo, CmsPageSettings } from './types'
 
 const MAX_HISTORY = 50
 
@@ -18,6 +18,7 @@ interface EditorActions {
   setTitle: (title: string) => void
   setSlug: (slug: string) => void
   updateSeo: (seo: Partial<CmsPageSeo>) => void
+  updateSettings: (settings: Partial<CmsPageSettings>) => void
   addBlock: (block: BlockData) => void
   removeBlock: (id: string) => void
   updateBlock: (id: string, data: Partial<BlockData>) => void
@@ -64,6 +65,13 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     if (!page) return
     const hist = pushHistory(get(), page)
     set({ page: { ...page, seo: { ...page.seo, ...seo } }, ...hist, isDirty: true })
+  },
+
+  updateSettings: (settings) => {
+    const { page } = get()
+    if (!page) return
+    const hist = pushHistory(get(), page)
+    set({ page: { ...page, settings: { ...page.settings, ...settings } }, ...hist, isDirty: true })
   },
 
   addBlock: (block) => {

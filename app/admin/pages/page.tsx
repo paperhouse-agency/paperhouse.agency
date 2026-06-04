@@ -12,64 +12,121 @@ export default async function PagesPage() {
   const canDelete = session.role ? canPerform(session.role, 'delete_page') : false
   const canDuplicate = canCreate
 
+  const publishedCount = pages.filter((p) => p.status === 'published').length
+  const draftCount = pages.filter((p) => p.status === 'draft').length
+
   return (
-    <div>
-      <div className="admin-page-header">
-        <h1 style={{ margin: 0 }}>Pages</h1>
-        {canCreate && (
-          <Link href="/admin/pages/new">
-            <button type="button" data-variant="primary">+ New page</button>
-          </Link>
-        )}
+    <div className="cms-page">
+      <div className="cms-list-header">
+        <div>
+          <span className="cms-list-eyebrow">Content</span>
+          <h1 className="cms-list-title">
+            Pages<span className="dot">.</span>
+          </h1>
+          <p className="cms-list-sub">
+            {pages.length} page{pages.length !== 1 ? 's' : ''} · {publishedCount} published · {draftCount} draft{draftCount !== 1 ? 's' : ''}
+          </p>
+        </div>
+        <div className="cms-list-actions">
+          {canCreate && (
+            <Link href="/admin/pages/new" className="cms-btn cms-btn-primary">
+              <span>+</span>
+              New page
+            </Link>
+          )}
+        </div>
       </div>
 
       {pages.length === 0 ? (
-        <div className="admin-card" style={{ textAlign: 'center', padding: '3rem', color: '#aaa' }}>
-          No pages yet. Create your first page.
+        <div className="cms-table-card">
+          <div className="cms-table-empty">
+            No pages yet. Create your first page.
+          </div>
         </div>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>File</th>
-              <th>Status</th>
-              <th>Updated</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {pages.map((page) => (
-              <tr key={page.id}>
-                <td>
-                  <Link href={`/admin/pages/${page.id}`} style={{ fontWeight: 500 }}>
-                    {page.title}
-                  </Link>
-                </td>
-                <td>
-                  <span className="admin-slug">
-                    {page.slug === '' ? '/ (homepage)' : `/${page.slug}`}
+        <div className="cms-table-card">
+          <div
+            className="cms-table-head"
+            style={{ gridTemplateColumns: 'minmax(0,2.2fr) 1.2fr 0.9fr 0.8fr 1.4fr auto' }}
+          >
+            <span className="cms-table-head-cell">Page</span>
+            <span className="cms-table-head-cell">URL</span>
+            <span className="cms-table-head-cell">Status</span>
+            <span className="cms-table-head-cell">Updated</span>
+            <span className="cms-table-head-cell" />
+            <span className="cms-table-head-cell" />
+          </div>
+
+          {pages.map((page) => {
+            const isHome = page.slug === '' || page.slug === 'index'
+            return (
+              <div
+                key={page.id}
+                className="cms-table-row"
+                style={{ gridTemplateColumns: 'minmax(0,2.2fr) 1.2fr 0.9fr 0.8fr 1.4fr auto' }}
+              >
+                {/* Title */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 13, minWidth: 0 }}>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap' }}>
+                      <Link
+                        href={`/admin/pages/${page.id}`}
+                        style={{
+                          fontFamily: 'var(--font-heading, Georgia, serif)',
+                          fontSize: 16,
+                          fontWeight: 400,
+                          color: 'var(--color-text)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {page.title}
+                      </Link>
+                      {isHome && <span className="cms-badge cms-badge-home">Homepage</span>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* URL */}
+                <span className="cms-mono" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {isHome ? '/' : `/${page.slug}`}
+                </span>
+
+                {/* Status */}
+                <span>
+                  <span className={`cms-badge cms-badge-${page.status === 'published' ? 'pub' : 'draft'}`}>
+                    {page.status === 'published' ? 'Published' : 'Draft'}
                   </span>
-                </td>
-                <td>
-                  <span className={`admin-badge admin-badge-${page.status}`}>
-                    {page.status}
-                  </span>
-                </td>
-                <td className="admin-muted">
+                </span>
+
+                {/* Updated */}
+                <span className="cms-text-muted" style={{ fontFamily: 'var(--font-body)', fontSize: 13.5 }}>
                   {new Date(page.updatedAt).toLocaleDateString()}
-                </td>
-                <td style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                </span>
+
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <Link href={`/admin/pages/${page.id}`}>
-                    <button type="button" data-variant="secondary" style={{ padding: '4px 10px', fontSize: '12px' }}>Edit</button>
+                    <button
+                      type="button"
+                      className="cms-btn cms-btn-ghost"
+                      style={{ height: 34, padding: '0 14px', fontSize: 12 }}
+                    >
+                      Edit
+                    </button>
                   </Link>
                   {canDuplicate && <DuplicatePageButton id={page.id} />}
+                </div>
+
+                {/* Delete */}
+                <div>
                   {canDelete && <DeletePageButton id={page.id} title={page.title} />}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </div>
+              </div>
+            )
+          })}
+        </div>
       )}
     </div>
   )

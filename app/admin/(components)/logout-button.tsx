@@ -4,7 +4,7 @@ export function LogoutButton() {
   return (
     <button
       type="button"
-      data-variant="secondary"
+      className="cms-logout-btn"
       onClick={async () => {
         await fetch('/api/admin/auth/logout', {
           method: 'POST',
@@ -12,7 +12,6 @@ export function LogoutButton() {
         })
         window.location.href = '/admin/login'
       }}
-      style={{ fontFamily: 'monospace', fontSize: '14px' }}
     >
       Logout
     </button>

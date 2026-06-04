@@ -1,0 +1,43 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
+import { Link } from '@/components/link'
+import { LogoutButton } from './logout-button'
+
+export function AdminNavUI({ showUsers }: { showUsers: boolean }) {
+  const pathname = usePathname()
+  const onUsers = pathname?.startsWith('/admin/users') ?? false
+  const onPages = !onUsers
+
+  return (
+    <header className="cms-nav">
+      <div className="cms-nav-left">
+        <Link href="/admin/pages" className="cms-nav-brand">
+          <span className="cms-nav-wordmark">paperhouse</span>
+          <span className="cms-nav-tag">CMS</span>
+        </Link>
+
+        <nav className="cms-nav-links">
+          <Link
+            href="/admin/pages"
+            className={`cms-nav-pill${onPages ? ' active' : ''}`}
+          >
+            Pages
+          </Link>
+          {showUsers && (
+            <Link
+              href="/admin/users"
+              className={`cms-nav-pill${onUsers ? ' active' : ''}`}
+            >
+              Users
+            </Link>
+          )}
+        </nav>
+      </div>
+
+      <div className="cms-nav-right">
+        <LogoutButton />
+      </div>
+    </header>
+  )
+}

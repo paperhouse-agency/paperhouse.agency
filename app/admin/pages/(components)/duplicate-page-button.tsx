@@ -18,8 +18,8 @@ export function DuplicatePageButton({ id }: { id: string }) {
   return (
     <button
       type="button"
-      data-variant="secondary"
-      style={{ padding: '4px 10px', fontSize: '12px' }}
+      className="cms-btn cms-btn-ghost"
+      style={{ height: 34, padding: '0 14px', fontSize: 12 }}
       onClick={handleDuplicate}
     >
       Duplicate

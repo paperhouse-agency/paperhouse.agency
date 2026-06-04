@@ -2,48 +2,72 @@
 
 ## Overview
 
-A custom CMS built natively into the Next.js 16 app that replaces Sanity CMS entirely. It lives at `/admin`, stores content as JSON via Vercel Blob, uses `iron-session` for encrypted cookie sessions with TOTP second-factor auth, supports multi-user roles, and publishes the site by triggering a Vercel Deploy Hook.
+A custom CMS built natively into the Next.js 16 app. Lives at `/admin`, stores pages as JSON files on the filesystem (committed via GitHub API on publish), stores users in Vercel Blob, uses `iron-session` for encrypted cookie sessions with TOTP 2-factor auth, supports multi-user RBAC, and can publish via GitHub commit → Vercel auto-deploy.
+
+> **Last updated:** 2026-06-05 — Reflects implemented state + redesigned admin UI.
 
 ---
 
-## Tech Stack Additions
+## Implementation Status
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| Foundation | Types, storage, auth helpers, env config | ✅ Done |
+| Sanity removal | Delete integrations, clean layout | ✅ Done |
+| Auth routes + middleware | Login, TOTP, logout, rate limiting | ✅ Done |
+| Block registry + renderer | All 15 block schemas, BlockRenderer | ✅ Done |
+| CRUD API | Pages + users + images | ✅ Done |
+| Admin UI — base | Nav, layout, pages list, users list | ✅ Done |
+| Block builder editor | Blocks/SEO/Settings tabs, DnD, auto-save | ✅ Done |
+| Extended Settings tab | Visibility, template, author, language, parent, publishedAt | ✅ Done |
+| Admin UI redesign | PaperHouse design system applied to entire admin | ✅ Done |
+| Live preview panel | Split editor + rendered block preview | ⏳ Pending |
+| List search / filter | Client-side search in pages & users lists | ⏳ Pending |
+| Nested blocks editor | `blocks-field.tsx` for SectionBlock children | ⏳ Pending |
+| User management UI | Edit user, reset TOTP, role change | ✅ Done (basic) |
+| Publish flow | Deploy Hook → Vercel build trigger + status polling | ⏳ Pending |
+| Media library | `/admin/media` — browse/manage uploaded images | ⏳ Pending |
+
+---
+
+## Tech Stack
 
 | Package | Purpose |
 |---------|---------|
-| `@vercel/blob` | JSON page storage + image uploads |
-| `iron-session` | Encrypted HTTP-only cookie sessions |
+| `@vercel/blob` | User storage (`content/users.json`) + image uploads |
+| `iron-session` | Encrypted HTTP-only cookie sessions (AES-256-GCM) |
 | `otplib` | TOTP second-factor generation & verification |
-| `bcryptjs` | Password hashing |
+| `bcryptjs` | Password hashing (cost 12) |
 | `@dnd-kit/core` | Drag-and-drop core |
-| `@dnd-kit/sortable` | Sortable list primitives |
-| `@dnd-kit/utilities` | DnD helpers |
+| `@dnd-kit/sortable` | Sortable block list |
+| `@dnd-kit/utilities` | DnD CSS transform helpers |
+| `zustand` | Editor client-side state |
+| `class-variance-authority` | Button variant system |
 
-**Remove:** `sanity`, `next-sanity`, `@sanity/image-url`, `@sanity/asset-utils`, `@sanity/visual-editing`, `@portabletext/react`, `@sanity/vision`
+**Note:** Sanity, next-sanity, and all `@sanity/*` packages have been removed.
 
 ---
 
 ## Environment Variables
 
 ```env
-# New — add to .env.local and Vercel project settings
+# Required
 CMS_SESSION_SECRET=<random 32+ chars>        # iron-session AES-256-GCM key
-BLOB_READ_WRITE_TOKEN=<vercel blob token>    # from Vercel Storage dashboard
-VERCEL_DEPLOY_HOOK_URL=<deploy hook URL>     # from Vercel Project Settings > Git
-VERCEL_ACCESS_TOKEN=<vercel api token>       # for deploy status polling
+BLOB_READ_WRITE_TOKEN=<vercel blob token>    # Users + image uploads (Vercel Storage)
 
-# Remove
-NEXT_PUBLIC_SANITY_PROJECT_ID
-NEXT_PUBLIC_SANITY_DATASET
-NEXT_PUBLIC_SANITY_API_VERSION
-NEXT_PUBLIC_SANITY_API_READ_TOKEN
-NEXT_PUBLIC_SANITY_STUDIO_URL
-SANITY_PRIVATE_TOKEN
-SANITY_API_WRITE_TOKEN
-DRAFT_MODE_TOKEN
-SANITY_REVALIDATE_SECRET
+# Optional — GitHub publish integration
+GITHUB_TOKEN=<personal access token>        # repo:write scope
+GITHUB_OWNER=<username or org>
+GITHUB_REPO=<repository name>
+
+# Optional — Vercel deploy status polling (for future publish bar)
+VERCEL_DEPLOY_HOOK_URL=<deploy hook URL>
+VERCEL_ACCESS_TOKEN=<vercel api token>
+
+# Root user bootstrap (idempotent, safe to remove after first login)
+ROOT_USER_ID=admin@example.com
+ROOT_USER_PASS=<initial password>
 ```
-
-Admin user credentials are stored in `content/users.json` (private Vercel Blob) — not env vars — to support multiple users.
 
 ---
 
@@ -59,9 +83,10 @@ interface CmsUser {
   email: string
   name: string
   role: UserRole
-  passwordHash: string   // bcrypt cost 12
-  totpSecret: string     // base32, generated at account creation
-  totpEnrolled: boolean  // false until user completes first TOTP login
+  passwordHash: string    // bcrypt cost 12
+  totpSecret: string      // base32
+  totpEnrolled: boolean   // false until first TOTP login
+  skipTotp?: boolean      // set true for root user only
   createdAt: string
   updatedAt: string
 }
@@ -70,7 +95,7 @@ interface AdminSession {
   isLoggedIn: boolean
   userId?: string
   role?: UserRole
-  pendingTotpUserId?: string  // set after password passes, cleared after TOTP
+  pendingTotpUserId?: string
 }
 ```
 
@@ -81,418 +106,255 @@ interface AdminSession {
 | Create pages | ✅ | ✅ | ❌ |
 | Edit pages | ✅ | ✅ | ✅ |
 | Delete pages | ✅ | ❌ | ❌ |
-| Publish | ✅ | ❌ | ❌ |
+| Publish (toggle status) | ✅ | ✅ | ✅ |
 | Manage users | ✅ | ❌ | ❌ |
 
-### Page & Blocks
+### Page, SEO & Settings
 
 ```typescript
 interface CmsPage {
-  id: string             // UUID
+  id: string               // UUID
   title: string
-  slug: string           // URL-safe, unique (e.g. 'about-us')
+  slug: string             // URL-safe, unique ('about-us' → content/about-us.json)
+                           // empty string or 'index' → homepage (content/index.json)
   status: 'draft' | 'published'
   seo: CmsPageSeo
+  settings?: CmsPageSettings
   blocks: BlockData[]
-  createdAt: string      // ISO timestamp
-  updatedAt: string
+  createdAt: string        // ISO
+  updatedAt: string        // ISO
 }
 
 interface CmsPageSeo {
   title?: string
   description?: string
   keywords?: string[]
-  ogImage?: CmsImage
+  ogImage?: string         // URL only (e.g. "https://example.com/og.jpg")
   noIndex?: boolean
 }
 
-interface CmsImage { src: string; alt: string }
+type PageVisibility = 'public' | 'private' | 'password-protected'
+type PageTemplate    = 'default' | 'landing-page' | 'article' | 'contact' | 'blank'
 
-type LucideIconName = string  // stored as string, resolved to component at render time
+interface CmsPageSettings {
+  visibility?: PageVisibility  // default: 'public'
+  template?:   PageTemplate    // default: 'default'
+  author?:     string          // display name, selected from users list
+  language?:   string          // BCP-47, e.g. 'en-US'
+  parentSlug?: string          // slug of parent page for hierarchy
+  publishedAt?: string         // ISO — auto-stamped on first publish, never overwritten
+}
+```
 
-type BlockType =
-  | 'bento-stats' | 'card-grid' | 'feature-cards' | 'form-cta'
-  | 'image-content-cards' | 'image-text-split' | 'newsletter'
-  | 'numbered-steps' | 'people-grid' | 'split-hero' | 'section'
+> **`ogImage` type change:** Was `CmsImage { src, alt }`. Changed to `string` (URL only) — OG image meta tags only need a URL, not alt text.
 
+### Block Types
+
+15 block types registered in `libs/cms/block-registry.ts`:
+
+| Type | Label |
+|------|-------|
+| `bento-stats` | Bento Stats |
+| `brands` | Brands Marquee |
+| `card-grid` | Card Grid |
+| `cta-manifesto` | CTA Manifesto |
+| `faq` | FAQ |
+| `feature-cards` | Feature Cards |
+| `form-cta` | Form CTA |
+| `image-content-cards` | Image Content Cards |
+| `image-text-split` | Image Text Split |
+| `newsletter` | Newsletter |
+| `numbered-steps` | Numbered Steps |
+| `people-grid` | People Grid |
+| `split-hero` | Split Hero |
+| `tagline-marquee` | Tagline Marquee |
+| `section` | Section (Wrapper) |
+
+All share `BaseBlockData`:
+```typescript
 interface BaseBlockData {
-  _id: string      // UUID for React key + DnD
+  _id: string      // UUID — React key + DnD id
   _type: BlockType
+  visible?: boolean  // false = hidden in renderer
 }
-```
-
-### Block Data Interfaces
-
-```typescript
-interface BentoStatsBlockData extends BaseBlockData {
-  _type: 'bento-stats'
-  preheadingContent?: string
-  metrics: {
-    large:  { value: string; heading: string; content: string }
-    image1: CmsImage
-    medium: { value: string; heading: string; content: string }
-    small:  { value: string; heading: string; content: string }
-    image2: CmsImage
-  }
-}
-
-interface CardGridBlockData extends BaseBlockData {
-  _type: 'card-grid'
-  preheadingContent?: string
-  headingContent: string
-  bodyContent?: string
-  articles: Array<{ image: CmsImage; heading: string; content: string; ctaUrl?: string }>
-}
-
-interface FeatureCardsBlockData extends BaseBlockData {
-  _type: 'feature-cards'
-  headingContent: string
-  bodyContent?: string
-  cards: Array<{ label: string; heading: string; content: string; ctaLabel: string; ctaUrl?: string; image: CmsImage }>
-}
-
-interface FormCtaBlockData extends BaseBlockData {
-  _type: 'form-cta'
-  headingLine1?: string
-  headingLine2?: string
-  bodyContent?: string
-  // Note: contact form is a hardcoded server action — not CMS-editable
-}
-
-interface ImageContentCardsBlockData extends BaseBlockData {
-  _type: 'image-content-cards'
-  preheadingContent?: string
-  headingType?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-  headingContent: string
-  bodyContent?: string
-  buttons?: Array<{ label: string; size?: 'sm'|'md'|'lg'; color?: 'primary'|'secondary'|'neutral'; hasIcon?: boolean; url?: string }>
-  cards: Array<{ icon: LucideIconName; heading: string; content: string; alternate?: boolean }>
-  image: CmsImage
-}
-
-interface ImageTextSplitBlockData extends BaseBlockData {
-  _type: 'image-text-split'
-  image?: CmsImage
-  heading?: string
-  bodyContent?: string
-  ctaLabel?: string
-  ctaUrl?: string
-}
-
-interface NewsletterBlockData extends BaseBlockData {
-  _type: 'newsletter'
-  preheadingContent?: string
-  headingContent?: string
-  bodyContent?: string
-  // Note: HubSpot form is hardcoded — not CMS-editable
-}
-
-interface NumberedStepsBlockData extends BaseBlockData {
-  _type: 'numbered-steps'
-  preheadingContent?: string
-  headingContent: string
-  bodyContent: string
-  steps: Array<{ icon: LucideIconName; number: string; heading: string; content: string; alternate?: boolean }>
-}
-
-interface PeopleGridBlockData extends BaseBlockData {
-  _type: 'people-grid'
-  preheadingContent?: string
-  headingContent: string
-  bodyContent?: string
-  members: Array<{ name: string; role: string; image: CmsImage; ctaUrl?: string }>
-}
-
-interface SplitHeroBlockData extends BaseBlockData {
-  _type: 'split-hero'
-  headingContent?: string
-  bodyContent?: string
-  videoUrl?: string
-  videoPosterImage?: CmsImage
-  buttons?: Array<{ label: string; size?: 'sm'|'md'|'lg'; color?: 'primary'|'secondary'|'neutral'; hasIcon?: boolean; url?: string }>
-}
-
-// Wrapper block — contains nested blocks
-interface SectionBlockData extends BaseBlockData {
-  _type: 'section'
-  backgroundColor?: 'offwhite' | 'bluishgray' | 'white' | 'text'
-  paddingSize?: 'none' | 'sm' | 'md' | 'lg'
-  children: BlockData[]
-}
-
-type BlockData =
-  | BentoStatsBlockData | CardGridBlockData | FeatureCardsBlockData
-  | FormCtaBlockData | ImageContentCardsBlockData | ImageTextSplitBlockData
-  | NewsletterBlockData | NumberedStepsBlockData | PeopleGridBlockData
-  | SplitHeroBlockData | SectionBlockData
-```
-
-### Vercel Blob Storage Layout
-
-```
-content/users.json                 ← CmsUser[]          (access: private)
-content/pages.json                 ← CmsPageMeta[]      (access: public — needed for SSG)
-content/pages/{id}.json            ← Full CmsPage       (access: public — needed for SSG)
-cms-uploads/{uuid}.{ext}           ← Uploaded images    (access: public)
 ```
 
 ---
 
-## File Structure
+## Storage
 
-### New Files to Create
+### Pages — Filesystem JSON
+
+Pages are stored as local JSON files. The GitHub integration optionally commits them to the repo on publish/delete so that Vercel can pick them up at build time.
 
 ```
-libs/
-  cms/
-    types.ts                       ← All CMS TypeScript interfaces (central source of truth)
-    storage.ts                     ← Vercel Blob read/write helpers
-    resolve-icon.ts                ← LucideIconName string → LucideIcon component
-    block-registry.ts              ← Block manifest: schema, labels, defaults for all 11 blocks
-    block-renderer.tsx             ← Frontend renderer: maps _type → block component
-    editor-store.ts                ← Zustand store for editor state (client-side)
-    auth/
-      session-config.ts            ← iron-session options (Edge-safe, no next/headers)
-      session.ts                   ← getSession() helper using next/headers
-      rate-limit.ts                ← In-memory IP rate limiter (5 req / 15 min)
-      totp.ts                      ← verifyTotp(), generateTotpSecret(), getTotpUri()
-      credentials.ts               ← verifyPassword(), findUserByEmail(), getUserById()
-      permissions.ts               ← canPerform(role, action) RBAC helper
+content/
+  index.json          ← homepage (slug = '')
+  about-us.json       ← /about-us
+  services.json       ← /services
+  ...
+```
 
-middleware.ts                      ← Edge middleware: protects /admin/** and /api/admin/**
+Key helpers in `libs/cms/storage.ts`:
 
-blocks/
-  section-block.tsx                ← New wrapper block (backgroundColor, paddingSize, children)
+| Function | Description |
+|----------|-------------|
+| `listPages()` | Scans `content/` directory, returns `CmsPageMeta[]` sorted by title |
+| `readPage(slug)` | Read single page by slug |
+| `readPageById(id)` | Finds page by scanning all pages |
+| `writePage(page)` | Write to `content/{slug}.json` |
+| `renamePage(oldSlug, page)` | Delete old file, write at new path |
+| `deletePage(slug)` | `fs.unlink` |
+| `isSlugTaken(slug, excludeId?)` | Uniqueness check |
+| `slugToRepoPath(slug)` | `content/{slug}.json` for GitHub API |
 
-app/
-  admin/
-    layout.tsx                     ← Bare admin shell (no site nav/footer/Lenis/GSAP)
-    login/
-      page.tsx                     ← Step 1: email + password form
-      totp/
-        page.tsx                   ← Step 2: TOTP code + first-time QR enrollment
-    pages/
-      page.tsx                     ← Page list table
-      new/
-        page.tsx                   ← Create page (title, slug)
-      [id]/
-        page.tsx                   ← Block builder editor
-    users/
-      page.tsx                     ← User list (SuperAdmin only)
-      new/
-        page.tsx                   ← Create user
-      [id]/
-        page.tsx                   ← Edit user / reset TOTP
-    settings/
-      page.tsx                     ← Placeholder
+Slug validation prevents path traversal: only `[a-z0-9-]` characters allowed.
+
+### Users — Vercel Blob
+
+Users are stored in a single JSON file at `content/users.json` in Vercel Blob (private, not exposed). Helpers: `readUsers()`, `writeUsers()`, `updateUser()`, `ensureRootUser()`.
+
+### Images — Vercel Blob
+
+Uploaded via `POST /api/admin/images`. Stored at `cms-uploads/{uuid}.{ext}` with `access: 'public'`. The URL is stored in block data.
+
+### GitHub Integration
+
+When `GITHUB_TOKEN`, `GITHUB_OWNER`, and `GITHUB_REPO` are set, `commitFile()` is called on page publish/unpublish and `deleteFile()` on page delete. This commits the page JSON to the repo, triggering a Vercel auto-deploy.
+
+---
+
+## Admin UI
+
+### Design System Alignment
+
+The admin uses the PaperHouse design system tokens — same fonts and color variables as the main site, applied to a distinct admin chrome.
+
+**Color roles (defined in `admin.css`):**
+
+| Variable | Value | Usage |
+|----------|-------|-------|
+| `--chrome` | `#eae7e1` | Nav + sidebar background |
+| `--workspace` | `#fbfaf8` | Main content area |
+| `--c-card` | `#ffffff` | Card surfaces |
+| `--color-primary` | `#ff4d00` | All primary actions (CTAs, active state, Save, Publish) |
+| `--color-text` | `#1a1a1a` | Body text |
+| `--chrome-muted` | `rgba(26,26,26,0.55)` | Secondary text, labels |
+
+**Font variables** (set by Next.js font optimization on `<html>`):
+
+| Variable | Font |
+|----------|------|
+| `--font-heading` | Bianco Serif — page titles, block names, card headings |
+| `--font-body` | IBM Plex Sans — body text, field values |
+| `--font-mono` | PP Neue Montreal Mono — nav pills, labels, badges, mono inputs |
+
+All admin-specific CSS classes use the `cms-*` prefix (e.g. `cms-nav`, `cms-block-card`, `cms-field-grid`). Old `.admin-*`, `.editor-*`, `.f-*` classes are kept as backward-compat stubs at the bottom of `admin.css` and can be removed once all pages are ported.
+
+### File Structure (current)
+
+```
+app/admin/
+  layout.tsx                        ← cms-shell wrapper, no admin-main padding
+  admin.css                         ← Full design-system-aligned styles (cms-* classes)
+  page.tsx                          ← Redirect to /admin/pages
+
+  (components)/
+    admin-nav.tsx                   ← Server: session check → renders AdminNavUI
+    admin-nav-ui.tsx                ← Client: usePathname() for active nav pill
+    logout-button.tsx               ← Client: coral pill logout button
+
+  login/
+    page.tsx                        ← Step 1: email + password
+    totp/page.tsx                   ← Step 2: TOTP code
+
+  pages/
+    page.tsx                        ← Server: page list table (card design)
+    new/page.tsx                    ← Client: create page form
+    [id]/
+      page.tsx                      ← Server: fetch page + users + allPages → PageEditor
+      (components)/
+        page-editor.tsx             ← Client: full editor (DnD, 3 tabs, all state)
+        block-fields-panel.tsx      ← Client: field grid for selected block
     (components)/
-      admin-layout.tsx             ← Top nav: logo, pages, users (SA only), logout
-      block-palette.tsx            ← Left sidebar: draggable block type tiles
-      block-canvas.tsx             ← Center: @dnd-kit/sortable block list
-      block-editor.tsx             ← Right panel: prop forms driven by block registry
-      block-item.tsx               ← Single row: drag handle, label, select, delete
-      seo-panel.tsx                ← SEO tab: title, description, keywords, ogImage, noIndex
-      page-header.tsx              ← Title input, slug input, status badge
-      publish-bar.tsx              ← Bottom sticky: save indicator + publish + deploy status
-      block-fields/
-        text-field.tsx
-        textarea-field.tsx
-        image-field.tsx            ← Upload + preview → POST /api/admin/images
-        icon-field.tsx             ← Searchable Lucide icon picker with inline preview
-        array-field.tsx            ← Repeating group: add / remove / DnD reorder
-        select-field.tsx
-        url-field.tsx
-        boolean-field.tsx
-        blocks-field.tsx           ← Nested DnD canvas for SectionBlock children
+      delete-page-button.tsx
+      duplicate-page-button.tsx
 
-  api/
-    admin/
-      auth/
-        login/route.ts             ← POST: password check → pending session
-        totp/route.ts              ← POST: TOTP verify → full session
-        logout/route.ts            ← POST: destroy session
-      pages/
-        route.ts                   ← GET (list) | POST (create)
-        [id]/route.ts              ← GET | PUT (update) | DELETE
-      users/
-        route.ts                   ← GET | POST (SuperAdmin only)
-        [id]/route.ts              ← GET | PUT | DELETE
-      images/route.ts              ← POST: upload image → Vercel Blob, return URL
-      publish/route.ts             ← POST: call Vercel Deploy Hook (SuperAdmin only)
-      deploy-status/route.ts       ← GET: poll Vercel API for build state
-      setup/route.ts               ← POST: bootstrap first SuperAdmin (only when 0 users exist)
+  users/
+    page.tsx                        ← Server: users list (avatar, role pills)
+    new/page.tsx                    ← Client: create user form
+    [id]/
+      page.tsx                      ← Server: edit user
+      (components)/
+        edit-user-form.tsx
+    (components)/
+      delete-user-button.tsx
 
-  (pages)/
-    [slug]/
-      page.tsx                     ← CMS-served pages: reads Blob, renders via BlockRenderer
+libs/cms/
+  types.ts                          ← CmsPage, CmsPageSeo, CmsPageSettings, BlockData, …
+  storage.ts                        ← Filesystem (pages) + Vercel Blob (users + images)
+  editor-store.ts                   ← Zustand: page state, undo/redo, save, updateSettings
+  block-registry.ts                 ← 15 block schemas + defaultData factories
+  block-renderer.tsx                ← Server renderer: _type → block component
+  block-schema.ts                   ← FieldDef + BlockSchema types
+  resolve-icon.ts                   ← LucideIconName string → LucideIcon component
+  github.ts                         ← commitFile, deleteFile via GitHub Contents API
+  auth/
+    session.ts                      ← getSession() via iron-session + next/headers
+    session-config.ts               ← iron-session options (8h TTL, HttpOnly, Secure)
+    credentials.ts                  ← verifyPassword, hashPassword, findUserByEmail
+    permissions.ts                  ← canPerform(role, action) RBAC
+    totp.ts                         ← generateTotpSecret, verifyTotp, getTotpUri
+    rate-limit.ts                   ← In-memory: 5 attempts / 15 min / IP
+
+app/api/admin/
+  auth/login/route.ts
+  auth/totp/route.ts
+  auth/logout/route.ts
+  pages/route.ts                    ← GET (list/slugCheck) | POST (create)
+  pages/[id]/route.ts               ← GET | PUT (update + settings + publishedAt) | DELETE
+  pages/[id]/duplicate/route.ts
+  users/route.ts
+  users/[id]/route.ts
+  images/route.ts                   ← POST: upload → Vercel Blob
 ```
 
-### Files to Modify
-
-| File | Change |
-|------|--------|
-| `blocks/image-text-split-block.tsx` | Add `ImageTextSplitBlockProps`. Hardcoded values become defaults — existing home page unaffected. |
-| `blocks/split-hero-block.tsx` | Add `SplitHeroBlockProps`. Same default-value approach. |
-| `next.config.ts` | Add `*.public.blob.vercel-storage.com` to `images.remotePatterns`. Remove `cdn.sanity.io`. |
-| `libs/validate-env.ts` | Add CMS env vars. Remove Sanity env vars. |
-| `integrations/check-integration.ts` | Remove `isSanityConfigured`. Add `isCmsConfigured`. |
-| `app/layout.tsx` | Remove Sanity visual editing, draft mode, and `SanityLive`. Simplify `ReactTempus`. |
-
-### Files / Directories to Delete
+### Editor Layout
 
 ```
-integrations/sanity/               ← entire directory
-app/studio/                        ← Sanity Studio route
-app/api/draft-mode/                ← draft-mode enable/disable routes
-app/api/revalidate/                ← Sanity ISR webhook route
-app/(pages)/sanity/                ← Sanity demo pages
+┌─────────────────────────────────────────────────────────────────┐
+│  cms-nav  (62px, chrome bg — "paperhouse" CMS | Pages Users | Logout) │
+├──────────────────┬──────────────────────────────────────────────┤
+│  cms-editor-     │  cms-canvas                                  │
+│  sidebar         │                                              │
+│  (268px,         │  cms-page-header                             │
+│  chrome bg)      │    breadcrumb / Bianco Serif title / badges  │
+│                  │    undo+redo / Save changes / Publish         │
+│  [Blocks]        │    Preview pill / Set as homepage            │
+│  15 draggable    │                                              │
+│  palette items   │  cms-tabs: [Blocks] [SEO] [Settings]         │
+│                  │                                              │
+│  search filter   │  Blocks tab:                                 │
+│                  │    block cards (collapsed header /           │
+│                  │    expanded form with BlockFieldsPanel)      │
+│                  │    empty drop zone                           │
+│                  │                                              │
+│                  │  SEO tab:                                    │
+│                  │    meta title + char counter (60)           │
+│                  │    meta description + char counter (160)    │
+│                  │    keywords / OG image URL / noIndex toggle  │
+│                  │    → search result preview card             │
+│                  │    → social card preview                    │
+│                  │                                              │
+│                  │  Settings tab:                               │
+│                  │    visibility / parent page / template       │
+│                  │    author dropdown / language                │
+│                  │    first published (read-only)               │
+│                  │    set as homepage / published toggles       │
+│                  │    page info (ID, slug, dates)               │
+│                  │    danger zone (delete page)                 │
+└──────────────────┴──────────────────────────────────────────────┘
 ```
-
----
-
-## Block Registry
-
-Central manifest at `libs/cms/block-registry.ts`. Each entry drives the block palette display, the props editor form, and default data factories.
-
-```typescript
-type FieldType =
-  | 'text' | 'textarea' | 'image' | 'url' | 'select'
-  | 'array' | 'blocks' | 'boolean' | 'icon'
-
-interface FieldDef {
-  key: string             // dot-notation for nested: 'metrics.large.value'
-  label: string
-  type: FieldType
-  required?: boolean
-  placeholder?: string
-  options?: { value: string; label: string }[]  // for 'select'
-  fields?: FieldDef[]                            // for 'array' item schema
-  defaultValue?: unknown
-}
-
-interface BlockRegistryEntry {
-  type: BlockType
-  label: string
-  icon: LucideIconName    // shown in block palette
-  isWrapper: boolean
-  fields: FieldDef[]
-  defaultData: () => BlockData  // factory for new block instances
-}
-```
-
-### Block Field Schemas
-
-**bento-stats:**
-`preheadingContent` (text), `metrics.large.value/heading/content` (text×3), `metrics.image1` (image), `metrics.medium.value/heading/content` (text×3), `metrics.small.value/heading/content` (text×3), `metrics.image2` (image)
-
-**card-grid:**
-`preheadingContent` (text), `headingContent` (text, `<span>` for highlight), `bodyContent` (textarea), `articles` (array: image, heading, content, ctaUrl)
-
-**feature-cards:**
-`headingContent` (text), `bodyContent` (textarea), `cards` (array: label, heading, content, ctaLabel, ctaUrl, image)
-
-**form-cta:**
-`headingLine1` (text), `headingLine2` (text), `bodyContent` (textarea)
-
-**image-content-cards:**
-`preheadingContent` (text), `headingType` (select: h1–h6), `headingContent` (text), `bodyContent` (textarea), `buttons` (array: label, size, color, hasIcon, url), `cards` (array: icon, heading, content, alternate), `image` (image)
-
-**image-text-split:**
-`image` (image), `heading` (text), `bodyContent` (textarea), `ctaLabel` (text), `ctaUrl` (url)
-
-**newsletter:**
-`preheadingContent` (text), `headingContent` (text), `bodyContent` (textarea)
-
-**numbered-steps:**
-`preheadingContent` (text), `headingContent` (text), `bodyContent` (textarea), `steps` (array: icon, number, heading, content, alternate)
-
-**people-grid:**
-`preheadingContent` (text), `headingContent` (text), `bodyContent` (textarea), `members` (array: name, role, image, ctaUrl)
-
-**split-hero:**
-`headingContent` (text), `bodyContent` (textarea), `videoUrl` (url), `videoPosterImage` (image), `buttons` (array: label, size, color, hasIcon, url)
-
-**section (wrapper):**
-`backgroundColor` (select: offwhite / bluishgray / white / text), `paddingSize` (select: none / sm / md / lg), `children` (blocks — nested DnD canvas)
-
----
-
-## Key Implementation Details
-
-### Icon Resolver (`libs/cms/resolve-icon.ts`)
-
-Blocks like `ImageContentCardsBlock` and `NumberedStepsBlock` accept `LucideIcon` (React component) as a prop, but the CMS stores icon names as strings. The resolver converts at render time:
-
-```typescript
-import * as LucideIcons from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
-
-export function resolveIcon(name: string): LucideIcon {
-  const icon = (LucideIcons as Record<string, unknown>)[name]
-  return typeof icon === 'function' ? (icon as LucideIcon) : LucideIcons.HelpCircle
-}
-```
-
-`BlockRenderer` calls this before passing props to icon-using blocks. The existing block components (`blocks/*.tsx`) remain unchanged — they still accept `LucideIcon` component props.
-
-### Block Renderer (`libs/cms/block-renderer.tsx`)
-
-```typescript
-'use client'
-
-export function BlockRenderer({ blocks }: { blocks: BlockData[] }) {
-  return <>{blocks.map((b) => <BlockItem key={b._id} block={b} />)}</>
-}
-
-function BlockItem({ block }: { block: BlockData }) {
-  switch (block._type) {
-    case 'image-content-cards':
-      return (
-        <ImageContentCardsBlock
-          {...block}
-          cards={block.cards.map(c => ({ ...c, icon: resolveIcon(c.icon) }))}
-        />
-      )
-    case 'numbered-steps':
-      return (
-        <NumberedStepsBlock
-          {...block}
-          steps={block.steps.map(s => ({ ...s, icon: resolveIcon(s.icon) }))}
-        />
-      )
-    case 'section':
-      return (
-        <SectionBlock {...block}>
-          <BlockRenderer blocks={block.children} />
-        </SectionBlock>
-      )
-    // ...all other cases
-    default:
-      return null
-  }
-}
-```
-
-### Frontend CMS Page Route (`app/(pages)/[slug]/page.tsx`)
-
-Server Component. Reads slug → looks up in pages index → fetches full page from Blob → renders via `BlockRenderer`. Named routes (`home`, `hubspot`, `r3f`) take priority over the catch-all `[slug]`.
-
-```typescript
-export async function generateStaticParams() {
-  const index = await readPagesIndex()
-  return index.pages
-    .filter(p => p.status === 'published')
-    .map(p => ({ slug: p.slug }))
-}
-```
-
-### Storage Helpers (`libs/cms/storage.ts`)
-
-Thin wrappers over `@vercel/blob`. Uses `addRandomSuffix: false` for predictable paths. Reads via `list({ prefix: path })` + exact `pathname` match to retrieve the download URL.
-
-- `content/users.json` → `access: 'private'` (password hashes + TOTP secrets)
-- `content/pages.json` + `content/pages/*.json` → `access: 'public'` (needed for SSG builds)
-- `cms-uploads/*` → `access: 'public'` (images)
 
 ---
 
@@ -501,57 +363,178 @@ Thin wrappers over `@vercel/blob`. Uses `addRandomSuffix: false` for predictable
 ### Login (2 Steps)
 
 **Step 1 — Password** (`POST /api/admin/auth/login`):
-1. Extract IP from `x-forwarded-for`
-2. `checkRateLimit(ip)` — 5 attempts / 15 min / IP; return 429 if exceeded
-3. `findUserByEmail(email)` + `bcrypt.compare(password, hash)`
-4. On success: set `session.pendingTotpUserId = user.id`, save session, return `{ totpEnrolled: boolean }`
-5. On failure: return 401 `"Invalid credentials"` — never indicate which field failed
+1. IP rate limit: 5 attempts / 15 min → 429 if exceeded
+2. `findUserByEmail(email)` + `bcrypt.compare(password, hash)`
+3. Success: `session.pendingTotpUserId = user.id` → return `{ requiresTotp: boolean }`
+4. Failure: 401 `"Invalid credentials"` (never indicate which field)
 
 **Step 2 — TOTP** (`POST /api/admin/auth/totp`):
-1. Read session — if no `pendingTotpUserId`, return 401
-2. If `totpEnrolled === false`: first-time enrollment — TOTP page shows QR code (generated from stored secret); any valid code confirms enrollment; `totpEnrolled` set to `true`
-3. `otplib.authenticator.verify({ token, secret })` with `window: 1` (±30s drift)
-4. On success: `session.isLoggedIn = true`, `session.userId`, `session.role`, clear pending, `clearRateLimit(ip)`
-5. On failure: return 401
+1. Require `pendingTotpUserId` in session
+2. First-time: `totpEnrolled === false` — show QR, any valid code enrolls
+3. `otplib.authenticator.verify({ token, secret, window: 1 })`
+4. Success: `isLoggedIn = true`, clear pending, `clearRateLimit(ip)`
 
-**Logout** (`POST /api/admin/auth/logout`): `session.destroy()`, redirect to `/admin/login`.
-
-### First SuperAdmin Bootstrap
-
-`POST /api/admin/setup` — only accessible when `readUsers()` returns an empty array. Creates the first SuperAdmin with provided email, password (bcrypt hashed), and a generated TOTP secret. The TOTP QR is returned in the response. After setup, the endpoint returns 403 permanently.
-
-The `/admin/login` page checks for zero users and redirects to `/admin/setup` if needed.
-
-### Middleware (`middleware.ts`)
-
-```typescript
-export const config = {
-  matcher: ['/admin/:path*', '/api/admin/:path*'],
-}
-```
-
-Reads `iron-session` from `request.cookies` (Edge-compatible). Redirects unauthenticated requests to `/admin/login`. Exempts `/admin/login`, `/admin/login/totp`, `/admin/setup`, and `/api/admin/auth/**`.
+**Logout** (`POST /api/admin/auth/logout`): session destroyed, redirect to `/admin/login`.
 
 ### Session Security
-- `iron-session` AES-256-GCM encrypted HTTP-only cookie, `sameSite: lax`, `secure: true` in prod, 8h TTL
-- All mutating API routes verify `x-requested-with: XMLHttpRequest` header (CSRF mitigation)
-- `canPerform(role, action)` checked at the top of every protected route handler
+
+- `iron-session` AES-256-GCM encrypted HTTP-only cookie, `sameSite: strict`, `secure: true` in prod, 8h TTL
+- All mutating API routes verify `x-requested-with: XMLHttpRequest` (CSRF mitigation)
+- `canPerform(role, action)` checked at the top of every protected handler
 
 ---
 
-## Publish Flow
+## Block Registry
 
-1. SuperAdmin clicks **Publish** in `publish-bar.tsx`
-2. `POST /api/admin/publish`: verifies role, calls `fetchWithTimeout(VERCEL_DEPLOY_HOOK_URL, { method: 'POST' }, 10_000)`
-3. Vercel responds with `{ job: { id: '...' } }`
-4. Client polls `GET /api/admin/deploy-status?jobId=<id>` every 5 seconds
-5. Route calls `https://api.vercel.com/v13/deployments/{id}` with `Authorization: Bearer VERCEL_ACCESS_TOKEN`
-6. Returns `{ state: 'BUILDING' | 'READY' | 'ERROR' }`
-7. On `READY`: the triggered build runs `generateStaticParams`, fetches the updated Blob index, and SSGs all published pages
+Each entry in `BLOCK_REGISTRY` (from `libs/cms/block-registry.ts`) drives:
+- The **palette sidebar** (label, icon, draggable tile)
+- The **block form** (which fields to render via `BlockFieldsPanel`)
+- The **default factory** (`defaultData()` — creates a new block with a UUID + sensible defaults)
 
-**Auto-save:** Editor debounces `PUT /api/admin/pages/[id]` 500ms after every change. Publish only triggers a rebuild — saving and publishing are independent actions.
+```typescript
+interface BlockSchema {
+  type: BlockType
+  label: string
+  icon?: string        // Lucide icon name (displayed in palette)
+  isWrapper?: boolean  // true for Section block
+  fields: FieldDef[]
+  defaultData: () => BlockData
+}
 
-**Publish bar states:** idle → saving (spinner) → deploying (spinner, button disabled) → success (checkmark, fades after 5s) → error (red, retry button)
+type FieldType =
+  | 'text' | 'textarea' | 'image' | 'url' | 'select'
+  | 'array' | 'blocks' | 'boolean' | 'icon'
+
+interface FieldDef {
+  key: string              // dot-notation for nested: 'metrics.large.value'
+  label: string
+  type: FieldType
+  required?: boolean
+  placeholder?: string
+  description?: string
+  span?: 'full'            // force full-width in the field grid
+  options?: { value: string; label: string }[]
+  fields?: FieldDef[]      // sub-fields for 'array' items
+  defaultValue?: unknown
+}
+```
+
+---
+
+## Editor Store (`libs/cms/editor-store.ts`)
+
+Zustand store. All mutations push to an undo history (max 50 snapshots).
+
+| Action | Description |
+|--------|-------------|
+| `setPage(page)` | Load page, reset history |
+| `setTitle(title)` | Update title → dirty |
+| `setSlug(slug)` | Update slug → dirty |
+| `updateSeo(partial)` | Merge into `page.seo` → dirty |
+| `updateSettings(partial)` | Merge into `page.settings` → dirty |
+| `addBlock(block)` | Append to `page.blocks` → dirty |
+| `removeBlock(id)` | Filter from `page.blocks` → dirty |
+| `updateBlock(id, data)` | Merge block data → dirty |
+| `reorderBlocks(blocks)` | Replace entire blocks array → dirty |
+| `duplicateBlock(id)` | Clone with new UUID, insert after → dirty |
+| `toggleStatus()` | Flip draft↔published → PUT `/api/admin/pages/{id}` immediately |
+| `undo() / redo()` | Navigate history |
+| `save()` | PUT `/api/admin/pages/{id}` with full page + new `updatedAt` |
+
+**Keyboard shortcuts in editor:**
+- `Ctrl/Cmd + S` → save
+- `Ctrl/Cmd + Z` → undo
+- `Ctrl/Cmd + Shift + Z` → redo
+- `Escape` → deselect block
+- `Delete / Backspace` (when block focused, not in input) → remove block
+
+---
+
+## API Routes
+
+### Pages
+
+| Method | Route | Auth | Description |
+|--------|-------|------|-------------|
+| GET | `/api/admin/pages?slugCheck=&excludeId=` | any | Check slug uniqueness |
+| GET | `/api/admin/pages` | any | List all page metadata |
+| POST | `/api/admin/pages` | create_page | Create page |
+| GET | `/api/admin/pages/[id]` | any | Read full page |
+| PUT | `/api/admin/pages/[id]` | edit_page | Update page (title, slug, status, seo, **settings**, blocks) — auto-stamps `settings.publishedAt` on first publish |
+| DELETE | `/api/admin/pages/[id]` | delete_page | Delete page + GitHub commit |
+| POST | `/api/admin/pages/[id]/duplicate` | create_page | Clone with new ID |
+
+### Users
+
+| Method | Route | Auth | Description |
+|--------|-------|------|-------------|
+| GET | `/api/admin/users` | manage_users | List users |
+| POST | `/api/admin/users` | manage_users | Create user |
+| GET | `/api/admin/users/[id]` | manage_users | Read user |
+| PUT | `/api/admin/users/[id]` | manage_users | Update name/role/password |
+| DELETE | `/api/admin/users/[id]` | manage_users | Delete user |
+
+### Other
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| POST | `/api/admin/auth/login` | Password step |
+| POST | `/api/admin/auth/totp` | TOTP step |
+| POST | `/api/admin/auth/logout` | Destroy session |
+| POST | `/api/admin/images` | Upload image → Vercel Blob URL |
+
+---
+
+## What Needs to Be Built Next
+
+### 1. Live Preview Panel ⏳
+
+Split the editor Blocks tab into a 2-column layout:
+- **Left (60%):** block card stack (existing)
+- **Right (40%, sticky):** iframe or React-rendered preview of the selected block
+
+The selected block's current field values are passed live into the preview. The preview should respect the current theme (light/dark via a data-theme toggle on the preview container).
+
+> **Implementation note:** User must be prompted before this is implemented. The iframe approach requires a preview API route (`GET /api/admin/preview/[id]`) that renders the page server-side with draft data. An in-React approach renders the block component directly in the editor (no iframe) but risks style conflicts.
+
+### 2. Pages & Users List Search ⏳
+
+The pages list and users list are currently server components with no filtering. Options:
+
+**Option A — Client component with in-memory filter:**
+Convert `pages/page.tsx` and `users/page.tsx` to client components. Fetch data once, filter in `useState`. Fast UX but loses RSC streaming.
+
+**Option B — URL query param (`?q=`):**
+Keep server components. Search state lives in the URL. Works with `useRouter().push`. Slightly slower (full page refetch) but more bookmarkable/shareable.
+
+**Option B is preferred** — keeps components server-rendered, matches Next.js App Router patterns.
+
+### 3. Publish Flow / Deploy Bar ⏳
+
+The Vercel Deploy Hook flow is designed but not yet wired to the UI:
+
+1. SuperAdmin clicks **Deploy** (separate from Save)
+2. `POST /api/admin/publish` → calls `VERCEL_DEPLOY_HOOK_URL`
+3. Returns `{ jobId }`
+4. Client polls `GET /api/admin/deploy-status?jobId=` every 5 seconds
+5. Route calls Vercel API with `VERCEL_ACCESS_TOKEN`
+6. UI shows: idle → deploying (spinner) → ready ✓ / error ✗
+
+**Scope:** Add a deploy button to the admin nav or pages list header. Only visible to super_admin.
+
+### 4. Nested Blocks Editor ⏳
+
+The `section` block has a `children: BlockData[]` field typed as `'blocks'` in the registry. The current `BlockFieldsPanel` renders `"nested block editing coming soon"` for this field type.
+
+Implementing this requires a nested DnD canvas inside the block form — a recursive version of the main block list. Scope and complexity are non-trivial; implement as a separate step.
+
+### 5. Media Library ⏳
+
+A `/admin/media` page that lists all uploaded images from Vercel Blob (`cms-uploads/` prefix). Features: browse, preview, copy URL, delete. Useful for re-using images across blocks without re-uploading.
+
+### 6. New Page Modal (in-editor) ⏳
+
+Currently "New page" navigates to `/admin/pages/new`. The design prototype showed a modal dialog. A nice-to-have improvement — creates pages without losing the current editor context.
 
 ---
 
@@ -561,32 +544,14 @@ Reads `iron-session` from `request.cookies` (Edge-compatible). Redirects unauthe
 |-------|---------|
 | Passwords | bcrypt cost 12, stored in private Vercel Blob |
 | 2FA | TOTP via `otplib` (RFC 6238, 30s ±1 window), mandatory for all users |
-| Rate limiting | 5 login attempts / 15 min / IP |
-| Sessions | `iron-session` AES-256-GCM encrypted HTTP-only cookie, 8h TTL |
-| Middleware | All `/admin` + `/api/admin` protected at Edge before any handler |
-| CSRF | `sameSite: lax` + `x-requested-with` check on all mutations |
-| RBAC | `canPerform(role, action)` checked in every API handler |
-| Storage | Blob token server-side only — never in `NEXT_PUBLIC_*` |
+| Rate limiting | 5 login attempts / 15 min / IP (in-memory) |
+| Sessions | `iron-session` AES-256-GCM, HttpOnly, SameSite strict, 8h TTL |
+| Middleware | All `/admin/*` + `/api/admin/*` protected at Edge before any handler |
+| CSRF | `x-requested-with: XMLHttpRequest` header required on all mutations |
+| RBAC | `canPerform(role, action)` checked in every handler |
+| Storage | Blob token server-side only — never in `NEXT_PUBLIC_*` vars |
 | Image uploads | Server validates `Content-Type: image/*`, max 10 MB |
-| Deploy Hook | URL server-side only, never sent to client |
+| GitHub token | Server-side only, gated behind `isGitHubConfigured()` |
+| Slug validation | `[a-z0-9-]` only + path-traversal check |
 | Error messages | Always `"Invalid credentials"` — never reveal which field failed |
-| Bootstrap | Setup endpoint becomes 403 after first SuperAdmin is created |
-
----
-
-## Implementation Phases
-
-| Phase | Description | Key Deliverable |
-|-------|-------------|-----------------|
-| **0** | Foundation: install deps, create `libs/cms/types.ts`, auth helpers, `storage.ts`, modify `next.config.ts` + `validate-env.ts` | Type-safe storage + auth layer |
-| **1** | Sanity removal: delete `integrations/sanity/`, `app/studio/`, draft-mode routes; clean up `app/layout.tsx`; remove Sanity packages | Clean build with no Sanity references |
-| **2** | Auth routes + middleware: `middleware.ts`, `/api/admin/auth/*`, `app/admin/login/` | Login flow end-to-end; middleware blocks unauthenticated access |
-| **3** | Block registry + renderer: `block-registry.ts`, `block-renderer.tsx`, `resolve-icon.ts`, `section-block.tsx`, update hardcoded blocks | Any `CmsPage` JSON renders correctly via `BlockRenderer` |
-| **4** | CMS page route: `app/(pages)/[slug]/page.tsx` | CMS pages SSG'd and served publicly at `/{slug}` |
-| **5** | CRUD API: `/api/admin/pages/*`, `/api/admin/users/*`, `/api/admin/images` | Full CRUD for pages + users; image upload working |
-| **6** | Admin pages UI: page list, create page, admin nav | Create / list / delete pages in browser |
-| **7** | Block builder editor: editor Zustand store, all field components, block palette, canvas, props editor, SEO panel, auto-save | Full block builder: add, edit, drag, SEO, auto-save to Blob |
-| **8** | Nested blocks: extend canvas for `SectionBlock`, `blocks-field.tsx` | Drag blocks into/out of sections; nested children saved correctly |
-| **9** | User management UI: `/admin/users/*`, TOTP QR on new user creation | Second user created, role restrictions verified |
-| **10** | Publish flow: `/api/admin/publish`, `/api/admin/deploy-status`, publish bar polling | Publish button triggers Vercel rebuild; UI shows BUILDING → READY |
-| **11** | Polish: slug validation, delete confirmations, error boundaries, preview button, this docs file | Production-ready |
+| Bootstrap | `ROOT_USER_ID` / `ROOT_USER_PASS` env vars create root user idempotently |

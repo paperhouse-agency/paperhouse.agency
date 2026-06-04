@@ -37,20 +37,45 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="admin-login-wrap">
-      <div className="admin-login-box">
-        <h1>Sign in</h1>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div className="form-row">
-            <label htmlFor="email">Username or Email</label>
-            <input id="email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" />
+    <div className="cms-login-wrap">
+      <div className="cms-login-card">
+        <div className="cms-login-wordmark">paperhouse</div>
+        <h1 className="cms-login-heading">Sign in</h1>
+        <p className="cms-login-sub">Sign in to manage your content.</p>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+          <div className="cms-field">
+            <label htmlFor="email" className="cms-field-label">Email</label>
+            <input
+              id="email"
+              type="text"
+              className="cms-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="username"
+              placeholder="you@paperhouse.agency"
+            />
           </div>
-          <div className="form-row">
-            <label htmlFor="password">Password</label>
-            <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
+          <div className="cms-field">
+            <label htmlFor="password" className="cms-field-label">Password</label>
+            <input
+              id="password"
+              type="password"
+              className="cms-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              placeholder="••••••••"
+            />
           </div>
-          {error && <p className="admin-error">{error}</p>}
-          <button type="submit" disabled={loading} style={{ width: '100%', justifyContent: 'center' }}>
+          {error && <p className="cms-error-msg">{error}</p>}
+          <button
+            type="submit"
+            className="cms-btn cms-btn-primary"
+            disabled={loading}
+            style={{ width: '100%', justifyContent: 'center', marginTop: 4 }}
+          >
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
