@@ -131,9 +131,9 @@ export const cmsSchema: BlockSchema = {
   label: 'Newsletter',
   icon: 'Mail',
   fields: [
-    { key: 'preheadingContent', label: 'Preheading', type: 'text' },
-    { key: 'headingContent', label: 'Heading', type: 'text' },
-    { key: 'bodyContent', label: 'Body', type: 'textarea' },
+    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'THE PAPER TRAIL' },
+    { key: 'headingContent', label: 'Heading', type: 'text', span: 'full', placeholder: 'One sharp idea on design & building, every two weeks' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full', description: 'Short subheading below the main heading' },
   ],
   defaultData: () => ({
     _id: crypto.randomUUID(),

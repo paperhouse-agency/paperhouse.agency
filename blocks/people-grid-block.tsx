@@ -67,17 +67,18 @@ export const cmsSchema: BlockSchema = {
   label: 'People Grid',
   icon: 'Users',
   fields: [
-    { key: 'preheadingContent', label: 'Preheading', type: 'text' },
-    { key: 'headingContent', label: 'Heading', type: 'text', required: true },
-    { key: 'bodyContent', label: 'Body', type: 'textarea' },
+    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'THE TEAM' },
+    { key: 'headingContent', label: 'Heading', type: 'text', required: true, span: 'full', description: 'Wrap text in <span> for accent color' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
     {
       key: 'members',
-      label: 'Members',
+      label: 'Team Members',
       type: 'array',
+      span: 'full',
       fields: [
         { key: 'name', label: 'Name', type: 'text', required: true },
         { key: 'role', label: 'Role', type: 'text', required: true },
-        { key: 'image', label: 'Image', type: 'image', required: true },
+        { key: 'image', label: 'Photo', type: 'image', span: 'full', required: true },
         { key: 'ctaUrl', label: 'Profile URL', type: 'url' },
       ],
     },

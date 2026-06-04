@@ -33,29 +33,9 @@ export const cmsSchema: BlockSchema = {
   icon: 'Square',
   isWrapper: true,
   fields: [
-    {
-      key: 'backgroundColor',
-      label: 'Background Color',
-      type: 'select',
-      options: [
-        { value: 'offwhite', label: 'Off White' },
-        { value: 'bluishgray', label: 'Bluish Gray' },
-        { value: 'white', label: 'White' },
-        { value: 'text', label: 'Text (Dark)' },
-      ],
-    },
-    {
-      key: 'paddingSize',
-      label: 'Padding Size',
-      type: 'select',
-      options: [
-        { value: 'none', label: 'None' },
-        { value: 'sm', label: 'Small' },
-        { value: 'md', label: 'Medium' },
-        { value: 'lg', label: 'Large' },
-      ],
-    },
-    { key: 'children', label: 'Nested Blocks', type: 'blocks' },
+    { key: 'backgroundColor', label: 'Background', type: 'select', options: [{ value: 'offwhite', label: 'Off White' }, { value: 'bluishgray', label: 'Bluish Gray' }, { value: 'white', label: 'White' }, { value: 'text', label: 'Text (Dark)' }] },
+    { key: 'paddingSize', label: 'Vertical Padding', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'sm', label: 'Small' }, { value: 'md', label: 'Medium' }, { value: 'lg', label: 'Large' }] },
+    { key: 'children', label: 'Nested Blocks', type: 'blocks', span: 'full' },
   ],
   defaultData: () => ({
     _id: crypto.randomUUID(),

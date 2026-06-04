@@ -162,41 +162,49 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
 
         {/* Canvas */}
         <div className="editor-canvas">
-          {/* Page meta */}
+          {/* Sticky page meta bar */}
           <div className="editor-canvas-meta">
-            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+            <div className="editor-meta-row">
               <input
                 type="text"
                 value={page.title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Page title"
-                style={{ flex: 1, fontSize: '16px', fontWeight: 600, border: '1px solid #e8e8e6' }}
+                className="editor-meta-title"
               />
-              <span className={`admin-badge admin-badge-${page.status}`}>{page.status}</span>
-              <button
-                type="button"
-                data-variant={page.status === 'draft' ? 'primary' : 'secondary'}
-                style={{ padding: '4px 12px', fontSize: '12px' }}
-                onClick={toggleStatus}
-              >
-                {page.status === 'draft' ? 'Publish' : 'Unpublish'}
-              </button>
-              <Link
-                href={`/${page.slug}`}
-                style={{ padding: '4px 10px', fontSize: '12px', textDecoration: 'none', border: '1px solid #ddd', borderRadius: '4px', color: '#444', whiteSpace: 'nowrap' }}
-              >
-                Preview ↗
-              </Link>
+              <div className="editor-meta-actions">
+                <span className="editor-save-status">
+                  {isSaving && <span className="editor-save-saving">Saving…</span>}
+                  {!isSaving && lastSaved && <span className="editor-save-ok">Saved {lastSaved.toLocaleTimeString()}</span>}
+                  {saveError && <span className="editor-save-error">{saveError}</span>}
+                </span>
+                <button type="button" className="editor-meta-icon-btn" disabled={!canUndo} onClick={undo} title="Undo (Ctrl+Z)">↩</button>
+                <button type="button" className="editor-meta-icon-btn" disabled={!canRedo} onClick={redo} title="Redo (Ctrl+Shift+Z)">↪</button>
+                <span className={`admin-badge admin-badge-${page.status}`}>{page.status}</span>
+                <button
+                  type="button"
+                  data-variant={page.status === 'draft' ? 'primary' : 'secondary'}
+                  style={{ padding: '4px 12px', fontSize: '12px' }}
+                  onClick={toggleStatus}
+                >
+                  {page.status === 'draft' ? 'Publish' : 'Unpublish'}
+                </button>
+                <Link
+                  href={`/${page.slug}`}
+                  className="editor-meta-preview"
+                >
+                  Preview ↗
+                </Link>
+              </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div className="editor-meta-slug">
               <span className="admin-slug">/</span>
               <input
                 type="text"
                 value={page.slug}
                 onChange={(e) => setSlug(e.target.value)}
                 placeholder="slug"
-                className="admin-slug"
-                style={{ flex: 1, border: '1px solid #e8e8e6', padding: '5px 8px', borderRadius: '4px', fontSize: '13px' }}
+                className="admin-slug editor-slug-input"
               />
             </div>
           </div>
@@ -257,16 +265,6 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
             </div>
           )}
 
-          {/* Save bar */}
-          <div className="editor-save-bar" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <button type="button" data-variant="secondary" style={{ padding: '2px 8px', fontSize: '12px' }} disabled={!canUndo} onClick={undo} title="Undo (Ctrl+Z)">↩</button>
-            <button type="button" data-variant="secondary" style={{ padding: '2px 8px', fontSize: '12px' }} disabled={!canRedo} onClick={redo} title="Redo (Ctrl+Shift+Z)">↪</button>
-            <span style={{ flex: 1 }}>
-              {isSaving && 'Saving…'}
-              {!isSaving && lastSaved && `Saved at ${lastSaved.toLocaleTimeString()}`}
-              {saveError && <span style={{ color: '#c0392b' }}> {saveError}</span>}
-            </span>
-          </div>
         </div>
       </div>
 

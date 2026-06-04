@@ -64,11 +64,11 @@ export const cmsSchema: BlockSchema = {
   label: 'Image Text Split',
   icon: 'Columns2',
   fields: [
-    { key: 'image', label: 'Image', type: 'image' },
-    { key: 'heading', label: 'Heading', type: 'text', placeholder: 'Use \\n for line breaks' },
-    { key: 'bodyContent', label: 'Body', type: 'textarea' },
-    { key: 'ctaLabel', label: 'CTA Label', type: 'text' },
-    { key: 'ctaUrl', label: 'CTA URL', type: 'url' },
+    { key: 'image', label: 'Full-width Image', type: 'image', span: 'full' },
+    { key: 'heading', label: 'Heading', type: 'text', span: 'full', placeholder: 'Our Brand\nCore Values', description: 'Use \\n for line breaks' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
+    { key: 'ctaLabel', label: 'CTA Label', type: 'text', placeholder: 'Know Us More' },
+    { key: 'ctaUrl', label: 'CTA URL', type: 'url', placeholder: '/about' },
   ],
   defaultData: () => ({
     _id: crypto.randomUUID(),

@@ -17,6 +17,8 @@ export interface FieldDef {
   type: FieldType
   required?: boolean
   placeholder?: string
+  description?: string
+  span?: 'full'
   options?: { value: string; label: string }[]
   fields?: FieldDef[]
   defaultValue?: unknown

@@ -171,6 +171,7 @@ export interface SplitHeroBlockData extends BaseBlockData {
 
 export interface BrandsBlockData extends BaseBlockData {
   _type: 'brands'
+  items?: Array<{ name: string }>
 }
 
 export interface CtaManifestoBlockData extends BaseBlockData {
@@ -194,6 +195,7 @@ export interface FaqBlockData extends BaseBlockData {
 
 export interface TaglineMarqueeBlockData extends BaseBlockData {
   _type: 'tagline-marquee'
+  items?: Array<{ label: string }>
 }
 
 export interface SectionBlockData extends BaseBlockData {

@@ -125,9 +125,9 @@ export const cmsSchema: BlockSchema = {
   label: 'Form CTA',
   icon: 'FormInput',
   fields: [
-    { key: 'headingLine1', label: 'Heading Line 1', type: 'text' },
-    { key: 'headingLine2', label: 'Heading Line 2', type: 'text' },
-    { key: 'bodyContent', label: 'Body', type: 'textarea' },
+    { key: 'headingLine1', label: 'Heading Line 1', type: 'text', placeholder: 'Have a project?' },
+    { key: 'headingLine2', label: 'Heading Line 2', type: 'text', placeholder: "Let's", description: 'Followed by "Talk!" in accent color' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
   ],
   defaultData: () => ({
     _id: crypto.randomUUID(),
