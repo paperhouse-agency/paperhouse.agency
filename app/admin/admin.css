@@ -419,7 +419,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-wrap: wrap;
+  padding-top: 2px;
 }
 
 .admin .editor-slug-input {
@@ -461,14 +461,19 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-left: 4px;
   font-size: 11px;
-  color: #888;
+  color: #999;
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
   cursor: pointer;
   user-select: none;
+  flex-shrink: 0;
+}
+
+.editor-slug-sep {
+  color: #bbb;
+  flex-shrink: 0;
 }
 
 .editor-slug-error-msg {

@@ -133,6 +133,7 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
 
   const canUndo = historyIndex >= 0 && history.length > 0
   const canRedo = historyIndex < history.length - 1
+  const isHomepage = page.slug === '' || page.slug === 'index'
   const activePaletteEntry = activeDragId?.startsWith('palette-')
     ? BLOCK_REGISTRY.find((e) => e.type === activeDragId.slice('palette-'.length))
     : null
@@ -209,30 +210,11 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
               </div>
             </div>
             <div className="editor-meta-slug">
-              <span className="admin-slug">/</span>
-              {page.slug === '' ? (
-                <span className="editor-slug-homepage">Homepage</span>
-              ) : (
-                <input
-                  type="text"
-                  value={page.slug}
-                  onChange={(e) => { setSlug(e.target.value); setSlugError(null) }}
-                  onBlur={async (e) => {
-                    const val = e.target.value.trim()
-                    if (!val || val === initialPage.slug) { setSlugError(null); return }
-                    const res = await fetch(`/api/admin/pages?slugCheck=${encodeURIComponent(val)}&excludeId=${page.id}`)
-                    const data = (await res.json()) as { taken?: boolean }
-                    setSlugError(data.taken ? 'This slug is already in use' : null)
-                  }}
-                  placeholder="slug"
-                  className={`admin-slug editor-slug-input${slugError ? ' editor-slug-error' : ''}`}
-                />
-              )}
-              <label className="editor-homepage-label">
+              <label className="editor-homepage-label" title="Set as homepage (served at /)">
                 <input
                   type="checkbox"
                   className="f-toggle"
-                  checked={page.slug === ''}
+                  checked={isHomepage}
                   onChange={(e) => {
                     setSlugError(null)
                     if (e.target.checked) {
@@ -244,7 +226,26 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
                 />
                 Homepage
               </label>
-              {slugError && <span className="editor-slug-error-msg">{slugError}</span>}
+              {!isHomepage && (
+                <>
+                  <span className="admin-slug editor-slug-sep">/</span>
+                  <input
+                    type="text"
+                    value={page.slug}
+                    onChange={(e) => { setSlug(e.target.value); setSlugError(null) }}
+                    onBlur={async (e) => {
+                      const val = e.target.value.trim()
+                      if (!val || val === initialPage.slug) { setSlugError(null); return }
+                      const res = await fetch(`/api/admin/pages?slugCheck=${encodeURIComponent(val)}&excludeId=${page.id}`)
+                      const data = (await res.json()) as { taken?: boolean }
+                      setSlugError(data.taken ? 'This slug is already in use' : null)
+                    }}
+                    placeholder="page-slug"
+                    className={`admin-slug editor-slug-input${slugError ? ' editor-slug-error' : ''}`}
+                  />
+                  {slugError && <span className="editor-slug-error-msg">{slugError}</span>}
+                </>
+              )}
             </div>
           </div>
 
