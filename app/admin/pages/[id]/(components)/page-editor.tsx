@@ -166,6 +166,8 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
         <div className="editor-canvas">
           {/* Sticky page meta bar */}
           <div className="editor-canvas-meta">
+
+            {/* Row 1 — title + actions */}
             <div className="editor-meta-row">
               <input
                 type="text"
@@ -175,60 +177,62 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
                 className="editor-meta-title"
               />
               <div className="editor-meta-actions">
-                <span className="editor-save-status">
-                  {isSaving && <span className="editor-save-saving">Saving…</span>}
-                  {!isSaving && saveError && <span className="editor-save-error">{saveError}</span>}
-                  {!isSaving && !saveError && isDirty && <span className="editor-save-dirty">Unsaved changes</span>}
-                  {!isSaving && !saveError && !isDirty && lastSaved && <span className="editor-save-ok">Saved {lastSaved.toLocaleTimeString()}</span>}
-                </span>
-                <button type="button" className="editor-meta-icon-btn" disabled={!canUndo} onClick={undo} title="Undo (Ctrl+Z)">↩</button>
-                <button type="button" className="editor-meta-icon-btn" disabled={!canRedo} onClick={redo} title="Redo (Ctrl+Shift+Z)">↪</button>
-                <button
-                  type="button"
-                  className="editor-meta-icon-btn editor-save-btn"
-                  disabled={isSaving || !isDirty}
-                  onClick={save}
-                  title="Save (Ctrl+S)"
-                >
-                  {isSaving ? 'Saving…' : 'Save'}
-                </button>
-                <span className={`admin-badge admin-badge-${page.status}`}>{page.status}</span>
-                <button
-                  type="button"
-                  data-variant={page.status === 'draft' ? 'primary' : 'secondary'}
-                  style={{ padding: '4px 12px', fontSize: '12px' }}
-                  onClick={toggleStatus}
-                >
-                  {page.status === 'draft' ? 'Publish' : 'Unpublish'}
-                </button>
-                <Link
-                  href={`/${page.slug}`}
-                  className="editor-meta-preview"
-                >
-                  Preview ↗
-                </Link>
+
+                {/* History */}
+                <div className="editor-meta-group">
+                  <button type="button" className="editor-meta-icon-btn" disabled={!canUndo} onClick={undo} title="Undo (Ctrl+Z)">↩</button>
+                  <button type="button" className="editor-meta-icon-btn" disabled={!canRedo} onClick={redo} title="Redo (Ctrl+Shift+Z)">↪</button>
+                </div>
+
+                {/* Save */}
+                <div className="editor-meta-group">
+                  <span className="editor-save-status">
+                    {isSaving && <span className="editor-save-saving">Saving…</span>}
+                    {!isSaving && saveError && <span className="editor-save-error">{saveError}</span>}
+                    {!isSaving && !saveError && isDirty && <span className="editor-save-dirty">● Unsaved</span>}
+                    {!isSaving && !saveError && !isDirty && lastSaved && <span className="editor-save-ok">✓ Saved</span>}
+                  </span>
+                  <button
+                    type="button"
+                    className={`editor-save-btn${isDirty ? ' editor-save-btn--dirty' : ''}`}
+                    disabled={isSaving || !isDirty}
+                    onClick={save}
+                    title="Save (Ctrl+S)"
+                  >
+                    {isSaving ? 'Saving…' : 'Save'}
+                  </button>
+                </div>
+
+                {/* Publish + preview */}
+                <div className="editor-meta-group">
+                  <span className={`editor-status-chip editor-status-chip--${page.status}`}>
+                    {page.status === 'published' ? 'Published' : 'Draft'}
+                  </span>
+                  <button
+                    type="button"
+                    className={`editor-publish-btn${page.status === 'published' ? ' editor-publish-btn--live' : ''}`}
+                    onClick={toggleStatus}
+                  >
+                    {page.status === 'draft' ? 'Publish' : 'Unpublish'}
+                  </button>
+                  <Link href={`/${page.slug}`} className="editor-meta-preview">
+                    Preview ↗
+                  </Link>
+                </div>
+
               </div>
             </div>
+
+            {/* Row 2 — slug / homepage */}
             <div className="editor-meta-slug">
-              <label className="editor-homepage-label" title="Set as homepage (served at /)">
-                <input
-                  type="checkbox"
-                  className="f-toggle"
-                  checked={isHomepage}
-                  onChange={(e) => {
-                    setSlugError(null)
-                    if (e.target.checked) {
-                      setSlug('')
-                    } else {
-                      setSlug(page.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'untitled')
-                    }
-                  }}
-                />
-                Homepage
-              </label>
-              {!isHomepage && (
-                <>
-                  <span className="admin-slug editor-slug-sep">/</span>
+              {isHomepage ? (
+                <span className="editor-slug-path">
+                  <span className="editor-slug-path-seg">/</span>
+                  <span className="editor-slug-homepage-chip">Homepage</span>
+                </span>
+              ) : (
+                <span className="editor-slug-path">
+                  <span className="editor-slug-path-seg">/</span>
                   <input
                     type="text"
                     value={page.slug}
@@ -238,15 +242,30 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
                       if (!val || val === initialPage.slug) { setSlugError(null); return }
                       const res = await fetch(`/api/admin/pages?slugCheck=${encodeURIComponent(val)}&excludeId=${page.id}`)
                       const data = (await res.json()) as { taken?: boolean }
-                      setSlugError(data.taken ? 'This slug is already in use' : null)
+                      setSlugError(data.taken ? 'Slug already in use' : null)
                     }}
                     placeholder="page-slug"
-                    className={`admin-slug editor-slug-input${slugError ? ' editor-slug-error' : ''}`}
+                    className={`editor-slug-input${slugError ? ' editor-slug-error' : ''}`}
                   />
                   {slugError && <span className="editor-slug-error-msg">{slugError}</span>}
-                </>
+                </span>
               )}
+              <label className="editor-homepage-toggle" title="Serve this page at /">
+                <input
+                  type="checkbox"
+                  checked={isHomepage}
+                  onChange={(e) => {
+                    setSlugError(null)
+                    setSlug(e.target.checked
+                      ? ''
+                      : (page.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'untitled')
+                    )
+                  }}
+                />
+                Set as homepage
+              </label>
             </div>
+
           </div>
 
           {/* Tabs */}

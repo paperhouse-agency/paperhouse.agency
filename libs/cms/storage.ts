@@ -24,6 +24,12 @@ function slugToFile(slug: string): string {
   return path.join(CONTENT_DIR, `${name}.json`)
 }
 
+// Repo-relative path used for GitHub API calls (e.g. "content/index.json")
+export function slugToRepoPath(slug: string): string {
+  const name = slug === '' || slug === '/' ? 'index' : slug
+  return `content/${name}.json`
+}
+
 async function readFile<T>(filePath: string): Promise<T | null> {
   try {
     const raw = await fs.readFile(filePath, 'utf-8')

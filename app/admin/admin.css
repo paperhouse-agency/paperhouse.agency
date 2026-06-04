@@ -75,7 +75,8 @@
 
 /* ── Form fields ───────────────────────────────────────────────────────────── */
 .admin label {
-  display: block;
+  display: flex;
+  align-items: center;
   font-size: 12px;
   font-weight: 500;
   color: #666;
@@ -302,186 +303,281 @@
   flex-direction: column;
 }
 
-/* Sticky meta bar */
+/* ── Sticky meta bar ───────────────────────────────────────────────────────── */
 .editor-canvas-meta {
   position: sticky;
   top: 0;
   z-index: 10;
   background: #fff;
-  border: 1px solid #e8e8e6;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e8e8e6;
+  padding: 10px 16px 8px;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 0 #e8e8e6, 0 4px 12px rgba(0,0,0,0.04);
 }
 
+/* Row 1: title + actions */
 .editor-meta-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 .admin .editor-meta-title {
   flex: 1;
   font-size: 15px;
   font-weight: 600;
-  border: 1px solid transparent;
-  background: transparent;
-  padding: 4px 6px;
-  border-radius: 4px;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.admin .editor-meta-title:hover {
-  border-color: #e8e8e6;
-  background: #fafaf8;
-}
-
-.admin .editor-meta-title:focus {
-  border-color: #1a1a1a;
-  background: #fff;
-}
-
-.editor-meta-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.editor-meta-icon-btn {
-  background: none;
-  border: 1px solid #e8e8e6;
-  color: #888;
-  cursor: pointer;
-  font-size: 13px;
-  padding: 3px 7px;
-  border-radius: 4px;
-  line-height: 1.4;
-  font-family: inherit;
-  transition: background 0.1s, color 0.1s, border-color 0.1s;
-}
-
-.editor-meta-icon-btn:hover:not(:disabled) {
-  background: #f0f0ee;
   color: #1a1a1a;
-  border-color: #ccc;
-}
-
-.editor-meta-icon-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.editor-save-status {
-  font-size: 11px;
-  min-width: 80px;
-  text-align: right;
-}
-
-.editor-save-saving { color: #aaa; }
-.editor-save-ok { color: #7ab87a; }
-.editor-save-error { color: #c0392b; }
-.editor-save-dirty { color: #b08a3e; }
-
-.editor-save-btn {
-  font-weight: 600;
-  border-color: #1a1a1a;
-  color: #1a1a1a;
-}
-
-.editor-save-btn:hover:not(:disabled) {
-  background: #1a1a1a;
-  color: #fff;
-  border-color: #1a1a1a;
-}
-
-.editor-meta-preview {
-  padding: 4px 10px;
-  font-size: 12px;
-  text-decoration: none;
-  border: 1px solid #e0e0de;
-  border-radius: 4px;
-  color: #555;
-  white-space: nowrap;
-  transition: border-color 0.1s, color 0.1s;
-}
-
-.editor-meta-preview:hover {
-  border-color: #bbb;
-  color: #1a1a1a;
-  text-decoration: none;
-}
-
-.editor-meta-slug {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding-top: 2px;
-}
-
-.admin .editor-slug-input {
-  flex: 1;
-  min-width: 80px;
   border: 1px solid transparent;
   background: transparent;
   padding: 3px 6px;
   border-radius: 4px;
   transition: border-color 0.15s, background 0.15s;
+  min-width: 0;
 }
 
-.admin .editor-slug-input:hover {
-  border-color: #e8e8e6;
-  background: #fafaf8;
+.admin .editor-meta-title:hover { border-color: #e8e8e6; background: #fafaf8; }
+.admin .editor-meta-title:focus { border-color: #1a1a1a; background: #fff; }
+
+/* Action groups — separated by visual dividers */
+.editor-meta-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
-.admin .editor-slug-input:focus {
-  border-color: #aaa;
-  background: #fff;
-}
-
-.admin .editor-slug-input.editor-slug-error {
-  border-color: #e0a0a0;
-  background: #fff8f8;
-}
-
-.editor-slug-homepage {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 12px;
-  color: #2e7d32;
-  background: #e8f5e9;
-  padding: 2px 8px;
-  border-radius: 3px;
-  font-weight: 500;
-}
-
-.editor-homepage-label {
+.editor-meta-group {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 0 12px;
+  border-left: 1px solid #e8e8e6;
+}
+
+.editor-meta-group:first-child { border-left: none; padding-left: 0; }
+
+/* Undo/redo */
+.editor-meta-icon-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 5px;
+  border-radius: 4px;
+  line-height: 1;
+  font-family: inherit;
+  transition: background 0.1s, color 0.1s;
+}
+
+.editor-meta-icon-btn:hover:not(:disabled) { background: #f0f0ee; color: #1a1a1a; }
+.editor-meta-icon-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+/* Save status text */
+.editor-save-status {
   font-size: 11px;
+  white-space: nowrap;
+}
+
+.editor-save-saving { color: #aaa; }
+.editor-save-ok     { color: #6aaa6a; font-weight: 500; }
+.editor-save-error  { color: #c0392b; }
+.editor-save-dirty  { color: #c09040; }
+
+/* Save button */
+.editor-save-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background: #fff;
   color: #999;
+  transition: all 0.15s;
+}
+
+.editor-save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.editor-save-btn--dirty {
+  border-color: #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.editor-save-btn--dirty:hover:not(:disabled) {
+  background: #333;
+  border-color: #333;
+}
+
+/* Status chip */
+.editor-status-chip {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.editor-status-chip--draft {
+  background: #f0f0ee;
+  color: #888;
+}
+
+.editor-status-chip--published {
+  background: #e6f4e6;
+  color: #2e7d32;
+}
+
+/* Publish/Unpublish button */
+.editor-publish-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
+  transition: all 0.15s;
+}
+
+.editor-publish-btn:hover { background: #333; border-color: #333; }
+
+.editor-publish-btn--live {
+  background: #fff;
+  border-color: #ddd;
+  color: #555;
+}
+
+.editor-publish-btn--live:hover { border-color: #bbb; color: #1a1a1a; background: #fafaf8; }
+
+/* Preview link */
+.editor-meta-preview {
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  color: #666;
+  padding: 4px 2px;
+  white-space: nowrap;
+  transition: color 0.1s;
+}
+
+.editor-meta-preview:hover { color: #1a1a1a; text-decoration: none; }
+
+/* Row 2: slug / homepage */
+.editor-meta-slug {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 22px;
+}
+
+.editor-slug-path {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.editor-slug-path-seg {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  color: #bbb;
+  flex-shrink: 0;
+}
+
+.editor-slug-homepage-chip {
+  font-size: 11px;
+  font-weight: 600;
+  color: #2e7d32;
+  background: #e8f4e8;
+  padding: 1px 7px;
+  border-radius: 10px;
+  letter-spacing: 0.02em;
+}
+
+.admin .editor-slug-input {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  color: #555;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 1px 4px;
+  border-radius: 3px;
+  transition: border-color 0.15s, background 0.15s;
+  min-width: 60px;
+  flex: 1;
+  max-width: 320px;
+}
+
+.admin .editor-slug-input:hover { border-color: #e0e0de; background: #fafaf8; }
+.admin .editor-slug-input:focus { border-color: #aaa; background: #fff; color: #1a1a1a; }
+.admin .editor-slug-input.editor-slug-error { border-color: #e0a0a0; background: #fff8f8; }
+
+.editor-slug-error-msg {
+  font-size: 11px;
+  color: #c0392b;
+}
+
+/* Homepage toggle */
+.editor-homepage-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #bbb;
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
   cursor: pointer;
   user-select: none;
+  margin-left: auto;
   flex-shrink: 0;
+  transition: color 0.1s;
 }
 
-.editor-slug-sep {
-  color: #bbb;
-  flex-shrink: 0;
+.editor-homepage-toggle:hover { color: #888; }
+
+.editor-homepage-toggle input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 26px;
+  height: 15px;
+  min-width: 26px;
+  background: #d8d8d6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+  padding: 0;
 }
 
-.editor-slug-error-msg {
-  font-size: 11px;
-  color: #c0392b;
-  width: 100%;
-  margin-left: 2px;
+.editor-homepage-toggle input[type='checkbox']:checked { background: #2e7d32; }
+
+.editor-homepage-toggle input[type='checkbox']::after {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background: #fff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.18s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
+
+.editor-homepage-toggle input[type='checkbox']:checked::after { transform: translateX(11px); }
 
 .editor-tabs {
   display: flex;

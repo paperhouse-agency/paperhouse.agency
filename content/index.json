@@ -29,13 +29,6 @@
       }
     },
     {
-      "_id": "dd0483f8-efd1-4d7d-b19d-4ea0f7e17538",
-      "_type": "newsletter",
-      "preheadingContent": "",
-      "headingContent": "",
-      "bodyContent": ""
-    },
-    {
       "_id": "577c218a-d82d-42b4-9b3c-5e8b36f208cb",
       "_type": "newsletter",
       "preheadingContent": "",
@@ -45,5 +38,5 @@
     }
   ],
   "createdAt": "2026-06-03T19:09:29.750Z",
-  "updatedAt": "2026-06-04T05:21:50.711Z"
+  "updatedAt": "2026-06-04T05:30:33.539Z"
 }
