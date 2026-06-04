@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
-import { readPageById, renamePage, deletePage } from '@/libs/cms/storage'
+import { readPageById, renamePage, deletePage, isSlugTaken } from '@/libs/cms/storage'
 import type { CmsPage } from '@/libs/cms/types'
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -31,6 +31,14 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
   const body = (await req.json()) as Partial<CmsPage>
   const { title, slug, status, seo, blocks } = body
+
+  // Uniqueness check only when slug is actually changing
+  if (slug !== undefined && slug !== existing.slug) {
+    if (await isSlugTaken(slug, existing.id)) {
+      return NextResponse.json({ error: 'A page with this slug already exists' }, { status: 409 })
+    }
+  }
+
   const updated: CmsPage = {
     ...existing,
     ...(title !== undefined && { title }),

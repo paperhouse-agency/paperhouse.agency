@@ -1,10 +1,19 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
-import { listPages, writePage } from '@/libs/cms/storage'
+import { listPages, writePage, isSlugTaken } from '@/libs/cms/storage'
 import type { CmsPage } from '@/libs/cms/types'
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  const slugCheck = searchParams.get('slugCheck')
+  const excludeId = searchParams.get('excludeId') ?? undefined
+
+  if (slugCheck !== null) {
+    const taken = await isSlugTaken(slugCheck, excludeId)
+    return NextResponse.json({ taken })
+  }
+
   const pages = await listPages()
   return NextResponse.json({ pages })
 }
@@ -32,6 +41,10 @@ export async function POST(req: Request) {
   const RESERVED = ['index', 'api', 'admin', '_next', 'static']
   if (RESERVED.includes(slug)) {
     return NextResponse.json({ error: 'Slug is reserved' }, { status: 400 })
+  }
+
+  if (await isSlugTaken(slug)) {
+    return NextResponse.json({ error: 'A page with this slug already exists' }, { status: 409 })
   }
 
   const now = new Date().toISOString()

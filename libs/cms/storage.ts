@@ -172,3 +172,12 @@ export async function deletePage(slug: string) {
   validateSlug(slug)
   await fs.unlink(slugToFile(slug)).catch(() => null)
 }
+
+export async function isSlugTaken(slug: string, excludeId?: string): Promise<boolean> {
+  const pages = await listPages()
+  const normalised = slug === '/' ? '' : slug
+  return pages.some((p) => {
+    const pageSlug = p.slug === '/' ? '' : p.slug
+    return pageSlug === normalised && p.id !== excludeId
+  })
+}

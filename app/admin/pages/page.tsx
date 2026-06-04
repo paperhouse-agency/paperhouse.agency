@@ -48,7 +48,7 @@ export default async function PagesPage() {
                 </td>
                 <td>
                   <span className="admin-slug">
-                    {page.slug === '' ? 'index' : page.slug}.json
+                    {page.slug === '' ? '/ (homepage)' : `/${page.slug}`}
                   </span>
                 </td>
                 <td>

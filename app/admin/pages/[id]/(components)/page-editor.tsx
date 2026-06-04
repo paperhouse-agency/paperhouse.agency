@@ -53,6 +53,7 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'blocks' | 'seo'>('blocks')
   const [activeDragId, setActiveDragId] = useState<string | null>(null)
+  const [slugError, setSlugError] = useState<string | null>(null)
 
   useEffect(() => {
     setPage(initialPage)
@@ -199,13 +200,41 @@ export function PageEditor({ initialPage }: { initialPage: CmsPage }) {
             </div>
             <div className="editor-meta-slug">
               <span className="admin-slug">/</span>
-              <input
-                type="text"
-                value={page.slug}
-                onChange={(e) => setSlug(e.target.value)}
-                placeholder="slug"
-                className="admin-slug editor-slug-input"
-              />
+              {page.slug === '' ? (
+                <span className="editor-slug-homepage">Homepage</span>
+              ) : (
+                <input
+                  type="text"
+                  value={page.slug}
+                  onChange={(e) => { setSlug(e.target.value); setSlugError(null) }}
+                  onBlur={async (e) => {
+                    const val = e.target.value.trim()
+                    if (!val || val === initialPage.slug) { setSlugError(null); return }
+                    const res = await fetch(`/api/admin/pages?slugCheck=${encodeURIComponent(val)}&excludeId=${page.id}`)
+                    const data = (await res.json()) as { taken?: boolean }
+                    setSlugError(data.taken ? 'This slug is already in use' : null)
+                  }}
+                  placeholder="slug"
+                  className={`admin-slug editor-slug-input${slugError ? ' editor-slug-error' : ''}`}
+                />
+              )}
+              <label className="editor-homepage-label">
+                <input
+                  type="checkbox"
+                  className="f-toggle"
+                  checked={page.slug === ''}
+                  onChange={(e) => {
+                    setSlugError(null)
+                    if (e.target.checked) {
+                      setSlug('')
+                    } else {
+                      setSlug(page.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'untitled')
+                    }
+                  }}
+                />
+                Homepage
+              </label>
+              {slugError && <span className="editor-slug-error-msg">{slugError}</span>}
             </div>
           </div>
 
