@@ -123,6 +123,8 @@ export interface CmsPageMeta {
   slug: string
   status: 'draft' | 'published'
   updatedAt: string
+  blockCount: number
+  author?: string
 }
 
 export async function listPages(): Promise<CmsPageMeta[]> {
@@ -139,6 +141,8 @@ export async function listPages(): Promise<CmsPageMeta[]> {
         slug: page.slug,
         status: page.status,
         updatedAt: page.updatedAt,
+        blockCount: Array.isArray(page.blocks) ? page.blocks.length : 0,
+        author: page.settings?.author,
       })
     }
     return pages.sort((a, b) => a.title.localeCompare(b.title))

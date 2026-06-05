@@ -27,7 +27,17 @@
   font-size: 14px;
   color: var(--color-text);
   background: var(--workspace);
-  min-height: 100svh;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollable area below the nav — list pages scroll here; editor fills it */
+.cms-shell-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }

@@ -35,8 +35,44 @@
       "headingContent": "",
       "bodyContent": "",
       "visible": true
+    },
+    {
+      "_id": "68641bf5-a8af-4795-b87c-3fc0170ae67c",
+      "_type": "brands",
+      "items": [
+        {
+          "name": "Stripe"
+        },
+        {
+          "name": "Vercel"
+        },
+        {
+          "name": "Notion"
+        },
+        {
+          "name": "Linear"
+        },
+        {
+          "name": "Figma"
+        },
+        {
+          "name": "GitHub"
+        },
+        {
+          "name": "Sanity"
+        },
+        {
+          "name": "Next.js"
+        },
+        {
+          "name": "Shopify"
+        },
+        {
+          "name": "Cloudflare"
+        }
+      ]
     }
   ],
   "createdAt": "2026-06-03T19:09:29.750Z",
-  "updatedAt": "2026-06-04T05:30:33.539Z"
+  "updatedAt": "2026-06-04T19:24:56.254Z"
 }

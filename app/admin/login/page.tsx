@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/button'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -70,14 +71,15 @@ export default function LoginPage() {
             />
           </div>
           {error && <p className="cms-error-msg">{error}</p>}
-          <button
-            type="submit"
-            className="cms-btn cms-btn-primary"
+          <Button
+            variant='default'
+            color='neutral'
+            size='md'
             disabled={loading}
-            style={{ width: '100%', justifyContent: 'center', marginTop: 4 }}
+            onClick={handleSubmit}
           >
             {loading ? 'Signing in…' : 'Sign in'}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

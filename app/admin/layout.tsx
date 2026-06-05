@@ -6,7 +6,9 @@ export default function AdminLayout({ children }: PropsWithChildren) {
   return (
     <div className="cms-shell">
       <AdminNav />
-      {children}
+      <div className="cms-shell-body">
+        {children}
+      </div>
     </div>
   )
 }

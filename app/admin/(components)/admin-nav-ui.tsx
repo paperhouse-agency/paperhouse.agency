@@ -4,8 +4,10 @@ import { usePathname } from 'next/navigation'
 import { Link } from '@/components/link'
 import { LogoutButton } from './logout-button'
 
-export function AdminNavUI({ showUsers }: { showUsers: boolean }) {
+export function AdminNavUI({ showUsers, initials }: { showUsers: boolean; initials: string }) {
   const pathname = usePathname()
+  if (pathname?.startsWith('/admin/login')) return null
+
   const onUsers = pathname?.startsWith('/admin/users') ?? false
   const onPages = !onUsers
 
@@ -36,6 +38,9 @@ export function AdminNavUI({ showUsers }: { showUsers: boolean }) {
       </div>
 
       <div className="cms-nav-right">
+        {initials && (
+          <span className="cms-nav-avatar">{initials}</span>
+        )}
         <LogoutButton />
       </div>
     </header>
