@@ -1,7 +1,7 @@
 import { listPages } from '@/libs/cms/storage'
 import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
-import { PagesListClient } from './(components)/pages-list-client'
+import { PagesListClient } from '@/components/cms/pages-list-client'
 
 export default async function PagesPage() {
   const session = await getSession()

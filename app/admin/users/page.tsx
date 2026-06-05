@@ -2,7 +2,7 @@ import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
 import { readUsers } from '@/libs/cms/storage'
 import { redirect } from 'next/navigation'
-import { UsersListClient } from './(components)/users-list-client'
+import { UsersListClient } from '@/components/cms/users-list-client'
 
 export default async function UsersPage() {
   const session = await getSession()

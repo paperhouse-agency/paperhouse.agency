@@ -26,6 +26,8 @@ import { BLOCK_REGISTRY } from '@/libs/cms/block-registry'
 import { useEditorStore } from '@/libs/cms/editor-store'
 import type { BlockData, CmsPage, CmsPageSettings } from '@/libs/cms/types'
 import { BlockFieldsPanel } from './block-fields-panel'
+import { Button } from '../button'
+import { Redo2, Redo2Icon, Undo, Undo2, Undo2Icon } from 'lucide-react'
 
 type Tab = 'blocks' | 'seo' | 'settings'
 
@@ -300,26 +302,32 @@ export function PageEditor({
             <div className="cms-header-actions">
               <div className="cms-header-action-row">
                 {/* Undo / Redo */}
-                <button
+                <Button
+                  variant="default"
                   type="button"
-                  className="cms-icon-btn"
+                  size="sm"
+                  color="neutral"
                   disabled={!canUndo}
                   onClick={undo}
                   title="Undo (Ctrl+Z)"
-                  style={{ fontSize: 16 }}
+                  hasIcon
+                  iconOverride={Undo2Icon}
                 >
-                  ↩
-                </button>
-                <button
+                  UNDO
+                </Button>
+                <Button
                   type="button"
-                  className="cms-icon-btn"
+                  variant="default"
+                  size="sm"
+                  color="neutral"
                   disabled={!canRedo}
                   onClick={redo}
                   title="Redo (Ctrl+Shift+Z)"
-                  style={{ fontSize: 16 }}
+                  hasIcon
+                  iconOverride={Redo2Icon}
                 >
-                  ↪
-                </button>
+                  REDO
+                </Button>
 
                 <span className="cms-divider" />
 
@@ -335,39 +343,43 @@ export function PageEditor({
                   )}
                 </span>
 
-                <button
+                <Button
                   type="button"
-                  className={`cms-btn-save${!isDirty ? ' cms-btn-save--clean' : ''}`}
+                  variant="default"
+                  color={"primary"}
+                  size="sm"
                   disabled={isSaving || !isDirty}
                   onClick={save}
                   title="Save (Ctrl+S)"
+                  className={isSaving || !isDirty ? 'opacity-50 cursor-not-allowed' : ''}
                 >
                   {isSaving ? 'Saving…' : 'Save changes'}
-                </button>
+                </Button>
 
                 <span className="cms-divider" />
 
                 {/* Publish / Unpublish */}
-                <button
-                  type="button"
-                  className={`cms-btn-publish${page.status === 'published' ? ' cms-btn-publish--live' : ''}`}
+                <Button
+                  variant="default"
+                  color="secondary"
+                  size="sm"
                   onClick={toggleStatus}
                 >
                   {page.status === 'draft' ? 'Publish' : 'Unpublish'}
-                </button>
+                </Button>
+                <Button
+                  variant="tertiary"
+                  isExternal
+                  url={`/${page.slug}`}
+                  hasIcon
+                  size="sm"
+                >
+                  Preview
+                </Button>
               </div>
 
               {/* Row 2: preview + homepage toggle */}
               <div className="cms-header-action-row">
-                <Link
-                  href={`/${page.slug}`}
-                  className="cms-preview-pill"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Preview
-                  <span className="cms-preview-pill-icon">↗</span>
-                </Link>
 
                 {/* biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: intentional toggle */}
                 {/* biome-ignore lint/a11y/useSemanticElements: label triggers checkbox */}

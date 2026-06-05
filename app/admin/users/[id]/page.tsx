@@ -2,7 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
 import { readUsers } from '@/libs/cms/storage'
-import { EditUserForm } from './(components)/edit-user-form'
+import { EditUserForm } from '@/components/cms/edit-user-form'
 
 export default async function EditUserPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getSession()
