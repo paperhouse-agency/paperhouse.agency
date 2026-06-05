@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Link } from '@/components/link'
+import { Button } from '@/components/button'
 import type { CmsPageMeta } from '@/libs/cms/storage'
 
 function relativeTime(iso: string): string {
@@ -76,10 +77,9 @@ export function PagesListClient({ pages, canCreate, canDelete, canDuplicate }: P
             />
           </div>
           {canCreate && (
-            <Link href="/admin/pages/new" className="cms-btn cms-btn-primary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            <Button url="/admin/pages/new" size="sm">
               New page
-            </Link>
+            </Button>
           )}
         </div>
       </div>

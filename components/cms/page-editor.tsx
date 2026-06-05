@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Link } from '@/components/link'
+import { Button } from '@/components/button'
 import {
   DndContext,
   DragOverlay,
@@ -26,8 +27,7 @@ import { BLOCK_REGISTRY } from '@/libs/cms/block-registry'
 import { useEditorStore } from '@/libs/cms/editor-store'
 import type { BlockData, CmsPage, CmsPageSettings } from '@/libs/cms/types'
 import { BlockFieldsPanel } from './block-fields-panel'
-import { Button } from '../button'
-import { Redo2, Redo2Icon, Undo, Undo2, Undo2Icon } from 'lucide-react'
+import { Undo2, Redo2 } from 'lucide-react'
 
 type Tab = 'blocks' | 'seo' | 'settings'
 
@@ -302,32 +302,24 @@ export function PageEditor({
             <div className="cms-header-actions">
               <div className="cms-header-action-row">
                 {/* Undo / Redo */}
-                <Button
-                  variant="default"
+                <button
                   type="button"
-                  size="sm"
-                  color="neutral"
+                  className="cms-icon-btn"
                   disabled={!canUndo}
                   onClick={undo}
                   title="Undo (Ctrl+Z)"
-                  hasIcon
-                  iconOverride={Undo2Icon}
                 >
-                  UNDO
-                </Button>
-                <Button
+                  <Undo2 size={15} />
+                </button>
+                <button
                   type="button"
-                  variant="default"
-                  size="sm"
-                  color="neutral"
+                  className="cms-icon-btn"
                   disabled={!canRedo}
                   onClick={redo}
                   title="Redo (Ctrl+Shift+Z)"
-                  hasIcon
-                  iconOverride={Redo2Icon}
                 >
-                  REDO
-                </Button>
+                  <Redo2 size={15} />
+                </button>
 
                 <span className="cms-divider" />
 
@@ -360,26 +352,27 @@ export function PageEditor({
 
                 {/* Publish / Unpublish */}
                 <Button
-                  variant="default"
-                  color="secondary"
                   size="sm"
+                  variant={page.status === 'published' ? 'outline' : 'default'}
+                  color={page.status === 'published' ? 'neutral' : 'primary'}
                   onClick={toggleStatus}
                 >
                   {page.status === 'draft' ? 'Publish' : 'Unpublish'}
-                </Button>
-                <Button
-                  variant="tertiary"
-                  isExternal
-                  url={`/${page.slug}`}
-                  hasIcon
-                  size="sm"
-                >
-                  Preview
                 </Button>
               </div>
 
               {/* Row 2: preview + homepage toggle */}
               <div className="cms-header-action-row">
+                <Button
+                  variant="tertiary"
+                  color="neutral"
+                  size="sm"
+                  url={`/${page.slug}`}
+                  isExternal
+                  hasIcon
+                >
+                  Preview
+                </Button>
 
                 {/* biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: intentional toggle */}
                 {/* biome-ignore lint/a11y/useSemanticElements: label triggers checkbox */}
@@ -1102,9 +1095,10 @@ function SettingsTab({
                 <h4>Delete this page</h4>
                 <p>Permanently removes the page and all its blocks. This cannot be undone.</p>
               </div>
-              <button
-                type="button"
-                className="cms-btn cms-btn-danger"
+              <Button
+                variant="outline"
+                color="primary"
+                size="sm"
                 onClick={async () => {
                   if (!confirm(`Delete "${page.title}"? This cannot be undone.`)) return
                   await fetch(`/api/admin/pages/${page.id}`, {
@@ -1115,7 +1109,7 @@ function SettingsTab({
                 }}
               >
                 Delete page
-              </button>
+              </Button>
             </div>
           </div>
         </div>

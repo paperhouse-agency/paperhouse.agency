@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/button'
 
 export function DuplicatePageButton({ id }: { id: string }) {
   const router = useRouter()
@@ -16,13 +17,8 @@ export function DuplicatePageButton({ id }: { id: string }) {
   }
 
   return (
-    <button
-      type="button"
-      className="cms-btn cms-btn-ghost"
-      style={{ height: 34, padding: '0 14px', fontSize: 12 }}
-      onClick={handleDuplicate}
-    >
+    <Button variant="outline" color="neutral" size="sm" onClick={handleDuplicate}>
       Duplicate
-    </button>
+    </Button>
   )
 }

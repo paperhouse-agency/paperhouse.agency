@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/button'
 import type { UserRole } from '@/libs/cms/types'
 
 interface SafeUser {
@@ -54,40 +55,81 @@ export function EditUserForm({ user }: { user: SafeUser }) {
   }
 
   return (
-    <div style={{ maxWidth: '500px' }}>
-      <h1>Edit User</h1>
-      <p style={{ color: '#888', fontSize: '13px' }}>{user.email}</p>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+    <div className="cms-page">
+      <div className="cms-list-header">
         <div>
-          <label htmlFor="name">Name</label>
-          <br />
-          <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required style={{ width: '100%', padding: '0.5rem', fontFamily: 'monospace', border: '1px solid #ccc' }} />
+          <span className="cms-list-eyebrow">Team &amp; access</span>
+          <h1 className="cms-list-title">Edit user<span className="dot">.</span></h1>
+          <p className="cms-list-sub">{user.email}</p>
         </div>
-        <div>
-          <label htmlFor="role">Role</label>
-          <br />
-          <select id="role" value={role} onChange={(e) => setRole(e.target.value as UserRole)} style={{ width: '100%', padding: '0.5rem', fontFamily: 'monospace', border: '1px solid #ccc' }}>
-            <option value="editor">Editor</option>
-            <option value="marketing">Marketing</option>
-            <option value="super_admin">Super Admin</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="password">New Password (leave blank to keep current)</label>
-          <br />
-          <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} minLength={8} style={{ width: '100%', padding: '0.5rem', fontFamily: 'monospace', border: '1px solid #ccc' }} />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {saved && <p style={{ color: 'green' }}>Saved.</p>}
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button type="submit" disabled={loading} style={{ padding: '0.5rem 1rem', fontFamily: 'monospace' }}>
-            {loading ? 'Saving...' : 'Save'}
-          </button>
-          <button type="button" data-variant="secondary" onClick={() => router.push('/admin/users' as string as never)} style={{ padding: '0.5rem 1rem', fontFamily: 'monospace' }}>
-            Back
-          </button>
-        </div>
-      </form>
+      </div>
+
+      <div style={{ maxWidth: 560 }}>
+        <form onSubmit={handleSubmit}>
+          <div className="cms-card">
+            <div className="cms-card-header">
+              <h3 className="cms-card-title">Account details</h3>
+            </div>
+            <div className="cms-card-body">
+              <div className="cms-field cms-field-full">
+                <label htmlFor="name" className="cms-field-label">Name <span className="cms-field-req">*</span></label>
+                <input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="cms-input cms-input--sm"
+                />
+              </div>
+
+              <div className="cms-field cms-field-full">
+                <label htmlFor="role" className="cms-field-label">Role</label>
+                <select
+                  id="role"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value as UserRole)}
+                  className="cms-select cms-select--sm"
+                >
+                  <option value="editor">Editor</option>
+                  <option value="marketing">Marketing</option>
+                  <option value="super_admin">Super Admin</option>
+                </select>
+              </div>
+
+              <div className="cms-field cms-field-full">
+                <label htmlFor="password" className="cms-field-label">New password</label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  minLength={8}
+                  className="cms-input cms-input--sm"
+                  placeholder="Leave blank to keep current"
+                />
+              </div>
+
+              {error && <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-primary)' }}>{error}</p>}
+              {saved && <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#1f8a5b' }}>Changes saved.</p>}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+            <Button size="sm" type="submit" disabled={loading}>
+              {loading ? 'Saving…' : 'Save changes'}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              color="neutral"
+              onClick={() => router.push('/admin/users' as string as never)}
+            >
+              Back
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

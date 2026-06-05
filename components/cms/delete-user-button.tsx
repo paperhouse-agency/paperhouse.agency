@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/button'
 
 export function DeleteUserButton({ id, name }: { id: string; name: string }) {
   const router = useRouter()
@@ -17,13 +18,8 @@ export function DeleteUserButton({ id, name }: { id: string; name: string }) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleDelete}
-      className="cms-btn cms-btn-ghost"
-      style={{ height: 34, padding: '0 14px', fontSize: 12, color: 'var(--color-primary)', borderColor: 'rgba(255,77,0,0.3)' }}
-    >
+    <Button variant="outline" color="primary" size="sm" onClick={handleDelete}>
       Delete
-    </button>
+    </Button>
   )
 }

@@ -8,7 +8,7 @@
  */
 
 /* ── Admin-level chrome tokens ──────────────────────────────────── */
-.cms-shell {
+:root {
   --chrome: #eae7e1;
   --chrome-border: rgba(26, 26, 26, 0.1);
   --chrome-fg: var(--color-text);

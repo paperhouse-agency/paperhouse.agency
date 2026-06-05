@@ -6,7 +6,6 @@ import { LogoutButton } from './logout-button'
 
 export function AdminNavUI({ showUsers, initials }: { showUsers: boolean; initials: string }) {
   const pathname = usePathname()
-  if (pathname?.startsWith('/admin/login')) return null
 
   const onUsers = pathname?.startsWith('/admin/users') ?? false
   const onPages = !onUsers

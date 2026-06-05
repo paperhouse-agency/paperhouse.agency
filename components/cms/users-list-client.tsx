@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Link } from '@/components/link'
+import { Button } from '@/components/button'
 import type { CmsUser } from '@/libs/cms/types'
 
 function relativeTime(iso: string): string {
@@ -88,10 +89,9 @@ export function UsersListClient({ users, currentUserId, canManage }: Props) {
             />
           </div>
           {canManage && (
-            <Link href="/admin/users/new" className="cms-btn cms-btn-primary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20a6.5 6.5 0 0 1 13 0" /><path d="M16 5.5a3.5 3.5 0 0 1 0 6.5M22 20a6.5 6.5 0 0 0-4.5-6.2" /></svg>
+            <Button url="/admin/users/new" size="sm">
               New user
-            </Link>
+            </Button>
           )}
         </div>
       </div>
