@@ -1,3 +1,4 @@
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { FeatureContentCard } from '@/components/molecules/feature-content-card'
 
 export interface FeatureCard {
@@ -65,4 +66,38 @@ export function FeatureCardsBlock({
       </div>
     </section>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'feature-cards',
+  label: 'Feature Cards',
+  icon: 'CreditCard',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'WHAT WE DO' },
+    { key: 'headingContent', label: 'Heading', type: 'text', required: true, span: 'full', description: 'Wrap text in <span> for accent color' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
+    {
+      key: 'cards',
+      label: 'Cards',
+      type: 'array',
+      span: 'full',
+      fields: [
+        { key: 'label', label: 'Label', type: 'text', required: true, placeholder: 'Design' },
+        { key: 'heading', label: 'Heading', type: 'text', required: true, span: 'full' },
+        { key: 'content', label: 'Description', type: 'textarea', span: 'full' },
+        { key: 'ctaLabel', label: 'CTA Label', type: 'text', required: true, placeholder: 'Learn more' },
+        { key: 'ctaUrl', label: 'CTA URL', type: 'url' },
+        { key: 'image', label: 'Image', type: 'image', span: 'full', required: true },
+      ],
+    },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'feature-cards',
+    preheadingContent: '',
+    headingContent: '',
+    bodyContent: '',
+    cards: [],
+  }),
 }

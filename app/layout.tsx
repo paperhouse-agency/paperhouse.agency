@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity/visual-editing'
-import type { PropsWithChildren } from 'react'
+import { Suspense, type PropsWithChildren } from 'react'
 import { ReactTempus } from 'tempus/react'
 import { RealViewport } from '@/components/real-viewport'
 import { DisableDraftMode } from '@/integrations/sanity/components/disable-draft-mode'
@@ -102,7 +102,9 @@ export default async function Layout({ children }: PropsWithChildren) {
         {children}
 
         {/* Development tools - dynamically imported */}
-        <OrchestraTools />
+        <Suspense>
+          <OrchestraTools />
+        </Suspense>
 
         {/* Animation framework */}
         <GSAPRuntime />

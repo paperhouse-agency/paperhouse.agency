@@ -2,6 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Link } from '@/components/link'
 import ArrowTopRight from '@/public/arrow-top-right.svg'
+import type { LucideIcon } from 'lucide-react'
 
 const buttonVariants = cva(
   // Base styles
@@ -169,6 +170,7 @@ const iconVariants = cva('', {
 type BaseButtonProps = VariantProps<typeof buttonVariants> & {
   children: ReactNode
   hasIcon?: boolean
+  iconOverride?: LucideIcon
   className?: string
 }
 
@@ -190,6 +192,7 @@ export function Button({
   color = 'primary',
   size = 'md',
   hasIcon = false,
+  iconOverride,
   isExternal = false,
   className,
   url,
@@ -203,12 +206,14 @@ export function Button({
     gapClass = 'gap-2.5'
   }
 
+  const ICON_SLOT = iconOverride ? iconOverride : ArrowTopRight
+
   const buttonContent = (
     <span className={`flex items-center ${gapClass}`}>
       <span>{children}</span>
       {hasIcon && variant !== 'outline' && (
         <span className={iconWrapperVariants({ size, variant, color })}>
-          <ArrowTopRight className={iconVariants({ size })} />
+          <ICON_SLOT className={iconVariants({ size })} />
         </span>
       )}
     </span>
@@ -218,6 +223,7 @@ export function Button({
     return (
       <Link
         href={url}
+        datatype='paperhouse-button'
         className={buttonVariants({ variant, color, size, hasIcon, className })}
         {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
       >

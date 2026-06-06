@@ -1,4 +1,5 @@
 'use client'
+import type { BlockSchema } from '@/libs/cms/block-schema'
 
 import { useActionState } from 'react'
 import Script from 'next/script'
@@ -116,4 +117,23 @@ export function FormCtaBlock({
       </section>
     </>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'form-cta',
+  label: 'Form CTA',
+  icon: 'FormInput',
+  fields: [
+    { key: 'headingLine1', label: 'Heading Line 1', type: 'text', placeholder: 'Have a project?' },
+    { key: 'headingLine2', label: 'Heading Line 2', type: 'text', placeholder: "Let's", description: 'Followed by "Talk!" in accent color' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'form-cta',
+    headingLine1: 'Have a project?',
+    headingLine2: "Let's",
+    bodyContent: '',
+  }),
 }

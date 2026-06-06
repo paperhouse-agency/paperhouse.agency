@@ -388,4 +388,52 @@ function ClientComponent({ data }) {
 6. **Code Quality**: Follow linting rules, maintain consistent style, write meaningful documentation
 7. **Development**: Use Bun, follow git best practices, understand client/server boundaries
 
-Last updated: 2025-10-07
+## Adding a New CMS Block (Checklist)
+
+When creating a new page block, ALL of the following must be updated — never add a block in only one place.
+
+### 1. Block file (`blocks/<name>-block.tsx`)
+Export both the React component and a `cmsSchema` object conforming to `BlockSchema`:
+```tsx
+export const cmsSchema: BlockSchema = {
+  type: 'my-block',
+  label: 'My Block',
+  defaultData: () => ({ _id: crypto.randomUUID(), _type: 'my-block', ... }),
+  fields: [ /* field definitions */ ],
+}
+
+export function MyBlock(props: MyBlockProps) { ... }
+```
+
+### 2. Block registry (`libs/cms/block-registry.ts`)
+Import the schema and add it to `BLOCK_REGISTRY`:
+```ts
+import { cmsSchema as myBlock } from '@/blocks/my-block'
+// ...
+export const BLOCK_REGISTRY: BlockSchema[] = [
+  // existing blocks...
+  myBlock,
+]
+```
+
+### 3. CMS live preview (`components/cms/block-preview.tsx`)
+Import the component and add a `case` in `renderBlock`:
+```tsx
+import { MyBlock } from '@/blocks/my-block'
+
+case 'my-block':
+  return <MyBlock {...block} />
+```
+
+### 4. CMS types (`libs/cms/types.ts`)
+Add the new type string to the `BlockType` union so TypeScript stays strict.
+
+### Summary — 4 files always touched:
+| File | What to add |
+|------|-------------|
+| `blocks/<name>-block.tsx` | Component + `cmsSchema` export |
+| `libs/cms/block-registry.ts` | Import schema, push to `BLOCK_REGISTRY` |
+| `components/cms/block-preview.tsx` | Import component, add `case` in `renderBlock` |
+| `libs/cms/types.ts` | Add type string to `BlockType` union |
+
+Last updated: 2026-06-06

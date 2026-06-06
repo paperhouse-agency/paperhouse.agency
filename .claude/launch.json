@@ -2,13 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "paperhouse-dev",
-      "runtimeExecutable": "/Users/xianmalik/.nvm/versions/node/v18.19.1/bin/pnpm",
-      "runtimeArgs": ["dev"],
-      "env": { "PATH": "/Users/xianmalik/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/usr/bin:/bin" },
-      "runtimeArgs": ["dev"],
-      "port": 3000,
-    "autoPort": true
+      "name": "dev",
+      "runtimeExecutable": "/Users/xianmalik/.bun/bin/bun",
+      "runtimeArgs": ["run", "dev", "--port", "3001"],
+      "env": { "PATH": "/Users/xianmalik/.bun/bin:/Users/xianmalik/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/usr/bin:/bin" },
+      "port": 3001,
+      "autoPort": false
     }
   ]
 }
