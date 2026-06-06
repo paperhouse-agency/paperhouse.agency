@@ -4,6 +4,22 @@ import { getSession } from '@/libs/cms/auth/session'
 
 const MAX_SIZE = 10 * 1024 * 1024
 const PREFIX = 'cms-media/'
+const STORAGE_LIMIT = Number(process.env.BLOB_STORAGE_LIMIT_MB ?? 500) * 1024 * 1024
+
+function inferContentType(pathname: string): string {
+  const ext = pathname.split('.').pop()?.toLowerCase() ?? ''
+  const types: Record<string, string> = {
+    jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
+    gif: 'image/gif', webp: 'image/webp', avif: 'image/avif',
+    svg: 'image/svg+xml',
+    mp4: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime',
+    avi: 'video/x-msvideo',
+    pdf: 'application/pdf',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  }
+  return types[ext] ?? 'application/octet-stream'
+}
 
 const MAGIC: Record<string, number[][]> = {
   'image/jpeg': [[0xff, 0xd8, 0xff]],
@@ -36,13 +52,15 @@ export async function GET() {
         pathname: b.pathname,
         size: b.size,
         uploadedAt: b.uploadedAt.toISOString(),
-        contentType: 'image/jpeg',
+        contentType: inferContentType(b.pathname),
       })
     }
     cursor = page.cursor
   } while (cursor)
 
-  return NextResponse.json({ blobs })
+  const storageUsed = blobs.reduce((sum, b) => sum + b.size, 0)
+
+  return NextResponse.json({ blobs, storageUsed, storageLimit: STORAGE_LIMIT })
 }
 
 export async function POST(req: Request) {
