@@ -123,7 +123,7 @@ Checked usage across the codebase:
 
 - `OrchestraTools` returns `null` when `process.env.NODE_ENV !== 'development'` (`index.tsx:35`).
 - Also returns `null` on `/admin` routes (`index.tsx:36`).
-- Sub-components are `next/dynamic` with `ssr: false` — never shipped to client in production builds, though bundler may still include modules. Verify with `pnpm build:analyze`.
+- Sub-components are `next/dynamic` with `ssr: false` — never shipped to client in production builds, though bundler may still include modules. Verify with `bun build:analyze`.
 - Console logs in Theatre providers are present but will be stripped in production builds (project-level convention).
 
 ## Verdict: Keep All Tools

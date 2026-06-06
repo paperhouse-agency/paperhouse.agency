@@ -279,7 +279,7 @@ Remove all Sanity-related sections:
 #### 3.2 Remove dependencies
 
 ```bash
-pnpm remove \
+bun remove \
   @sanity/asset-utils \
   @sanity/image-url \
   @sanity/visual-editing \
@@ -377,13 +377,13 @@ rg "portabletext" --include '*.ts' --include '*.tsx'
 rg "groq" --include '*.ts' --include '*.tsx'
 
 # Type check
-pnpm typecheck
+bun typecheck
 
 # Lint
-pnpm lint
+bun lint
 
 # Build
-pnpm build
+bun build
 ```
 
 ---

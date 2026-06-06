@@ -275,7 +275,7 @@ When asked to write content:
 ALWAYS re-run schema extraction after making schema file changes with `npx sanity@latest schema extract`
 
 #### For Monorepos
-ALWAYS use a simple pnpm workspace configuration to place the studio in `apps/studio`
+ALWAYS use a simple bun workspace configuration to place the studio in `apps/studio`
 
 ```
 your-project/
