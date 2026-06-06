@@ -77,7 +77,7 @@ export function PagesListClient({ pages, canCreate, canDelete, canDuplicate }: P
             />
           </div>
           {canCreate && (
-            <Button url="/admin/pages/new" size="sm">
+            <Button variant="default" url="/admin/pages/new" size="sm">
               New page
             </Button>
           )}

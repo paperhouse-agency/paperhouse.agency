@@ -206,7 +206,7 @@ export function Button({
     gapClass = 'gap-2.5'
   }
 
-  let ICON_SLOT = iconOverride ? iconOverride : ArrowTopRight
+  const ICON_SLOT = iconOverride ? iconOverride : ArrowTopRight
 
   const buttonContent = (
     <span className={`flex items-center ${gapClass}`}>
@@ -223,6 +223,7 @@ export function Button({
     return (
       <Link
         href={url}
+        datatype='paperhouse-button'
         className={buttonVariants({ variant, color, size, hasIcon, className })}
         {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
       >

@@ -8,7 +8,8 @@ export function AdminNavUI({ showUsers, initials }: { showUsers: boolean; initia
   const pathname = usePathname()
 
   const onUsers = pathname?.startsWith('/admin/users') ?? false
-  const onPages = !onUsers
+  const onMedia = pathname?.startsWith('/admin/media') ?? false
+  const onPages = !(onUsers || onMedia)
 
   return (
     <header className="cms-nav">
@@ -24,6 +25,12 @@ export function AdminNavUI({ showUsers, initials }: { showUsers: boolean; initia
             className={`cms-nav-pill${onPages ? ' active' : ''}`}
           >
             Pages
+          </Link>
+          <Link
+            href="/admin/media"
+            className={`cms-nav-pill${onMedia ? ' active' : ''}`}
+          >
+            Media
           </Link>
           {showUsers && (
             <Link

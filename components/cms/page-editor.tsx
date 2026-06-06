@@ -27,6 +27,7 @@ import { BLOCK_REGISTRY } from '@/libs/cms/block-registry'
 import { useEditorStore } from '@/libs/cms/editor-store'
 import type { BlockData, CmsPage, CmsPageSettings } from '@/libs/cms/types'
 import { BlockFieldsPanel } from './block-fields-panel'
+import { BlocksPreview } from './block-preview'
 import { Undo2, Redo2 } from 'lucide-react'
 
 type Tab = 'blocks' | 'seo' | 'settings'
@@ -72,6 +73,48 @@ export function PageEditor({
   const [activeDragId, setActiveDragId] = useState<string | null>(null)
   const [slugError, setSlugError] = useState<string | null>(null)
   const [sidebarSearch, setSidebarSearch] = useState('')
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [previewOpen, setPreviewOpen] = useState(true)
+  const [sidebarWidth, setSidebarWidth] = useState(268)
+  const [previewWidth, setPreviewWidth] = useState(400)
+
+  function startSidebarResize(e: React.MouseEvent) {
+    e.preventDefault()
+    const startX = e.clientX
+    const startW = sidebarWidth
+    function onMove(ev: MouseEvent) {
+      setSidebarWidth(Math.max(160, Math.min(480, startW + ev.clientX - startX)))
+    }
+    function onUp() {
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onUp)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onUp)
+  }
+
+  function startPreviewResize(e: React.MouseEvent) {
+    e.preventDefault()
+    const startX = e.clientX
+    const startW = previewWidth
+    function onMove(ev: MouseEvent) {
+      setPreviewWidth(Math.max(280, Math.min(720, startW - (ev.clientX - startX))))
+    }
+    function onUp() {
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onUp)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onUp)
+  }
 
   useEffect(() => {
     setPage(initialPage)
@@ -163,6 +206,7 @@ export function PageEditor({
     e.label.toLowerCase().includes(sidebarSearch.toLowerCase()),
   )
 
+
   return (
     <DndContext
       sensors={sensors}
@@ -172,12 +216,30 @@ export function PageEditor({
     >
       <div className="cms-editor-shell">
 
+        {/* Floating sidebar collapse/expand button — anchored to shell */}
+        <button
+          type="button"
+          className="cms-sidebar-float-btn"
+          style={{ left: sidebarOpen ? sidebarWidth - 13 : 0 }}
+          onClick={() => setSidebarOpen((v) => !v)}
+          title={sidebarOpen ? 'Hide blocks panel' : 'Show blocks panel'}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {sidebarOpen
+              ? <path d="M15 18l-6-6 6-6" />
+              : <path d="M9 18l6-6-6-6" />}
+          </svg>
+        </button>
+
         {/* ── Left sidebar: block palette ── */}
-        <aside className="cms-editor-sidebar">
+        <aside
+          className={`cms-editor-sidebar${sidebarOpen ? '' : ' cms-editor-sidebar--collapsed'}`}
+          style={sidebarOpen ? { width: sidebarWidth } : undefined}
+        >
+          {sidebarOpen && <>
           <div className="cms-sidebar-top">
             <div className="cms-sidebar-title-row">
               <span className="cms-mono-label">Blocks</span>
-              <span className="cms-mono-label">{BLOCK_REGISTRY.length}</span>
             </div>
             <p className="cms-sidebar-desc">Drag a block onto the page.</p>
             <div className="cms-sidebar-search">
@@ -208,7 +270,14 @@ export function PageEditor({
               />
             ))}
           </div>
+          </>}
         </aside>
+
+        {/* Sidebar resize handle */}
+        {sidebarOpen && (
+          // biome-ignore lint/a11y/noStaticElementInteractions: drag handle
+          <div className="cms-resize-handle" onMouseDown={startSidebarResize} />
+        )}
 
         {/* ── Right canvas ── */}
         <div className="cms-canvas">
@@ -327,10 +396,10 @@ export function PageEditor({
                 <span className="cms-save-status">
                   {isSaving && <span className="cms-save-saving">Saving…</span>}
                   {!isSaving && saveError && <span className="cms-save-error">{saveError}</span>}
-                  {!isSaving && !saveError && isDirty && (
+                  {!(isSaving || saveError ) && isDirty && (
                     <span className="cms-save-dirty">● Unsaved</span>
                   )}
-                  {!isSaving && !saveError && !isDirty && lastSaved && (
+                  {!((isSaving || saveError ) || isDirty ) && lastSaved && (
                     <span className="cms-save-ok">✓ Saved</span>
                   )}
                 </span>
@@ -361,17 +430,16 @@ export function PageEditor({
                 </Button>
               </div>
 
-              {/* Row 2: preview + homepage toggle */}
+              {/* Row 2: preview toggle + homepage toggle */}
               <div className="cms-header-action-row">
                 <Button
-                  variant="tertiary"
+                  type="button"
+                  variant={previewOpen ? 'default' : 'outline'}
                   color="neutral"
                   size="sm"
-                  url={`/${page.slug}`}
-                  isExternal
-                  hasIcon
+                  onClick={() => setPreviewOpen((v) => !v)}
                 >
-                  Preview
+                  {previewOpen ? 'Hide preview' : 'Preview'}
                 </Button>
 
                 {/* biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: intentional toggle */}
@@ -479,6 +547,29 @@ export function PageEditor({
             />
           )}
         </div>
+
+        {/* ── Live preview panel (blocks tab only) ── */}
+        {activeTab === 'blocks' && previewOpen && (
+          // biome-ignore lint/a11y/noStaticElementInteractions: drag handle sibling
+          <div className="cms-resize-handle" onMouseDown={startPreviewResize} />
+        )}
+
+        {activeTab === 'blocks' && previewOpen && (
+          <div className="cms-preview-panel" style={{ width: previewWidth }}>
+            <div className="cms-preview-panel-header">
+              <span className="cms-mono-label">Preview</span>
+              <button
+                type="button"
+                className="cms-sidebar-collapse-btn"
+                onClick={() => setPreviewOpen(false)}
+                title="Hide preview"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <BlocksPreview blocks={page.blocks} selectedBlockId={selectedBlockId} />
+          </div>
+        )}
       </div>
 
       {/* Drag overlay for palette items */}

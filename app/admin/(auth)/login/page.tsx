@@ -75,8 +75,8 @@ export default function LoginPage() {
             variant='default'
             color='neutral'
             size='md'
+            type='submit'
             disabled={loading}
-            onClick={handleSubmit}
           >
             {loading ? 'Signing in…' : 'Sign in'}
           </Button>

@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { MediaPickerModal } from './media-picker-modal'
+import type { MediaAsset } from './media-manager'
 import { getBlockEntry } from '@/libs/cms/block-registry'
 import type { FieldDef } from '@/libs/cms/block-registry'
 import { useEditorStore } from '@/libs/cms/editor-store'
@@ -402,62 +404,52 @@ function ImageField({
   alt: string
   onChange: (src: string, alt: string) => void
 }) {
-  const [uploading, setUploading] = useState(false)
+  const [pickerOpen, setPickerOpen] = useState(false)
 
-  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    const res = await fetch('/api/admin/images', {
-      method: 'POST',
-      headers: {
-        'Content-Type': file.type,
-        'x-filename': file.name,
-        'x-requested-with': 'XMLHttpRequest',
-      },
-      body: file,
-    })
-    const data = (await res.json()) as { url?: string }
-    setUploading(false)
-    if (res.ok && data.url) onChange(data.url, alt)
+  function handleSelect(asset: MediaAsset) {
+    onChange(asset.url, alt)
   }
 
   return (
-    <div className="cms-image-field">
-      <div className="cms-image-thumb">
-        {src ? (
-          // biome-ignore lint/performance/noImgElement: admin-only thumbnail
-          <img src={src} alt={alt} />
-        ) : (
-          <span>No img</span>
-        )}
-      </div>
-      <div className="cms-image-inputs">
-        <input
-          type="url"
-          value={src}
-          onChange={(e) => onChange(e.target.value, alt)}
-          placeholder="Image URL"
-          className="cms-input cms-input--sm cms-input--mono"
-        />
-        <input
-          type="text"
-          value={alt}
-          onChange={(e) => onChange(src, e.target.value)}
-          placeholder="Alt text"
-          className="cms-input cms-input--sm"
-        />
-        <label className="cms-upload-btn">
-          {uploading ? 'Uploading…' : 'Upload file'}
+    <>
+      <div className="cms-image-field">
+        <div className="cms-image-thumb">
+          {src ? (
+            // biome-ignore lint/performance/noImgElement: admin-only thumbnail
+            <img src={src} alt={alt} />
+          ) : (
+            <span>No image</span>
+          )}
+        </div>
+        <div className="cms-image-inputs">
+          {src && (
+            <p className="cms-image-url-preview" title={src}>
+              {src.split('/').pop()}
+            </p>
+          )}
+          <button
+            type="button"
+            className="cms-upload-btn"
+            onClick={() => setPickerOpen(true)}
+          >
+            {src ? 'Change image' : 'Choose image'}
+          </button>
           <input
-            type="file"
-            accept="image/*"
-            onChange={handleFile}
-            disabled={uploading}
-            style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}
+            type="text"
+            value={alt}
+            onChange={(e) => onChange(src, e.target.value)}
+            placeholder="Alt text"
+            className="cms-input cms-input--sm"
           />
-        </label>
+        </div>
       </div>
-    </div>
+      {pickerOpen && (
+        <MediaPickerModal
+          currentUrl={src}
+          onSelect={handleSelect}
+          onClose={() => setPickerOpen(false)}
+        />
+      )}
+    </>
   )
 }
