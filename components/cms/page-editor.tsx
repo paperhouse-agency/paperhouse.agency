@@ -28,6 +28,7 @@ import { useEditorStore } from '@/libs/cms/editor-store'
 import type { BlockData, CmsPage, CmsPageSettings } from '@/libs/cms/types'
 import { BlockFieldsPanel } from './block-fields-panel'
 import { BlocksPreview } from './block-preview'
+import { useSplitResize } from '@/hooks/use-split-resize'
 import { Undo2, Redo2 } from 'lucide-react'
 
 type Tab = 'blocks' | 'seo' | 'settings'
@@ -76,7 +77,12 @@ export function PageEditor({
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [previewOpen, setPreviewOpen] = useState(true)
   const [sidebarWidth, setSidebarWidth] = useState(268)
-  const [previewWidth, setPreviewWidth] = useState(400)
+
+  const { containerRef, previewWidth, available, isDragging: isResizing, startResize: startPreviewResize } =
+    useSplitResize({
+      defaultRatio: 0.5,
+      getReservedWidth: () => (sidebarOpen ? sidebarWidth + 4 : 0) + 14,
+    })
 
   function startSidebarResize(e: React.MouseEvent) {
     e.preventDefault()
@@ -84,25 +90,6 @@ export function PageEditor({
     const startW = sidebarWidth
     function onMove(ev: MouseEvent) {
       setSidebarWidth(Math.max(160, Math.min(480, startW + ev.clientX - startX)))
-    }
-    function onUp() {
-      document.removeEventListener('mousemove', onMove)
-      document.removeEventListener('mouseup', onUp)
-      document.body.style.cursor = ''
-      document.body.style.userSelect = ''
-    }
-    document.body.style.cursor = 'col-resize'
-    document.body.style.userSelect = 'none'
-    document.addEventListener('mousemove', onMove)
-    document.addEventListener('mouseup', onUp)
-  }
-
-  function startPreviewResize(e: React.MouseEvent) {
-    e.preventDefault()
-    const startX = e.clientX
-    const startW = previewWidth
-    function onMove(ev: MouseEvent) {
-      setPreviewWidth(Math.max(280, Math.min(720, startW - (ev.clientX - startX))))
     }
     function onUp() {
       document.removeEventListener('mousemove', onMove)
@@ -214,7 +201,7 @@ export function PageEditor({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="relative flex-1 flex min-h-0 overflow-hidden">
+      <div ref={containerRef} className="relative flex-1 flex min-h-0 overflow-hidden">
 
         {/* Floating sidebar collapse/expand button — anchored to shell */}
         <button
@@ -549,11 +536,41 @@ export function PageEditor({
           )}
         </div>
 
-        {/* ── Live preview panel (blocks tab only) ── */}
-        {activeTab === 'blocks' && previewOpen && (
-          // biome-ignore lint/a11y/noStaticElementInteractions: drag handle sibling
-          <div className="flex-none w-[4px] cursor-col-resize bg-transparent transition-[background] duration-150 z-[5] hover:bg-primary hover:opacity-35 active:bg-primary active:opacity-35" onMouseDown={startPreviewResize} />
-        )}
+        {/* ── Preview resize handle ── */}
+        {activeTab === 'blocks' && previewOpen && (() => {
+          const previewPct = available > 0 ? Math.round((previewWidth / available) * 100) : 50
+          const editorPct = 100 - previewPct
+          const labelBase = 'absolute top-1/2 -translate-y-1/2 font-mono text-[10px] tracking-[0.06em] whitespace-nowrap px-[7px] py-[3px] rounded-full border bg-[var(--c-card)] border-[var(--chrome-border)] pointer-events-none transition-[opacity,color] duration-150'
+          return (
+            // biome-ignore lint/a11y/noStaticElementInteractions: drag handle
+            <div
+              className="relative flex-none w-[14px] cursor-col-resize z-[5] select-none group flex items-center justify-center"
+              onMouseDown={startPreviewResize}
+            >
+              {/* track line */}
+              <div className={`absolute inset-y-0 w-px left-1/2 -translate-x-px transition-colors duration-150 ${isResizing ? 'bg-primary/40' : 'bg-[var(--chrome-border)] group-hover:bg-primary/30'}`} />
+
+              {/* ||| pill */}
+              <div className={`relative z-[1] flex items-center justify-center h-[36px] w-[10px] rounded-full bg-[var(--c-card)] border transition-[border-color,color,box-shadow] duration-150 ${isResizing ? 'border-primary/50 text-primary shadow-[0_0_0_3px_rgba(255,77,0,0.08)]' : 'border-[var(--chrome-border)] text-[var(--chrome-faint)] group-hover:border-primary/40 group-hover:text-primary'}`}>
+                <svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor" aria-hidden="true">
+                  <rect x="0" y="0" width="1.5" height="10" rx="0.75" />
+                  <rect x="2.25" y="0" width="1.5" height="10" rx="0.75" />
+                  <rect x="4.5" y="0" width="1.5" height="10" rx="0.75" />
+                </svg>
+              </div>
+
+              {/* editor width label — floats into canvas */}
+              <div className={`${labelBase} right-full mr-[8px] ${isResizing ? 'opacity-100 text-text' : 'opacity-0 group-hover:opacity-100 text-[var(--chrome-muted)]'}`}>
+                {editorPct}%
+              </div>
+
+              {/* preview width label — floats into preview */}
+              <div className={`${labelBase} left-full ml-[8px] ${isResizing ? 'opacity-100 text-text' : 'opacity-0 group-hover:opacity-100 text-[var(--chrome-muted)]'}`}>
+                {previewPct}%
+              </div>
+            </div>
+          )
+        })()}
 
         {activeTab === 'blocks' && previewOpen && (
           <div className="flex-none bg-[var(--chrome)] flex flex-col overflow-hidden" style={{ width: previewWidth }}>
