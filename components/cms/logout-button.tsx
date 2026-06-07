@@ -4,7 +4,7 @@ export function LogoutButton() {
   return (
     <button
       type="button"
-      className="cms-logout-btn"
+      className="inline-flex items-center gap-[7px] h-[36px] px-[16px] rounded-full border-none cursor-pointer font-mono text-[12.5px] tracking-[0.06em] bg-primary text-offwhite transition-[background] duration-150 hover:bg-[#e54300]"
       onClick={async () => {
         await fetch('/api/admin/auth/logout', {
           method: 'POST',

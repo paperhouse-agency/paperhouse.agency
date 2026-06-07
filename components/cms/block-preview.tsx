@@ -53,11 +53,11 @@ export function BlocksPreview({ blocks, selectedBlockId }: Props) {
   const visible = blocks.filter((b) => b.visible !== false)
 
   return (
-    <div className="cms-preview-body">
-      <div className="cms-preview-toolbar">
+    <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex items-center gap-[4px] px-[14px] py-[10px] border-b border-[var(--chrome-border)] flex-none bg-[var(--chrome)]">
         <button
           type="button"
-          className={`cms-preview-vp-btn${viewport === 'desktop' ? ' active' : ''}`}
+          className={`inline-flex items-center gap-[5px] px-[10px] py-[4px] rounded-[6px] font-body text-[12px] cursor-pointer transition-[background,color] duration-[120ms] border ${viewport === 'desktop' ? 'bg-[var(--c-card)] text-text border-[var(--chrome-border)]' : 'text-[var(--chrome-muted)] bg-transparent border-transparent hover:bg-[rgba(26,26,26,0.06)] hover:text-text'}`}
           onClick={() => setViewport('desktop')}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg>
@@ -65,7 +65,7 @@ export function BlocksPreview({ blocks, selectedBlockId }: Props) {
         </button>
         <button
           type="button"
-          className={`cms-preview-vp-btn${viewport === 'mobile' ? ' active' : ''}`}
+          className={`inline-flex items-center gap-[5px] px-[10px] py-[4px] rounded-[6px] font-body text-[12px] cursor-pointer transition-[background,color] duration-[120ms] border ${viewport === 'mobile' ? 'bg-[var(--c-card)] text-text border-[var(--chrome-border)]' : 'text-[var(--chrome-muted)] bg-transparent border-transparent hover:bg-[rgba(26,26,26,0.06)] hover:text-text'}`}
           onClick={() => setViewport('mobile')}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" /><path d="M12 18h.01" /></svg>
@@ -73,9 +73,9 @@ export function BlocksPreview({ blocks, selectedBlockId }: Props) {
         </button>
       </div>
 
-      <div className="cms-preview-frame" ref={frameRef}>
+      <div className="flex-1 overflow-y-auto bg-white" ref={frameRef}>
         {visible.length === 0 ? (
-          <div className="cms-preview-empty">Add a block to see the page preview here.</div>
+          <div className="flex-1 flex items-center justify-center p-[40px_24px] text-center font-body text-[13px] text-[var(--chrome-muted)] leading-[1.5]">Add a block to see the page preview here.</div>
         ) : (
           <div
             style={
@@ -90,7 +90,6 @@ export function BlocksPreview({ blocks, selectedBlockId }: Props) {
               return (
                 <div
                   key={block._id}
-                  className={`cms-preview-block${block._id === selectedBlockId ? ' cms-preview-block--active' : ''}`}
                 >
                   {rendered}
                 </div>

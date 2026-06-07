@@ -12,30 +12,30 @@ export function AdminNavUI({ showUsers, initials }: { showUsers: boolean; initia
   const onPages = !(onUsers || onMedia)
 
   return (
-    <header className="cms-nav">
-      <div className="cms-nav-left">
-        <Link href="/admin/pages" className="cms-nav-brand">
-          <span className="cms-nav-wordmark">paperhouse</span>
-          <span className="cms-nav-tag">CMS</span>
+    <header className="flex items-center justify-between h-[62px] px-[26px] bg-[var(--chrome)] border-b border-[var(--chrome-border)] flex-none relative z-10">
+      <div className="flex items-center gap-[28px]">
+        <Link href="/admin/pages" className="flex items-center gap-[9px] no-underline">
+          <span className="font-body font-bold text-[20px] tracking-[-0.015em] text-primary leading-none">paperhouse</span>
+          <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--chrome-muted)] border border-[var(--chrome-border)] rounded-[4px] px-[6px] py-[3px] leading-none">CMS</span>
         </Link>
 
-        <nav className="cms-nav-links">
+        <nav className="flex items-center gap-[4px]">
           <Link
             href="/admin/pages"
-            className={`cms-nav-pill${onPages ? ' active' : ''}`}
+            className={`font-mono text-[12.5px] tracking-[0.06em] px-[14px] py-[7px] rounded-full cursor-pointer no-underline whitespace-nowrap transition-[background,color] duration-150 ${onPages ? 'bg-primary text-offwhite' : 'text-[var(--chrome-muted)] bg-transparent hover:text-[#1a1a1a] hover:bg-[rgba(26,26,26,0.06)]'}`}
           >
             Pages
           </Link>
           <Link
             href="/admin/media"
-            className={`cms-nav-pill${onMedia ? ' active' : ''}`}
+            className={`font-mono text-[12.5px] tracking-[0.06em] px-[14px] py-[7px] rounded-full cursor-pointer no-underline whitespace-nowrap transition-[background,color] duration-150 ${onMedia ? 'bg-primary text-offwhite' : 'text-[var(--chrome-muted)] bg-transparent hover:text-[#1a1a1a] hover:bg-[rgba(26,26,26,0.06)]'}`}
           >
             Media
           </Link>
           {showUsers && (
             <Link
               href="/admin/users"
-              className={`cms-nav-pill${onUsers ? ' active' : ''}`}
+              className={`font-mono text-[12.5px] tracking-[0.06em] px-[14px] py-[7px] rounded-full cursor-pointer no-underline whitespace-nowrap transition-[background,color] duration-150 ${onUsers ? 'bg-primary text-offwhite' : 'text-[var(--chrome-muted)] bg-transparent hover:text-[#1a1a1a] hover:bg-[rgba(26,26,26,0.06)]'}`}
             >
               Users
             </Link>
@@ -43,9 +43,9 @@ export function AdminNavUI({ showUsers, initials }: { showUsers: boolean; initia
         </nav>
       </div>
 
-      <div className="cms-nav-right">
+      <div className="flex items-center gap-[12px]">
         {initials && (
-          <span className="cms-nav-avatar">{initials}</span>
+          <span className="w-[30px] h-[30px] rounded-full bg-text text-offwhite font-mono text-[11px] inline-flex items-center justify-center font-medium flex-none tracking-[0.02em]">{initials}</span>
         )}
         <LogoutButton />
       </div>

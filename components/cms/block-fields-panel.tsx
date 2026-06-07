@@ -8,6 +8,13 @@ import type { FieldDef } from '@/libs/cms/block-registry'
 import { useEditorStore } from '@/libs/cms/editor-store'
 import type { BlockData } from '@/libs/cms/types'
 
+const inputSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
+const inputSmErrorCls = 'w-full bg-[var(--c-card)] border border-primary rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
+const textareaSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)] resize-y min-h-[80px] leading-[1.5]'
+const textareaSmErrorCls = 'w-full bg-[var(--c-card)] border border-primary rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)] resize-y min-h-[80px] leading-[1.5]'
+const fieldLabelCls = 'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
+const fieldHintCls = 'font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]'
+
 export function BlockFieldsPanel({ block }: { block: BlockData }) {
   const { updateBlock } = useEditorStore()
   const entry = getBlockEntry(block._type)
@@ -55,7 +62,7 @@ export function BlockFieldsPanel({ block }: { block: BlockData }) {
   }
 
   return (
-    <div className="cms-field-grid">
+    <div className="grid grid-cols-2 gap-x-[20px] gap-y-[18px]">
       {entry.fields.map((field) => (
         <FieldGroup key={field.key} field={field}>
           <FieldEditor
@@ -74,7 +81,7 @@ function FieldGroup({ field, children }: { field: FieldDef; children: React.Reac
   const isFullSpan =
     field.span === 'full' || ['textarea', 'array', 'image', 'blocks'].includes(field.type)
   return (
-    <div className={`cms-field${isFullSpan ? ' cms-field-full' : ''}`}>
+    <div className={`flex flex-col gap-[8px]${isFullSpan ? ' col-span-2' : ''}`}>
       {children}
     </div>
   )
@@ -82,16 +89,16 @@ function FieldGroup({ field, children }: { field: FieldDef; children: React.Reac
 
 function FieldLabel({ field, htmlFor }: { field: FieldDef; htmlFor: string }) {
   return (
-    <label htmlFor={htmlFor} className="cms-field-label">
+    <label htmlFor={htmlFor} className={fieldLabelCls}>
       {field.label}
-      {field.required && <span className="cms-field-req">*</span>}
+      {field.required && <span className="text-primary">*</span>}
     </label>
   )
 }
 
 function FieldHint({ field }: { field: FieldDef }) {
   if (!field.description) return null
-  return <span className="cms-field-hint">{field.description}</span>
+  return <span className={fieldHintCls}>{field.description}</span>
 }
 
 function FieldEditor({
@@ -120,7 +127,7 @@ function FieldEditor({
             value={(value as string) ?? ''}
             onChange={(e) => onChange(e.target.value)}
             placeholder={field.placeholder}
-            className={`cms-input cms-input--sm${isEmpty ? ' cms-input--error' : ''}`}
+            className={isEmpty ? inputSmErrorCls : inputSmCls}
           />
           <FieldHint field={field} />
         </>
@@ -136,7 +143,7 @@ function FieldEditor({
             onChange={(e) => onChange(e.target.value)}
             placeholder={field.placeholder}
             rows={3}
-            className={`cms-textarea cms-textarea--sm${isEmpty ? ' cms-input--error' : ''}`}
+            className={isEmpty ? textareaSmErrorCls : textareaSmCls}
           />
           <FieldHint field={field} />
         </>
@@ -159,7 +166,7 @@ function FieldEditor({
             {field.label}
           </label>
           {field.description && (
-            <span className="cms-field-hint">{field.description}</span>
+            <span className={fieldHintCls}>{field.description}</span>
           )}
         </div>
       )
@@ -172,7 +179,7 @@ function FieldEditor({
             id={fieldId}
             value={(value as string) ?? field.defaultValue ?? ''}
             onChange={(e) => onChange(e.target.value)}
-            className={`cms-select cms-select--sm${isEmpty ? ' cms-input--error' : ''}`}
+            className={`${isEmpty ? 'border-primary' : 'border-[var(--field-border)]'} w-full bg-[var(--c-card)] border rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary cursor-pointer appearance-auto`}
           >
             <option value="">— Select —</option>
             {field.options?.map((opt) => (
@@ -195,9 +202,9 @@ function FieldEditor({
             value={(value as string) ?? ''}
             onChange={(e) => onChange(e.target.value)}
             placeholder={field.placeholder ?? 'e.g. Star, ArrowRight'}
-            className={`cms-input cms-input--sm${isEmpty ? ' cms-input--error' : ''}`}
+            className={isEmpty ? inputSmErrorCls : inputSmCls}
           />
-          <span className="cms-field-hint">Lucide icon name in PascalCase</span>
+          <span className={fieldHintCls}>Lucide icon name in PascalCase</span>
         </>
       )
 
@@ -230,7 +237,7 @@ function FieldEditor({
 
     case 'blocks':
       return (
-        <p className="cms-field-hint" style={{ fontStyle: 'italic' }}>
+        <p className={`${fieldHintCls} italic`}>
           {field.label} — nested block editing coming soon.
         </p>
       )
@@ -275,9 +282,9 @@ function ArrayField({
   }
 
   return (
-    <div className="cms-array">
+    <div className="flex flex-col gap-[8px] mt-[4px]">
       {items.length === 0 && (
-        <p className="cms-array-empty">No items yet.</p>
+        <p className="text-[13px] text-[var(--chrome-muted)] italic font-body">No items yet.</p>
       )}
       {items.map((item, i) => (
         <ArrayItem
@@ -296,7 +303,11 @@ function ArrayField({
           }}
         />
       ))}
-      <button type="button" className="cms-array-add" onClick={addItem}>
+      <button
+        type="button"
+        className="w-full text-center px-[12px] py-[10px] bg-none border-[1.5px] border-dashed border-[var(--chrome-faint)] rounded-[10px] text-[13px] font-mono tracking-[0.04em] text-[var(--chrome-muted)] cursor-pointer transition-[border-color,color] duration-[120ms] hover:border-text hover:text-text"
+        onClick={addItem}
+      >
         + Add {field.label}
       </button>
     </div>
@@ -326,23 +337,23 @@ function ArrayItem({
   const preview = getItemPreview(item, subFields)
 
   return (
-    <div className="cms-array-item">
-      <div className="cms-array-header">
+    <div className="border border-[var(--c-card-border)] rounded-[10px] overflow-hidden bg-[var(--c-card)]">
+      <div className="flex items-center justify-between px-[14px] py-[9px] pr-[12px] bg-[var(--workspace)] border-b border-[var(--c-card-border)] gap-[8px]">
         <button
           type="button"
-          className="cms-array-toggle"
+          className="flex items-center gap-[7px] bg-none border-none cursor-pointer p-0 font-mono flex-1 text-left min-w-0"
           onClick={() => setOpen(!open)}
         >
-          <span className="cms-array-chevron">{open ? '▾' : '▸'}</span>
-          <span className="cms-array-num">Item {index + 1}</span>
+          <span className="text-[12px] text-[var(--chrome-muted)] flex-none">{open ? '▾' : '▸'}</span>
+          <span className="font-mono text-[11.5px] text-[var(--chrome-muted)]">Item {index + 1}</span>
           {preview && (
-            <span className="cms-array-preview-text"> — {preview}</span>
+            <span className="font-body text-[13px] text-text"> — {preview}</span>
           )}
         </button>
-        <div className="cms-array-actions">
+        <div className="flex gap-[2px] flex-none text-[var(--chrome-faint)]">
           <button
             type="button"
-            className="cms-array-btn"
+            className="bg-none border-none text-inherit cursor-pointer px-[6px] py-[3px] text-[13px] rounded-[4px] transition-[background,color] duration-100 font-body hover:bg-bluishgray hover:text-text disabled:opacity-25 disabled:cursor-not-allowed"
             title="Move up"
             disabled={index === 0}
             onClick={() => onMove(index, index - 1)}
@@ -351,7 +362,7 @@ function ArrayItem({
           </button>
           <button
             type="button"
-            className="cms-array-btn"
+            className="bg-none border-none text-inherit cursor-pointer px-[6px] py-[3px] text-[13px] rounded-[4px] transition-[background,color] duration-100 font-body hover:bg-bluishgray hover:text-text disabled:opacity-25 disabled:cursor-not-allowed"
             title="Move down"
             disabled={index === total - 1}
             onClick={() => onMove(index, index + 1)}
@@ -360,7 +371,7 @@ function ArrayItem({
           </button>
           <button
             type="button"
-            className="cms-array-btn cms-array-btn--remove"
+            className="bg-none border-none text-inherit cursor-pointer px-[6px] py-[3px] text-[13px] rounded-[4px] transition-[background,color] duration-100 font-body hover:text-primary hover:bg-[rgba(255,77,0,0.08)]"
             title="Remove"
             onClick={onRemove}
           >
@@ -370,7 +381,7 @@ function ArrayItem({
       </div>
 
       {open && (
-        <div className="cms-array-body">
+        <div className="px-[16px] py-[14px] grid grid-cols-2 gap-x-[14px] gap-y-[12px]">
           {subFields.map((subField) => (
             <FieldGroup key={subField.key} field={subField}>
               <FieldEditor
@@ -412,24 +423,24 @@ function ImageField({
 
   return (
     <>
-      <div className="cms-image-field">
-        <div className="cms-image-thumb">
+      <div className="flex gap-[14px] items-start">
+        <div className="w-[80px] h-[70px] flex-none rounded-[8px] overflow-hidden border border-[var(--c-card-border)] bg-bluishgray flex items-center justify-center font-mono text-[10px] text-[var(--chrome-faint)]">
           {src ? (
             // biome-ignore lint/performance/noImgElement: admin-only thumbnail
-            <img src={src} alt={alt} />
+            <img src={src} alt={alt} className="w-full h-full object-cover" />
           ) : (
             <span>No image</span>
           )}
         </div>
-        <div className="cms-image-inputs">
+        <div className="flex-1 flex flex-col gap-[8px]">
           {src && (
-            <p className="cms-image-url-preview" title={src}>
+            <p className="font-mono text-[11px] text-[var(--chrome-muted)] overflow-hidden text-ellipsis whitespace-nowrap max-w-full m-0" title={src}>
               {src.split('/').pop()}
             </p>
           )}
           <button
             type="button"
-            className="cms-upload-btn"
+            className="inline-flex items-center gap-[7px] self-start px-[14px] py-[7px] rounded-[7px] border border-[var(--c-card-border)] bg-[var(--c-card)] text-text font-mono text-[12px] tracking-[0.04em] cursor-pointer transition-[background] duration-[120ms] whitespace-nowrap hover:bg-[var(--workspace)]"
             onClick={() => setPickerOpen(true)}
           >
             {src ? 'Change image' : 'Choose image'}
@@ -439,7 +450,7 @@ function ImageField({
             value={alt}
             onChange={(e) => onChange(src, e.target.value)}
             placeholder="Alt text"
-            className="cms-input cms-input--sm"
+            className={inputSmCls}
           />
         </div>
       </div>

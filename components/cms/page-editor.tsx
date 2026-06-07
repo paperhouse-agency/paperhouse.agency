@@ -214,12 +214,12 @@ export function PageEditor({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="cms-editor-shell">
+      <div className="relative flex-1 flex min-h-0 overflow-hidden">
 
         {/* Floating sidebar collapse/expand button — anchored to shell */}
         <button
           type="button"
-          className="cms-sidebar-float-btn"
+          className="absolute top-[14px] z-20 flex items-center justify-center w-[24px] h-[24px] rounded-full border border-[var(--chrome-border)] bg-[var(--c-card)] text-[var(--chrome-muted)] cursor-pointer shadow-[0_1px_4px_rgba(0,0,0,0.10)] transition-[left,background,color,box-shadow] duration-200 hover:text-text hover:shadow-[0_2px_8px_rgba(0,0,0,0.14)]"
           style={{ left: sidebarOpen ? sidebarWidth - 13 : 0 }}
           onClick={() => setSidebarOpen((v) => !v)}
           title={sidebarOpen ? 'Hide blocks panel' : 'Show blocks panel'}
@@ -233,29 +233,30 @@ export function PageEditor({
 
         {/* ── Left sidebar: block palette ── */}
         <aside
-          className={`cms-editor-sidebar${sidebarOpen ? '' : ' cms-editor-sidebar--collapsed'}`}
+          className={`relative flex-none bg-[var(--chrome)] flex flex-col overflow-hidden transition-[width,min-width] duration-200${sidebarOpen ? '' : ' !w-0 min-w-0'}`}
           style={sidebarOpen ? { width: sidebarWidth } : undefined}
         >
           {sidebarOpen && <>
-          <div className="cms-sidebar-top">
-            <div className="cms-sidebar-title-row">
-              <span className="cms-mono-label">Blocks</span>
+          <div className="px-[20px] pt-[22px] pb-[14px] flex-none">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Blocks</span>
             </div>
-            <p className="cms-sidebar-desc">Drag a block onto the page.</p>
-            <div className="cms-sidebar-search">
+            <p className="mt-[8px] mb-0 font-body text-[12.5px] leading-[1.45] text-[var(--chrome-muted)]">Drag a block onto the page.</p>
+            <div className="mt-[14px] flex items-center gap-[9px] px-[14px] h-[38px] rounded-full bg-[rgba(26,26,26,0.05)] border border-transparent text-[var(--chrome-faint)]">
               <span style={{ flex: 'none', opacity: 0.5, lineHeight: 1, fontSize: 14 }}>⌕</span>
               <input
                 type="text"
                 value={sidebarSearch}
                 onChange={(e) => setSidebarSearch(e.target.value)}
+                className="border-none bg-transparent outline-none flex-1 font-body text-[13px] text-text min-w-0 placeholder:text-[var(--chrome-faint)]"
                 placeholder="Search blocks…"
               />
             </div>
           </div>
 
-          <div className="cms-sidebar-blocks">
+          <div className="flex-1 overflow-y-auto px-[14px] pb-[18px] pt-[4px] flex flex-col gap-[7px]">
             {filteredPalette.length === 0 && (
-              <p className="cms-sidebar-empty">No blocks match "{sidebarSearch}".</p>
+              <p className="font-body text-[13px] text-[var(--chrome-muted)] py-[14px] px-[4px]">No blocks match "{sidebarSearch}".</p>
             )}
             {filteredPalette.map((entry) => (
               <PaletteItem
@@ -276,22 +277,22 @@ export function PageEditor({
         {/* Sidebar resize handle */}
         {sidebarOpen && (
           // biome-ignore lint/a11y/noStaticElementInteractions: drag handle
-          <div className="cms-resize-handle" onMouseDown={startSidebarResize} />
+          <div className="flex-none w-[4px] cursor-col-resize bg-transparent transition-[background] duration-150 z-[5] hover:bg-primary hover:opacity-35 active:bg-primary active:opacity-35" onMouseDown={startSidebarResize} />
         )}
 
         {/* ── Right canvas ── */}
-        <div className="cms-canvas">
+        <div className="flex-1 overflow-y-auto min-w-0 bg-[var(--workspace)] flex flex-col">
 
           {/* Page header */}
-          <div className="cms-page-header">
+          <div className="px-[34px] pt-[26px] pb-[22px] flex items-start justify-between gap-[24px] flex-wrap flex-none">
             <div>
-              <div className="cms-breadcrumb">
-                <Link href="/admin/pages" className="cms-breadcrumb-link">Pages</Link>
-                <span className="cms-breadcrumb-sep">›</span>
-                <span className="cms-breadcrumb-current">{page.title || 'Untitled'}</span>
+              <div className="flex items-center gap-[8px] mb-[10px]">
+                <Link href="/admin/pages" className="font-mono text-[11.5px] tracking-[0.08em] text-[var(--chrome-muted)] no-underline transition-colors duration-[120ms] hover:text-text">Pages</Link>
+                <span className="text-[var(--chrome-faint)] text-[12px] leading-none">›</span>
+                <span className="font-mono text-[11.5px] tracking-[0.08em] text-text">{page.title || 'Untitled'}</span>
               </div>
 
-              <div className="cms-ph-title-row">
+              <div className="flex items-center gap-[14px] flex-wrap">
                 <input
                   type="text"
                   value={page.title}
@@ -322,21 +323,21 @@ export function PageEditor({
                   }}
                 />
 
-                <span className={`cms-badge cms-badge-${page.status === 'published' ? 'pub' : 'draft'}`}>
+                <span className={`inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none ${page.status === 'published' ? 'bg-[rgba(31,138,91,0.12)] text-[#1f8a5b]' : 'bg-bluishgray text-[var(--chrome-muted)]'}`}>
                   {page.status === 'published' ? 'Published' : 'Draft'}
                 </span>
 
                 {isHomepage && (
-                  <span className="cms-badge cms-badge-home">Homepage</span>
+                  <span className="inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none bg-[rgba(255,77,0,0.1)] text-primary">Homepage</span>
                 )}
               </div>
 
-              <div className="cms-ph-meta">
+              <div className="font-body text-[14px] text-[var(--chrome-muted)] mt-[10px] flex items-center gap-[8px]">
                 {isHomepage ? (
-                  <span className="cms-mono">/</span>
+                  <span className="font-mono text-[12px] text-[var(--chrome-muted)]">/</span>
                 ) : (
-                  <div className="cms-slug-row">
-                    <span className="cms-slug-seg">/</span>
+                  <div className="flex items-center gap-[4px] flex-1 min-w-0">
+                    <span className="font-mono text-[13px] text-[var(--chrome-faint)] flex-none">/</span>
                     <input
                       type="text"
                       value={page.slug}
@@ -357,10 +358,10 @@ export function PageEditor({
                         setSlugError(data.taken ? 'Slug already in use' : null)
                       }}
                       placeholder="page-slug"
-                      className={`cms-slug-input${slugError ? ' cms-slug-input--error' : ''}`}
+                      className={`font-mono text-[13px] text-[var(--chrome-muted)] border border-transparent bg-transparent py-[2px] px-[6px] rounded-[4px] transition-[border-color,background] duration-150 min-w-[60px] flex-1 max-w-[300px] outline-none hover:border-[var(--c-card-border)] hover:bg-[var(--c-card)] focus:border-[var(--chrome-muted)] focus:bg-[var(--c-card)] focus:text-text${slugError ? ' border-primary' : ''}`}
                     />
                     {slugError && (
-                      <span className="cms-slug-error">{slugError}</span>
+                      <span className="text-[12px] text-primary font-body">{slugError}</span>
                     )}
                   </div>
                 )}
@@ -368,12 +369,12 @@ export function PageEditor({
             </div>
 
             {/* Actions */}
-            <div className="cms-header-actions">
-              <div className="cms-header-action-row">
+            <div className="flex flex-col items-end gap-[14px] flex-none">
+              <div className="flex items-center gap-[10px]">
                 {/* Undo / Redo */}
                 <button
                   type="button"
-                  className="cms-icon-btn"
+                  className="w-[34px] h-[34px] rounded-[8px] inline-flex items-center justify-center border border-[var(--c-card-border)] bg-[var(--c-card)] text-text cursor-pointer transition-[border-color,background] duration-[120ms] flex-none hover:not-disabled:border-[#b8b5b0] hover:not-disabled:bg-[var(--workspace)] disabled:opacity-35 disabled:cursor-not-allowed"
                   disabled={!canUndo}
                   onClick={undo}
                   title="Undo (Ctrl+Z)"
@@ -382,7 +383,7 @@ export function PageEditor({
                 </button>
                 <button
                   type="button"
-                  className="cms-icon-btn"
+                  className="w-[34px] h-[34px] rounded-[8px] inline-flex items-center justify-center border border-[var(--c-card-border)] bg-[var(--c-card)] text-text cursor-pointer transition-[border-color,background] duration-[120ms] flex-none hover:not-disabled:border-[#b8b5b0] hover:not-disabled:bg-[var(--workspace)] disabled:opacity-35 disabled:cursor-not-allowed"
                   disabled={!canRedo}
                   onClick={redo}
                   title="Redo (Ctrl+Shift+Z)"
@@ -390,17 +391,17 @@ export function PageEditor({
                   <Redo2 size={15} />
                 </button>
 
-                <span className="cms-divider" />
+                <span className="w-[1px] h-[24px] bg-[var(--c-card-border)] flex-none" />
 
                 {/* Save status + button */}
-                <span className="cms-save-status">
-                  {isSaving && <span className="cms-save-saving">Saving…</span>}
-                  {!isSaving && saveError && <span className="cms-save-error">{saveError}</span>}
+                <span className="font-mono text-[11.5px] whitespace-nowrap tracking-[0.04em]">
+                  {isSaving && <span className="text-[var(--chrome-muted)]">Saving…</span>}
+                  {!isSaving && saveError && <span className="text-primary">{saveError}</span>}
                   {!(isSaving || saveError ) && isDirty && (
-                    <span className="cms-save-dirty">● Unsaved</span>
+                    <span className="text-[#b87c20]">● Unsaved</span>
                   )}
                   {!((isSaving || saveError ) || isDirty ) && lastSaved && (
-                    <span className="cms-save-ok">✓ Saved</span>
+                    <span className="text-[#1f8a5b]">✓ Saved</span>
                   )}
                 </span>
 
@@ -417,7 +418,7 @@ export function PageEditor({
                   {isSaving ? 'Saving…' : 'Save changes'}
                 </Button>
 
-                <span className="cms-divider" />
+                <span className="w-[1px] h-[24px] bg-[var(--c-card-border)] flex-none" />
 
                 {/* Publish / Unpublish */}
                 <Button
@@ -431,7 +432,7 @@ export function PageEditor({
               </div>
 
               {/* Row 2: preview toggle + homepage toggle */}
-              <div className="cms-header-action-row">
+              <div className="flex items-center gap-[10px]">
                 <Button
                   type="button"
                   variant={previewOpen ? 'default' : 'outline'}
@@ -444,7 +445,7 @@ export function PageEditor({
 
                 {/* biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: intentional toggle */}
                 {/* biome-ignore lint/a11y/useSemanticElements: label triggers checkbox */}
-                <label className="cms-homepage-row">
+                <label className="inline-flex items-center gap-[10px] cursor-pointer select-none">
                   <input
                     type="checkbox"
                     className="cms-toggle"
@@ -461,14 +462,14 @@ export function PageEditor({
                       )
                     }}
                   />
-                  <span className="cms-toggle-label">Set as homepage</span>
+                  <span className="font-mono text-[11.5px] tracking-[0.08em] uppercase text-[var(--chrome-muted)]">Set as homepage</span>
                 </label>
               </div>
             </div>
           </div>
 
           {/* Tabs */}
-          <div className="cms-tabs">
+          <div className="flex gap-[30px] px-[34px] border-b border-[var(--c-card-border)] flex-none bg-[var(--workspace)]">
             {(
               [
                 ['blocks', 'Blocks', String(page.blocks.length)],
@@ -479,12 +480,12 @@ export function PageEditor({
               <button
                 key={id}
                 type="button"
-                className={`cms-tab${activeTab === id ? ' active' : ''}`}
+                className={`inline-flex items-center gap-[8px] pb-[14px] pt-0 px-[2px] bg-none border-none border-b-2 -mb-[1px] cursor-pointer font-mono text-[13.5px] tracking-[0.04em] transition-colors duration-150 ${activeTab === id ? 'text-text border-b-primary' : 'text-[var(--chrome-muted)] border-b-transparent hover:text-text'}`}
                 onClick={() => setActiveTab(id)}
               >
                 {label}
                 {count !== null && (
-                  <span className="cms-tab-count">{count}</span>
+                  <span className={`font-mono text-[11px] py-[2px] px-[7px] rounded-full ${activeTab === id ? 'bg-[rgba(255,77,0,0.1)] text-primary' : 'bg-bluishgray text-[var(--chrome-faint)]'}`}>{count}</span>
                 )}
               </button>
             ))}
@@ -492,14 +493,14 @@ export function PageEditor({
 
           {/* ── Blocks tab ── */}
           {activeTab === 'blocks' && (
-            <div className="cms-tab-body">
+            <div className="px-[34px] py-[24px] pb-[40px] flex-1">
               <SortableContext
                 items={page.blocks.map((b) => b._id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="cms-blocks-layout">
+                <div className="flex flex-col gap-[14px]">
                   {page.blocks.length === 0 && (
-                    <div className="cms-drop-zone">
+                    <div className="flex items-center justify-center gap-[8px] p-[22px] rounded-[12px] border-[1.5px] border-dashed border-[var(--chrome-faint)] bg-transparent text-[var(--chrome-muted)] font-mono text-[13px] tracking-[0.04em] cursor-default text-center">
                       Drag a block from the left panel or click a block to add it.
                     </div>
                   )}
@@ -551,16 +552,16 @@ export function PageEditor({
         {/* ── Live preview panel (blocks tab only) ── */}
         {activeTab === 'blocks' && previewOpen && (
           // biome-ignore lint/a11y/noStaticElementInteractions: drag handle sibling
-          <div className="cms-resize-handle" onMouseDown={startPreviewResize} />
+          <div className="flex-none w-[4px] cursor-col-resize bg-transparent transition-[background] duration-150 z-[5] hover:bg-primary hover:opacity-35 active:bg-primary active:opacity-35" onMouseDown={startPreviewResize} />
         )}
 
         {activeTab === 'blocks' && previewOpen && (
-          <div className="cms-preview-panel" style={{ width: previewWidth }}>
-            <div className="cms-preview-panel-header">
-              <span className="cms-mono-label">Preview</span>
+          <div className="flex-none bg-[var(--chrome)] flex flex-col overflow-hidden" style={{ width: previewWidth }}>
+            <div className="px-[20px] py-[13px] border-b border-[var(--chrome-border)] flex items-center justify-between flex-none">
+              <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Preview</span>
               <button
                 type="button"
-                className="cms-sidebar-collapse-btn"
+                className="inline-flex items-center justify-center w-[26px] h-[26px] rounded-[6px] border-none bg-transparent text-[var(--chrome-muted)] cursor-pointer transition-[background,color] duration-[120ms] flex-none hover:bg-[rgba(26,26,26,0.08)] hover:text-text"
                 onClick={() => setPreviewOpen(false)}
                 title="Hide preview"
               >
@@ -575,10 +576,10 @@ export function PageEditor({
       {/* Drag overlay for palette items */}
       <DragOverlay>
         {activePaletteEntry && (
-          <div className="cms-palette-item cms-palette-item--dragging">
-            <span className="cms-palette-grip">⠿</span>
-            <span className="cms-palette-icon-wrap" />
-            <span className="cms-palette-name">{activePaletteEntry.label}</span>
+          <div className="flex items-center gap-[11px] py-[10px] px-[12px] rounded-[10px] cursor-grab bg-[rgba(255,255,255,0.88)] border border-[rgba(26,26,26,0.08)] shadow-[0_8px_24px_rgba(0,0,0,0.15)] text-text select-none opacity-[0.88]">
+            <span className="text-[var(--chrome-faint)] cursor-grab flex-none leading-none text-[16px]">⠿</span>
+            <span className="w-[30px] h-[30px] rounded-[8px] flex-none inline-flex items-center justify-center bg-bluishgray text-[var(--chrome-muted)]" />
+            <span className="font-body text-[13px] whitespace-nowrap overflow-hidden text-ellipsis">{activePaletteEntry.label}</span>
           </div>
         )}
       </DragOverlay>
@@ -603,17 +604,17 @@ function PaletteItem({
     // biome-ignore lint/a11y/noStaticElementInteractions: dnd-kit requires div as draggable root
     <div
       ref={setNodeRef}
-      className="cms-palette-item"
+      className="flex items-center gap-[11px] py-[10px] px-[12px] rounded-[10px] cursor-grab bg-[rgba(255,255,255,0.88)] border border-[rgba(26,26,26,0.08)] shadow-[var(--c-card-shadow)] text-text transition-[border-color,box-shadow,opacity] duration-100 select-none hover:border-[rgba(26,26,26,0.15)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)] active:cursor-grabbing"
       style={{ opacity: isDragging ? 0.35 : 1 }}
       onClick={onAdd}
       {...listeners}
       {...attributes}
     >
-      <span className="cms-palette-grip">⠿</span>
-      <span className="cms-palette-icon-wrap" style={{ fontSize: 14 }}>
+      <span className="text-[var(--chrome-faint)] cursor-grab flex-none leading-none text-[16px]">⠿</span>
+      <span className="w-[30px] h-[30px] rounded-[8px] flex-none inline-flex items-center justify-center bg-bluishgray text-[var(--chrome-muted)]" style={{ fontSize: 14 }}>
         {entry.icon ? '◈' : '▣'}
       </span>
-      <span className="cms-palette-name">{entry.label}</span>
+      <span className="font-body text-[13px] whitespace-nowrap overflow-hidden text-ellipsis">{entry.label}</span>
     </div>
   )
 }
@@ -657,22 +658,22 @@ function SortableBlockCard({
         opacity: isDragging ? 0.4 : isVisible ? 1 : 0.5,
       }}
     >
-      <div className={`cms-block-card${isSelected ? ' cms-block-card--selected' : ''}`}>
+      <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
         {/* Card header — click to expand/collapse */}
         {/* biome-ignore lint/a11y/noStaticElementInteractions: dnd-kit sortable wrapper */}
         {/* biome-ignore lint/a11y/useSemanticElements: sortable requires div */}
         <div
-          className="cms-block-card-header"
+          className="flex items-center justify-between px-[18px] py-[14px] border-b border-[var(--c-card-border)] bg-[var(--workspace)] cursor-pointer transition-[background] duration-100 select-none hover:bg-[#f5f3f0]"
           onClick={onSelect}
           onKeyDown={(e) => e.key === 'Enter' && onSelect()}
           role="button"
           tabIndex={0}
         >
-          <div className="cms-block-card-left">
+          <div className="flex items-center gap-[12px] min-w-0">
             {/* biome-ignore lint/a11y/noStaticElementInteractions: dnd-kit */}
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: dnd-kit */}
             <span
-              className="cms-block-drag"
+              className="text-[var(--chrome-faint)] cursor-grab flex-none text-[18px] leading-none p-[2px] active:cursor-grabbing"
               {...attributes}
               {...listeners}
               onClick={(e) => e.stopPropagation()}
@@ -681,26 +682,26 @@ function SortableBlockCard({
             </span>
 
             <span
-              className={`cms-block-icon${isSelected ? ' cms-block-icon--active' : ''}`}
+              className={`w-[32px] h-[32px] rounded-[8px] inline-flex items-center justify-center flex-none text-[15px] leading-none ${isSelected ? 'bg-primary text-offwhite' : 'bg-bluishgray text-[var(--chrome-muted)]'}`}
             >
               ▣
             </span>
 
-            <div className="cms-block-info">
-              <span className="cms-block-name">{entry?.label ?? block._type}</span>
-              <span className="cms-block-num">Block {String(index + 1).padStart(2, '0')}</span>
+            <div className="flex items-center gap-[9px] min-w-0">
+              <span className="font-heading text-[16px] text-text whitespace-nowrap overflow-hidden text-ellipsis">{entry?.label ?? block._type}</span>
+              <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-[var(--chrome-faint)] border border-[var(--c-card-border)] rounded-[4px] py-[2px] px-[6px] flex-none">Block {String(index + 1).padStart(2, '0')}</span>
             </div>
           </div>
 
           <div
-            className="cms-block-card-actions"
+            className="flex items-center gap-[6px] flex-none"
             // stop propagation so clicks on action buttons don't toggle selection
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
           >
             <button
               type="button"
-              className="cms-block-action"
+              className="w-[32px] h-[32px] rounded-[7px] inline-flex items-center justify-center border border-[var(--c-card-border)] bg-[var(--c-card)] text-[var(--chrome-muted)] cursor-pointer font-body transition-[background,color,border-color] duration-100 hover:bg-[var(--workspace)] hover:border-[#b8b5b0] hover:text-text"
               title={isVisible ? 'Hide block' : 'Show block'}
               onClick={onToggleVisible}
               style={{ fontSize: 14 }}
@@ -709,7 +710,7 @@ function SortableBlockCard({
             </button>
             <button
               type="button"
-              className="cms-block-action"
+              className="w-[32px] h-[32px] rounded-[7px] inline-flex items-center justify-center border border-[var(--c-card-border)] bg-[var(--c-card)] text-[var(--chrome-muted)] cursor-pointer font-body transition-[background,color,border-color] duration-100 hover:bg-[var(--workspace)] hover:border-[#b8b5b0] hover:text-text"
               title="Duplicate"
               onClick={onDuplicate}
               style={{ fontSize: 13 }}
@@ -718,7 +719,7 @@ function SortableBlockCard({
             </button>
             <button
               type="button"
-              className="cms-block-action cms-block-action--danger"
+              className="w-[32px] h-[32px] rounded-[7px] inline-flex items-center justify-center border border-[var(--c-card-border)] bg-[var(--c-card)] text-[var(--chrome-muted)] cursor-pointer font-body transition-[background,color,border-color] duration-100 hover:bg-[#fff5f4] hover:text-primary hover:border-[#ffc4bc]"
               title="Remove block"
               onClick={onRemove}
               style={{ fontSize: 16 }}
@@ -730,7 +731,7 @@ function SortableBlockCard({
 
         {/* Expanded form */}
         {isSelected && (
-          <div className="cms-block-form">
+          <div className="px-[24px] py-[24px] pb-[26px] flex flex-col gap-[20px]">
             <BlockFieldsPanel block={block} />
           </div>
         )}
@@ -752,41 +753,46 @@ function SeoTab({
   const metaDesc = seo.description ?? ''
   const keywords = (seo.keywords ?? []).join(', ')
 
+  const fieldCls = 'flex flex-col gap-[8px]'
+  const labelCls = 'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
+  const inputSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
+  const hintCls = 'font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]'
+
   return (
-    <div className="cms-tab-body">
-      <div className="cms-seo-layout">
+    <div className="px-[34px] py-[24px] pb-[40px] flex-1">
+      <div className="grid gap-[26px] items-start" style={{ gridTemplateColumns: 'minmax(0,1fr) 400px' }}>
         {/* Left: form */}
-        <div className="cms-card">
-          <div className="cms-card-header">
-            <h3 className="cms-card-title">Search engine optimization</h3>
-            <p className="cms-card-sub">How this page appears in search results and when shared.</p>
+        <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
+          <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
+            <h3 className="font-heading font-normal text-[19px] m-0 text-text">Search engine optimization</h3>
+            <p className="font-body text-[13.5px] text-[var(--chrome-muted)] mt-[5px] mb-0">How this page appears in search results and when shared.</p>
           </div>
-          <div className="cms-card-body">
-            <div className="cms-field cms-field-full">
-              <div className="cms-field-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Meta title <span className="cms-field-req">*</span></span>
-                <span className={`cms-char-meter${metaTitle.length > 60 ? ' cms-char-meter--over' : ''}`}>
+          <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
+            <div className={fieldCls}>
+              <div className={labelCls} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Meta title <span className="text-primary">*</span></span>
+                <span className={`font-body text-[12px] ${metaTitle.length > 60 ? 'text-primary' : 'text-[var(--chrome-faint)]'}`}>
                   {metaTitle.length} / 60
                 </span>
               </div>
               <input
                 type="text"
-                className="cms-input cms-input--sm"
+                className={inputSmCls}
                 value={metaTitle}
                 onChange={(e) => updateSeo({ title: e.target.value })}
                 placeholder="Page title for search engines"
               />
             </div>
 
-            <div className="cms-field cms-field-full">
-              <div className="cms-field-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className={fieldCls}>
+              <div className={labelCls} style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Meta description</span>
-                <span className={`cms-char-meter${metaDesc.length > 160 ? ' cms-char-meter--over' : ''}`}>
+                <span className={`font-body text-[12px] ${metaDesc.length > 160 ? 'text-primary' : 'text-[var(--chrome-faint)]'}`}>
                   {metaDesc.length} / 160
                 </span>
               </div>
               <textarea
-                className="cms-textarea cms-textarea--sm"
+                className="w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)] resize-y min-h-[80px]"
                 value={metaDesc}
                 onChange={(e) => updateSeo({ description: e.target.value })}
                 placeholder="Short description for search results"
@@ -794,11 +800,11 @@ function SeoTab({
               />
             </div>
 
-            <div className="cms-field cms-field-full">
-              <label className="cms-field-label">Keywords</label>
+            <div className={fieldCls}>
+              <label className={labelCls}>Keywords</label>
               <input
                 type="text"
-                className="cms-input cms-input--sm"
+                className={inputSmCls}
                 value={keywords}
                 onChange={(e) =>
                   updateSeo({
@@ -810,26 +816,26 @@ function SeoTab({
                 }
                 placeholder="keyword1, keyword2, keyword3"
               />
-              <span className="cms-field-hint">Comma-separated keywords</span>
+              <span className={hintCls}>Comma-separated keywords</span>
             </div>
 
             {/* OG image if available */}
-            <div className="cms-field cms-field-full">
-              <label className="cms-field-label">Social share image (OG)</label>
+            <div className={fieldCls}>
+              <label className={labelCls}>Social share image (OG)</label>
               <input
                 type="url"
-                className="cms-input cms-input--sm cms-input--mono"
+                className={`${inputSmCls} font-mono`}
                 value={seo.ogImage ?? ''}
                 onChange={(e) => updateSeo({ ogImage: e.target.value })}
                 placeholder="https://example.com/og-image.jpg"
               />
-              <span className="cms-field-hint">Recommended 1200 × 630 px</span>
+              <span className={hintCls}>Recommended 1200 × 630 px</span>
             </div>
 
             {/* Search indexing toggle */}
-            <div className="cms-toggle-row">
+            <div className="flex items-center justify-between px-[16px] py-[14px] rounded-[10px] bg-bluishgray">
               <div>
-                <div className="cms-indexing-title" style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500 }}>
+                <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500 }}>
                   Allow search indexing
                 </div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--chrome-muted)', marginTop: 2 }}>
@@ -849,41 +855,41 @@ function SeoTab({
         {/* Right: previews */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22, position: 'sticky', top: 0 }}>
           <div>
-            <div className="cms-mono-label">Search result preview</div>
-            <div className="cms-google-preview">
-              <div className="cms-google-domain-row">
-                <span className="cms-google-favicon">p</span>
+            <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Search result preview</div>
+            <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] px-[20px] py-[18px] mt-[12px]">
+              <div className="flex items-center gap-[9px] mb-[8px]">
+                <span className="w-[26px] h-[26px] rounded-full bg-primary text-offwhite font-body font-bold text-[13px] inline-flex items-center justify-center flex-none">p</span>
                 <div>
-                  <div className="cms-google-site-name">PaperHouse</div>
-                  <div className="cms-google-url">
+                  <div className="font-body text-[13px] leading-[1.2] text-text">PaperHouse</div>
+                  <div className="font-mono text-[11.5px] text-[var(--chrome-muted)]">
                     https://paperhouse.agency/{page.slug || ''}
                   </div>
                 </div>
               </div>
-              <div className="cms-google-title">
+              <div className="font-body text-[18px] text-secondary leading-[1.25] mb-[4px]">
                 {metaTitle || page.title || 'Page title'}
               </div>
-              <div className="cms-google-desc">
+              <div className="font-body text-[13px] text-[var(--chrome-muted)] leading-[1.5]">
                 {metaDesc || 'Add a meta description to preview how this page appears in search results.'}
               </div>
             </div>
           </div>
 
           <div>
-            <div className="cms-mono-label">Social card</div>
-            <div className="cms-social-card">
-              <div className="cms-social-img">
+            <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Social card</div>
+            <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden mt-[12px]">
+              <div className="aspect-[1200/500] overflow-hidden bg-bluishgray flex items-center justify-center text-[var(--chrome-faint)] font-mono text-[12px]">
                 {seo.ogImage ? (
                   // biome-ignore lint/performance/noImgElement: admin-only preview
-                  <img src={seo.ogImage} alt="" />
+                  <img src={seo.ogImage} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <span>No OG image set</span>
                 )}
               </div>
-              <div className="cms-social-body">
-                <div className="cms-social-domain">paperhouse.agency</div>
-                <div className="cms-social-title">{metaTitle || page.title}</div>
-                <div className="cms-social-desc">{metaDesc}</div>
+              <div className="px-[16px] py-[14px]">
+                <div className="font-mono text-[11px] tracking-[0.08em] uppercase text-[var(--chrome-faint)]">paperhouse.agency</div>
+                <div className="font-heading text-[16px] mt-[5px] text-text">{metaTitle || page.title}</div>
+                <div className="font-body text-[12px] text-[var(--chrome-muted)] mt-[4px] leading-[1.5]">{metaDesc}</div>
               </div>
             </div>
           </div>
@@ -956,38 +962,42 @@ function SettingsTab({
     }
   }
 
+  const fieldCls = 'flex flex-col gap-[8px]'
+  const labelCls = 'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
+  const selectSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary cursor-pointer appearance-auto'
+  const inputSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
+
   return (
-    <div className="cms-tab-body">
-      <div className="cms-settings-layout">
+    <div className="px-[34px] py-[24px] pb-[40px] flex-1">
+      <div className="max-w-[780px] flex flex-col gap-[20px]">
 
         {/* ── Page settings card ── */}
-        <div className="cms-card">
-          <div className="cms-card-header">
-            <h3 className="cms-card-title">Page settings</h3>
-            <p className="cms-card-sub">Placement, visibility and authorship for this page.</p>
+        <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
+          <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
+            <h3 className="font-heading font-normal text-[19px] m-0 text-text">Page settings</h3>
+            <p className="font-body text-[13.5px] text-[var(--chrome-muted)] mt-[5px] mb-0">Placement, visibility and authorship for this page.</p>
           </div>
-          <div className="cms-card-body">
+          <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
 
             {/* 2-col grid */}
-            <div className="cms-settings-grid">
+            <div className="grid gap-[18px_20px]" style={{ gridTemplateColumns: '1fr 1fr' }}>
 
               {/* Status (read-only — use Publish toggle below) */}
-              <div className="cms-field">
-                <label className="cms-field-label">Status</label>
+              <div className={fieldCls}>
+                <label className={labelCls}>Status</label>
                 <span
-                  className={`cms-badge cms-badge-${page.status === 'published' ? 'pub' : 'draft'}`}
-                  style={{ alignSelf: 'flex-start' }}
+                  className={`inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none self-start ${page.status === 'published' ? 'bg-[rgba(31,138,91,0.12)] text-[#1f8a5b]' : 'bg-bluishgray text-[var(--chrome-muted)]'}`}
                 >
                   {page.status === 'published' ? 'Published' : 'Draft'}
                 </span>
               </div>
 
               {/* Visibility */}
-              <div className="cms-field">
-                <label htmlFor="settings-visibility" className="cms-field-label">Visibility</label>
+              <div className={fieldCls}>
+                <label htmlFor="settings-visibility" className={labelCls}>Visibility</label>
                 <select
                   id="settings-visibility"
-                  className="cms-select cms-select--sm"
+                  className={selectSmCls}
                   value={s.visibility ?? 'public'}
                   onChange={(e) =>
                     updateSettings({ visibility: e.target.value as CmsPageSettings['visibility'] })
@@ -1000,11 +1010,11 @@ function SettingsTab({
               </div>
 
               {/* Parent page */}
-              <div className="cms-field">
-                <label htmlFor="settings-parent" className="cms-field-label">Parent page</label>
+              <div className={fieldCls}>
+                <label htmlFor="settings-parent" className={labelCls}>Parent page</label>
                 <select
                   id="settings-parent"
-                  className="cms-select cms-select--sm"
+                  className={selectSmCls}
                   value={s.parentSlug ?? ''}
                   onChange={(e) => updateSettings({ parentSlug: e.target.value || undefined })}
                 >
@@ -1018,11 +1028,11 @@ function SettingsTab({
               </div>
 
               {/* Template */}
-              <div className="cms-field">
-                <label htmlFor="settings-template" className="cms-field-label">Template</label>
+              <div className={fieldCls}>
+                <label htmlFor="settings-template" className={labelCls}>Template</label>
                 <select
                   id="settings-template"
-                  className="cms-select cms-select--sm"
+                  className={selectSmCls}
                   value={s.template ?? 'default'}
                   onChange={(e) =>
                     updateSettings({ template: e.target.value as CmsPageSettings['template'] })
@@ -1035,12 +1045,12 @@ function SettingsTab({
               </div>
 
               {/* Author */}
-              <div className="cms-field">
-                <label htmlFor="settings-author" className="cms-field-label">Author</label>
+              <div className={fieldCls}>
+                <label htmlFor="settings-author" className={labelCls}>Author</label>
                 {authors.length > 0 ? (
                   <select
                     id="settings-author"
-                    className="cms-select cms-select--sm"
+                    className={selectSmCls}
                     value={s.author ?? ''}
                     onChange={(e) => updateSettings({ author: e.target.value || undefined })}
                   >
@@ -1053,7 +1063,7 @@ function SettingsTab({
                   <input
                     id="settings-author"
                     type="text"
-                    className="cms-input cms-input--sm"
+                    className={inputSmCls}
                     value={s.author ?? ''}
                     onChange={(e) => updateSettings({ author: e.target.value || undefined })}
                     placeholder="Author name"
@@ -1062,11 +1072,11 @@ function SettingsTab({
               </div>
 
               {/* Language */}
-              <div className="cms-field">
-                <label htmlFor="settings-language" className="cms-field-label">Language</label>
+              <div className={fieldCls}>
+                <label htmlFor="settings-language" className={labelCls}>Language</label>
                 <select
                   id="settings-language"
-                  className="cms-select cms-select--sm"
+                  className={selectSmCls}
                   value={s.language ?? 'en-US'}
                   onChange={(e) => updateSettings({ language: e.target.value })}
                 >
@@ -1079,21 +1089,21 @@ function SettingsTab({
             </div>
 
             {/* Publish date (read-only timestamp, auto-set on first publish) */}
-            <div className="cms-field">
-              <label className="cms-field-label">First published</label>
+            <div className={fieldCls}>
+              <label className={labelCls}>First published</label>
               <input
                 type="text"
-                className="cms-input cms-input--sm cms-input--mono"
+                className={`${inputSmCls} font-mono`}
                 value={formatPublishedAt(s.publishedAt)}
                 readOnly
                 placeholder="Not yet published"
                 style={{ color: s.publishedAt ? 'var(--color-text)' : 'var(--chrome-faint)' }}
               />
-              <span className="cms-field-hint">Set automatically when this page is first published.</span>
+              <span className="font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]">Set automatically when this page is first published.</span>
             </div>
 
             {/* Set as homepage toggle */}
-            <div className="cms-toggle-row">
+            <div className="flex items-center justify-between px-[16px] py-[14px] rounded-[10px] bg-bluishgray">
               <div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500, color: 'var(--color-text)' }}>
                   Set as homepage
@@ -1120,7 +1130,7 @@ function SettingsTab({
             </div>
 
             {/* Published toggle */}
-            <div className="cms-toggle-row">
+            <div className="flex items-center justify-between px-[16px] py-[14px] rounded-[10px] bg-bluishgray">
               <div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500, color: 'var(--color-text)' }}>
                   Published
@@ -1141,32 +1151,32 @@ function SettingsTab({
         </div>
 
         {/* ── Meta card (read-only timestamps) ── */}
-        <div className="cms-card">
-          <div className="cms-card-header">
-            <h3 className="cms-card-title">Page info</h3>
+        <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
+          <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
+            <h3 className="font-heading font-normal text-[19px] m-0 text-text">Page info</h3>
           </div>
-          <div className="cms-card-body">
-            <div className="cms-settings-grid">
-              <div className="cms-field">
-                <label className="cms-field-label">Page ID</label>
+          <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
+            <div className="grid gap-[18px_20px]" style={{ gridTemplateColumns: '1fr 1fr' }}>
+              <div className={fieldCls}>
+                <label className={labelCls}>Page ID</label>
                 <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--chrome-muted)', wordBreak: 'break-all' }}>
                   {page.id}
                 </code>
               </div>
-              <div className="cms-field">
-                <label className="cms-field-label">URL slug</label>
+              <div className={fieldCls}>
+                <label className={labelCls}>URL slug</label>
                 <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--chrome-muted)' }}>
                   /{page.slug || ''}
                 </code>
               </div>
-              <div className="cms-field">
-                <label className="cms-field-label">Created</label>
+              <div className={fieldCls}>
+                <label className={labelCls}>Created</label>
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--chrome-muted)' }}>
                   {new Date(page.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </span>
               </div>
-              <div className="cms-field">
-                <label className="cms-field-label">Last updated</label>
+              <div className={fieldCls}>
+                <label className={labelCls}>Last updated</label>
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--chrome-muted)' }}>
                   {new Date(page.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </span>
@@ -1176,15 +1186,15 @@ function SettingsTab({
         </div>
 
         {/* ── Danger zone card ── */}
-        <div className="cms-card">
-          <div className="cms-card-header">
-            <h3 className="cms-card-title" style={{ color: 'var(--color-primary)' }}>Danger zone</h3>
+        <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
+          <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
+            <h3 className="font-heading font-normal text-[19px] m-0 text-primary">Danger zone</h3>
           </div>
-          <div className="cms-card-body">
-            <div className="cms-danger-row">
-              <div className="cms-danger-text">
-                <h4>Delete this page</h4>
-                <p>Permanently removes the page and all its blocks. This cannot be undone.</p>
+          <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
+            <div className="flex items-center justify-between gap-[20px]">
+              <div>
+                <h4 style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500, margin: '0 0 3px', color: 'var(--color-text)' }}>Delete this page</h4>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--chrome-muted)', margin: 0 }}>Permanently removes the page and all its blocks. This cannot be undone.</p>
               </div>
               <Button
                 variant="outline"

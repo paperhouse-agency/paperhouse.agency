@@ -71,24 +71,24 @@ export default function NewPagePage() {
   }
 
   return (
-    <div className="cms-form-wrap">
-      <Link href="/admin/pages" className="cms-back-link">
+    <div className="py-[40px] px-[40px] pb-[60px] max-w-[560px] mx-auto w-full">
+      <Link href="/admin/pages" className="inline-flex items-center gap-[6px] font-mono text-[12px] tracking-[0.08em] text-[var(--chrome-muted)] no-underline mb-[20px] transition-colors duration-[120ms] hover:text-text">
         ← Pages
       </Link>
-      <h1 className="cms-form-heading">New page</h1>
-      <p className="cms-form-sub">Give it a name — you can add blocks next.</p>
+      <h1 className="font-heading font-normal text-[32px] text-text m-0 mb-[24px]">New page</h1>
+      <p className="font-body text-[14px] text-[var(--chrome-muted)] mt-[-16px] mb-[24px]">Give it a name — you can add blocks next.</p>
 
-      <div className="cms-card">
-        <div className="cms-card-body">
+      <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
+        <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div className="cms-field">
-              <label htmlFor="title" className="cms-field-label">
-                Title <span className="cms-field-req">*</span>
+            <div className="flex flex-col gap-[8px]">
+              <label htmlFor="title" className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]">
+                Title <span className="text-primary">*</span>
               </label>
               <input
                 id="title"
                 type="text"
-                className="cms-input"
+                className="w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[8px] px-[14px] py-[11px] font-body text-[15px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]"
                 value={title}
                 onChange={(e) => handleTitleChange(e.target.value)}
                 required
@@ -114,14 +114,14 @@ export default function NewPagePage() {
             </div>
 
             {!isHomepage && (
-              <div className="cms-field">
-                <label htmlFor="slug" className="cms-field-label">URL slug</label>
+              <div className="flex flex-col gap-[8px]">
+                <label htmlFor="slug" className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]">URL slug</label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span className="cms-slug-seg">/</span>
+                  <span className="font-mono text-[13px] text-[var(--chrome-faint)] flex-none">/</span>
                   <input
                     id="slug"
                     type="text"
-                    className={`cms-input${slugWarning ? ' cms-input--error' : ''}`}
+                    className={`w-full bg-[var(--c-card)] border rounded-[8px] px-[14px] py-[11px] font-body text-[15px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]${slugWarning ? ' border-primary' : ' border-[var(--field-border)]'}`}
                     value={slug}
                     onChange={(e) => { setSlug(e.target.value); setSlugWarning('') }}
                     onBlur={(e) => checkSlug(e.target.value)}
@@ -131,34 +131,34 @@ export default function NewPagePage() {
                     style={{ flex: 1 }}
                   />
                 </div>
-                <span className="cms-field-hint">
+                <span className="font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]">
                   Saved as content/{slug || 'slug'}.json
                 </span>
                 {slugWarning && (
-                  <span className="cms-error-msg">{slugWarning}</span>
+                  <span className="text-primary font-body text-[12px] mt-[4px]">{slugWarning}</span>
                 )}
               </div>
             )}
 
             {isHomepage && (
-              <p className="cms-muted-text">
+              <p className="text-[var(--chrome-muted)] text-[12px] font-body">
                 Saved as <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>content/index.json</code> — served at <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>/</code>
               </p>
             )}
 
-            {error && <p className="cms-error-msg">{error}</p>}
+            {error && <p className="text-primary font-body text-[12px] mt-[4px] mb-0">{error}</p>}
 
             <div style={{ display: 'flex', gap: 10, paddingTop: 4 }}>
               <button
                 type="submit"
-                className="cms-btn cms-btn-primary"
+                className="inline-flex items-center justify-center gap-[8px] h-[42px] px-[20px] rounded-full font-mono text-[13px] tracking-[0.04em] cursor-pointer transition-[background] duration-150 whitespace-nowrap border-none bg-primary text-offwhite hover:not-disabled:bg-[#e54300] disabled:opacity-45 disabled:cursor-not-allowed"
                 disabled={loading || !!slugWarning}
               >
                 {loading ? 'Creating…' : 'Create page'}
               </button>
               <button
                 type="button"
-                className="cms-btn cms-btn-ghost"
+                className="inline-flex items-center justify-center gap-[8px] h-[42px] px-[18px] rounded-full font-mono text-[13px] tracking-[0.04em] cursor-pointer transition-[background,border-color] duration-150 whitespace-nowrap border border-[var(--c-card-border)] bg-transparent text-text hover:border-[#b8b5b0] hover:bg-[var(--workspace)]"
                 onClick={() => router.push('/admin/pages' as string as never)}
               >
                 Cancel

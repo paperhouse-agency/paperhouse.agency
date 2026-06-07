@@ -54,26 +54,27 @@ export function PagesListClient({ pages, canCreate, canDelete, canDuplicate }: P
   }
 
   return (
-    <div className="cms-page">
+    <div className="py-[40px] px-[40px] pb-[60px] max-w-[1200px] mx-auto w-full">
       {/* List header */}
-      <div className="cms-list-header">
+      <div className="flex items-end justify-between gap-[24px] flex-wrap mb-[26px]">
         <div>
-          <span className="cms-list-eyebrow">Content</span>
-          <h1 className="cms-list-title">
-            Pages<span className="dot">.</span>
+          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-primary mb-[10px] block">Content</span>
+          <h1 className="font-heading font-normal text-[40px] leading-none text-text m-0">
+            Pages<span className="text-primary">.</span>
           </h1>
-          <p className="cms-list-sub">
+          <p className="font-body text-[15px] text-[var(--chrome-muted)] mt-[10px] mb-0">
             {pages.length} page{pages.length !== 1 ? 's' : ''} · {publishedCount} published · {draftCount} draft{draftCount !== 1 ? 's' : ''}
           </p>
         </div>
-        <div className="cms-list-actions">
+        <div className="flex items-center gap-[12px]">
           {/* Search */}
-          <div className="cms-search" style={{ minWidth: 240 }}>
+          <div className="flex items-center gap-[9px] h-[42px] px-[16px] rounded-full bg-[var(--c-card)] border border-[var(--c-card-border)] text-[var(--chrome-faint)]" style={{ minWidth: 240 }}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" /></svg>
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search pages"
+              className="border-none bg-transparent outline-none flex-1 font-body text-[14px] text-text min-w-0 placeholder:text-[var(--chrome-faint)]"
             />
           </div>
           {canCreate && (
@@ -85,18 +86,18 @@ export function PagesListClient({ pages, canCreate, canDelete, canDuplicate }: P
       </div>
 
       {/* Table */}
-      <div className="cms-table-card">
-        <div className="cms-table-head" style={{ gridTemplateColumns: PAGE_COLS }}>
-          <span className="cms-table-head-cell">Page</span>
-          <span className="cms-table-head-cell">URL</span>
-          <span className="cms-table-head-cell">Status</span>
-          <span className="cms-table-head-cell">Blocks</span>
-          <span className="cms-table-head-cell">Last edited</span>
-          <span className="cms-table-head-cell" />
+      <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
+        <div className="grid gap-[16px] px-[24px] py-[14px] border-b border-[var(--c-card-border)] bg-bluishgray" style={{ gridTemplateColumns: PAGE_COLS }}>
+          <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Page</span>
+          <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">URL</span>
+          <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Status</span>
+          <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Blocks</span>
+          <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Last edited</span>
+          <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] text-right" />
         </div>
 
         {shown.length === 0 && (
-          <div className="cms-table-empty">
+          <div className="py-[40px] px-[24px] text-center font-body text-[14px] text-[var(--chrome-muted)]">
             {q ? `No pages match "${q}".` : 'No pages yet. Create your first page.'}
           </div>
         )}
@@ -106,8 +107,8 @@ export function PagesListClient({ pages, canCreate, canDelete, canDuplicate }: P
           return (
             <div
               key={page.id}
-              className="cms-table-row"
-              style={{ gridTemplateColumns: PAGE_COLS, cursor: 'pointer' }}
+              className="grid gap-[16px] items-center px-[24px] py-[15px] border-b border-[var(--c-card-border)] last:border-b-0 cursor-pointer transition-[background] duration-100 hover:bg-[#faf9f7]"
+              style={{ gridTemplateColumns: PAGE_COLS }}
               onClick={() => router.push(`/admin/pages/${page.id}`)}
             >
               {/* Page title + icon */}
@@ -132,19 +133,23 @@ export function PagesListClient({ pages, canCreate, canDelete, canDuplicate }: P
                     }}>
                       {page.title}
                     </span>
-                    {isHome && <span className="cms-badge cms-badge-home">Homepage</span>}
+                    {isHome && (
+                      <span className="inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none bg-[rgba(255,77,0,0.1)] text-primary">
+                        Homepage
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* URL */}
-              <span className="cms-mono" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span className="font-mono text-[12px] text-[var(--chrome-muted)]" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {isHome ? '/' : `/${page.slug}`}
               </span>
 
               {/* Status */}
               <span>
-                <span className={`cms-badge cms-badge-${page.status === 'published' ? 'pub' : 'draft'}`}>
+                <span className={`inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none ${page.status === 'published' ? 'bg-[rgba(31,138,91,0.12)] text-[#1f8a5b]' : 'bg-bluishgray text-[var(--chrome-muted)]'}`}>
                   {page.status === 'published' ? 'Published' : 'Draft'}
                 </span>
               </span>
@@ -172,7 +177,7 @@ export function PagesListClient({ pages, canCreate, canDelete, canDuplicate }: P
                 {canDuplicate && (
                   <button
                     type="button"
-                    className="cms-block-action"
+                    className="w-[32px] h-[32px] rounded-[7px] inline-flex items-center justify-center border border-[var(--c-card-border)] bg-[var(--c-card)] text-[var(--chrome-muted)] cursor-pointer text-[14px] font-body transition-[background,color,border-color] duration-100 hover:bg-[var(--workspace)] hover:border-[#b8b5b0] hover:text-text"
                     title="Duplicate"
                     onClick={() => handleDuplicate(page.id)}
                   >
@@ -182,7 +187,7 @@ export function PagesListClient({ pages, canCreate, canDelete, canDuplicate }: P
                 {canDelete && (
                   <button
                     type="button"
-                    className="cms-block-action cms-block-action--danger"
+                    className="w-[32px] h-[32px] rounded-[7px] inline-flex items-center justify-center border border-[var(--c-card-border)] bg-[var(--c-card)] text-[var(--chrome-muted)] cursor-pointer text-[14px] font-body transition-[background,color,border-color] duration-100 hover:bg-[#fff5f4] hover:text-primary hover:border-[#ffc4bc]"
                     title="Delete"
                     onClick={() => handleDelete(page.id, page.title)}
                   >
