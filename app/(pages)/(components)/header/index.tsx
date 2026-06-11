@@ -200,6 +200,26 @@ export function Header() {
         </div>
       </header>
 
+      {/* Progressive blur — top */}
+      <div className="fixed top-0 left-0 right-0 h-[220px] z-[49] pointer-events-none">
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 12%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 12%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 25%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 25%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 42%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 42%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 60%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 60%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 78%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 78%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(1px)', WebkitBackdropFilter: 'blur(1px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 95%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 95%)' }} />
+      </div>
+
+      {/* Progressive blur — bottom */}
+      <div className="fixed bottom-0 left-0 right-0 h-[220px] z-[49] pointer-events-none">
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', maskImage: 'linear-gradient(to top, black 0%, transparent 12%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 12%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', maskImage: 'linear-gradient(to top, black 0%, transparent 25%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 25%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', maskImage: 'linear-gradient(to top, black 0%, transparent 42%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 42%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', maskImage: 'linear-gradient(to top, black 0%, transparent 60%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 60%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', maskImage: 'linear-gradient(to top, black 0%, transparent 78%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 78%)' }} />
+        <div className="absolute inset-0" style={{ backdropFilter: 'blur(1px)', WebkitBackdropFilter: 'blur(1px)', maskImage: 'linear-gradient(to top, black 0%, transparent 95%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 95%)' }} />
+      </div>
+
       {/* Mobile Drawer */}
       <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </>
