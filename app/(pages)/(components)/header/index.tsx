@@ -4,46 +4,32 @@ import cn from 'clsx'
 import { useState } from 'react'
 
 import { Button } from '@/components/button'
-import { Image } from '@/components/image'
 import { Link } from '@/components/link'
 
-const MEGA_MENU_COLS = [
+const EXPLORE_LINKS = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Process', href: '/process' },
+]
+
+const PRODUCTS = [
   {
-    title: 'Pages',
-    links: [
-      { label: 'Home', href: '/' },
-      { label: 'About Us', href: '/about' },
-      { label: 'Services', href: '/services' },
-      { label: 'Blog', href: '/blog' },
-    ],
+    name: 'Habitly',
+    description: 'Build lasting habits with science-backed tracking',
+    href: '/products/habitly',
   },
   {
-    title: 'Work',
-    links: [
-      { label: 'Case Studies', href: '/work' },
-      { label: 'Portfolio', href: '/portfolio' },
-      { label: 'Industries', href: '/industries' },
-      { label: 'Our Process', href: '/process' },
-    ],
+    name: 'Shifa',
+    description: 'Modern healthcare management for clinics',
+    href: '/products/shifa',
   },
-  {
-    title: 'Company',
-    links: [
-      { label: 'About', href: '/about' },
-      { label: 'Team', href: '/team' },
-      { label: 'Careers', href: '/careers' },
-      { label: 'Contact', href: '/contact' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { label: 'Blog', href: '/blog' },
-      { label: 'Press', href: '/press' },
-      { label: 'FAQs', href: '/faqs' },
-      { label: 'Privacy', href: '/privacy' },
-    ],
-  },
+]
+
+const WORK_LINKS = [
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Case Studies', href: '/work' },
+  { label: 'Industries', href: '/industries' },
 ]
 
 function MenuIcon({ isOpen }: { isOpen: boolean }) {
@@ -76,7 +62,7 @@ export function Header() {
       <header className="fixed top-0 left-0 right-0 z-50 p-5">
         <div
           className={cn(
-            'mx-auto bg-white rounded-[25px] shadow-[4px_4px_24px_0_rgba(0,0,0,0.10)] overflow-hidden',
+            'mx-auto bg-white/80 backdrop-blur-md rounded-[25px] shadow-[4px_4px_24px_0_rgba(0,0,0,0.10)] overflow-hidden',
             'transition-[max-width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
             isOpen ? 'max-w-[1400px] delay-0' : 'max-w-[580px] delay-150'
           )}
@@ -95,7 +81,7 @@ export function Header() {
               <span className="mono">{isOpen ? 'CLOSE' : 'MENU'}</span>
             </button>
 
-            {/* Center: logo — spans full bar, centers content, sits behind left/right controls */}
+            {/* Center: logo */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-[100px] dt:px-0">
               <img
                 src="/PAPERHOUSE_ALT.svg"
@@ -111,7 +97,7 @@ export function Header() {
               />
             </div>
 
-            {/* Right: CTA buttons */}
+            {/* Right: CTA */}
             <Button variant="tertiary" color="neutral" size="sm" hasIcon className="mono uppercase">
               <span className="dt:hidden">TALK</span>
               <span className="hidden dt:inline">LET'S TALK</span>
@@ -128,33 +114,99 @@ export function Header() {
             )}
           >
             <div className="h-px bg-bluishgray mx-6" />
-            <div className="grid grid-cols-2 dt:grid-cols-4">
-              {MEGA_MENU_COLS.map((col, i) => (
-                <div
-                  key={col.title}
-                  className={cn(
-                    'px-6 py-6 dt:px-8 dt:py-8',
-                    'border-b border-bluishgray dt:border-b-0',
-                    i % 2 === 0 && 'border-r border-bluishgray',
-                    i < MEGA_MENU_COLS.length - 1 && 'dt:border-r dt:border-bluishgray'
-                  )}
-                >
-                  <p className="mono-wide text-text/40 mb-5">{col.title}</p>
-                  <ul className="flex flex-col gap-3 dt:gap-4">
-                    {col.links.map((link) => (
-                      <li key={link.label}>
-                        <Link
-                          href={link.href}
-                          className="heading-4 dt:heading-3 text-text hover:text-primary transition-colors block"
-                          onClick={close}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+            <div className="grid grid-cols-2 dt:grid-cols-4 relative">
+
+              {/* Column dividers — not full height */}
+              <div className="hidden dt:block absolute left-1/4 top-6 bottom-6 w-px bg-bluishgray" />
+              <div className="hidden dt:block absolute left-2/4 top-6 bottom-6 w-px bg-bluishgray" />
+              <div className="hidden dt:block absolute left-3/4 top-6 bottom-6 w-px bg-bluishgray" />
+
+              {/* Col 1: Explore */}
+              <div className="px-6 py-6 dt:px-8 dt:py-7 border-b border-bluishgray dt:border-b-0">
+                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">Explore</p>
+                <ul className="flex flex-col gap-2">
+                  {EXPLORE_LINKS.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="heading-4 text-text hover:text-primary transition-colors block"
+                        onClick={close}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Col 2: Products */}
+              <div className="px-6 py-6 dt:px-8 dt:py-7 border-b border-bluishgray dt:border-b-0">
+                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">Products</p>
+                <ul className="flex flex-col gap-4">
+                  {PRODUCTS.map((product) => (
+                    <li key={product.name}>
+                      <Link
+                        href={product.href}
+                        className="group block"
+                        onClick={close}
+                      >
+                        <span className="heading-4 text-text group-hover:text-primary transition-colors block">
+                          {product.name}
+                        </span>
+                        <span className="body-small text-text/50 mt-0.5 block">
+                          {product.description}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Col 3: Work */}
+              <div className="px-6 py-6 dt:px-8 dt:py-7">
+                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">Work</p>
+                <ul className="flex flex-col gap-2">
+                  {WORK_LINKS.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="heading-4 text-text hover:text-primary transition-colors block"
+                        onClick={close}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Col 4: Featured */}
+              <div className="px-6 py-6 dt:px-8 dt:py-7 flex flex-col gap-3">
+                <p className="mono-wide text-[10px] text-text/35 tracking-widest">Latest Product</p>
+                <div className="flex-1 rounded-[14px] bg-secondary min-h-[120px] dt:min-h-[160px]">
+                  <div className="p-5 h-full flex flex-col items-center justify-center gap-3 text-center">
+                    <p className="heading-4 text-white">Habitly</p>
+                    <div className="w-full rounded-[10px] overflow-hidden bg-white/10 aspect-[16/7]">
+                      <img
+                        src="https://placehold.co/400x175/ffffff/cccccc?text=Habitly"
+                        alt="Habitly app preview"
+                        className="w-full h-full object-cover opacity-80"
+                      />
+                    </div>
+                    <Button
+                      variant="tertiary"
+                      color="neutral"
+                      size="sm"
+                      hasIcon
+                      className="mono uppercase text-white"
+                      onClick={close}
+                    >
+                      Explore
+                    </Button>
+                  </div>
                 </div>
-              ))}
+              </div>
+
             </div>
           </div>
         </div>
@@ -166,10 +218,9 @@ export function Header() {
         tabIndex={-1}
         aria-label="Close menu"
         className={cn(
-          'fixed top-0 left-0 w-screen h-screen z-[48] bg-black/20 backdrop-blur-[2px] transition-opacity duration-300',
+          'fixed top-0 left-0 w-screen h-screen z-[48] bg-black/30 backdrop-blur-[2px] transition-opacity duration-300',
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         )}
-        style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
         onClick={close}
         onKeyDown={(e) => e.key === 'Escape' && close()}
       />
