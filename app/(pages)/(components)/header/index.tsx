@@ -3,202 +3,173 @@
 import cn from 'clsx'
 import { useState } from 'react'
 
-import { Navigation } from '@/app/(pages)/(components)/navigation'
 import { Button } from '@/components/button'
 import { Image } from '@/components/image'
 import { Link } from '@/components/link'
 
-// Hamburger menu button component
-function HamburgerMenu({
-  isOpen,
-  onClick,
-}: {
-  isOpen: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      className="p-2 rounded-md md:hidden"
-      onClick={onClick}
-      aria-label="Toggle navigation menu"
-      aria-expanded={isOpen}
-    >
-      <div className="relative w-6 h-6 flex flex-col justify-center">
-        <span
-          className={cn(
-            'block h-0.5 w-6 bg-current transition-all duration-300 absolute',
-            isOpen ? 'rotate-45' : '-translate-y-1'
-          )}
-        />
-        <span
-          className={cn(
-            'block h-0.5 w-6 bg-current transition-all duration-300',
-            isOpen ? 'opacity-0' : 'opacity-100'
-          )}
-        />
-        <span
-          className={cn(
-            'block h-0.5 w-6 bg-current transition-all duration-300 absolute',
-            isOpen ? '-rotate-45' : 'translate-y-1'
-          )}
-        />
-      </div>
-    </button>
-  )
-}
+const MEGA_MENU_COLS = [
+  {
+    title: 'Pages',
+    links: [
+      { label: 'Home', href: '/' },
+      { label: 'About Us', href: '/about' },
+      { label: 'Services', href: '/services' },
+      { label: 'Blog', href: '/blog' },
+    ],
+  },
+  {
+    title: 'Work',
+    links: [
+      { label: 'Case Studies', href: '/work' },
+      { label: 'Portfolio', href: '/portfolio' },
+      { label: 'Industries', href: '/industries' },
+      { label: 'Our Process', href: '/process' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'About', href: '/about' },
+      { label: 'Team', href: '/team' },
+      { label: 'Careers', href: '/careers' },
+      { label: 'Contact', href: '/contact' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Blog', href: '/blog' },
+      { label: 'Press', href: '/press' },
+      { label: 'FAQs', href: '/faqs' },
+      { label: 'Privacy', href: '/privacy' },
+    ],
+  },
+]
 
-// Drawer component for mobile navigation
-function Drawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const navigationLinks = [
-    { href: '/', label: 'HOME' },
-    { href: '/about', label: 'ABOUT US' },
-    { href: '/services', label: 'SERVICES' },
-    { href: '/blog', label: 'BLOG' },
-  ]
-
+function MenuIcon({ isOpen }: { isOpen: boolean }) {
   return (
-    <>
-      {/* Backdrop */}
-      {/* biome-ignore lint/a11y/useSemanticElements: Backdrop div is appropriate for overlay */}
-      <div
-        role="button"
-        tabIndex={0}
+    <div className="w-[18px] h-[18px] shrink-0 flex flex-col justify-center gap-[5px]">
+      <span
         className={cn(
-          'fixed inset-0 bg-black/50 z-40 transition-opacity duration-300',
-          isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          'block h-0.5 w-full bg-current transition-all duration-300 ease-in-out origin-center',
+          isOpen ? 'rotate-45 translate-y-[3.5px]' : ''
         )}
-        onClick={onClose}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            onClose()
-          }
-        }}
-        aria-label="Close navigation menu"
       />
-
-      {/* Drawer */}
-      <div
+      <span
         className={cn(
-          'fixed top-0 left-0 h-full w-80 max-w-[80vw] bg-white z-50 shadow-xl transform transition-transform duration-300 ease-in-out',
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          'block h-0.5 w-full bg-current transition-all duration-300 ease-in-out origin-center',
+          isOpen ? '-rotate-45 -translate-y-[3.5px]' : ''
         )}
-      >
-        <div className="p-5 h-full flex flex-col">
-          {/* Logo in drawer */}
-          <div className="flex items-center h-[30px] mb-8">
-            <Image
-              src="/logo.png"
-              alt="PaperHouse Agency"
-              width={130}
-              height={30}
-              block
-              priority
-              unoptimized
-            />
-          </div>
-
-          {/* Navigation links */}
-          <nav className="flex-1">
-            <ul className="space-y-4">
-              {navigationLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="block py-2 px-3 text-text hover:text-primary transition-colors"
-                    onClick={onClose}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Divider */}
-          <div className="my-4 h-px bg-bluishgray w-full" />
-
-          {/* Buttons */}
-          <div className="flex flex-col gap-3">
-            <Button
-              variant="default"
-              color="neutral"
-              size="sm"
-              className="mono uppercase w-full justify-center"
-              onClick={onClose}
-            >
-              BOOK A MEETING
-            </Button>
-            <Button
-              variant="default"
-              color="primary"
-              size="sm"
-              className="mono uppercase w-full justify-center"
-              onClick={onClose}
-            >
-              LOGIN
-            </Button>
-          </div>
-        </div>
-      </div>
-    </>
+      />
+    </div>
   )
 }
 
 export function Header() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen)
-  }
+  const toggle = () => setIsOpen((v) => !v)
+  const close = () => setIsOpen(false)
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 w-full p-5">
-        <div className="flex items-center justify-between max-w-[1400px] mx-auto p-5 bg-white rounded-lg shadow-[4px_4px_16px_0_rgba(0,0,0,0.08)]">
-          {/* Logo */}
-          <div className="flex items-center h-[30px]">
-            <Image
-              src="/logo.png"
-              alt="PaperHouse Agency"
-              width={130}
-              height={30}
-              block
-              unoptimized
-            />
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex">
-            <Navigation />
-          </div>
-
-          {/* Desktop Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            <Button
-              variant="default"
-              color="neutral"
-              size="sm"
-              className="mono uppercase"
+      <header className="fixed top-0 left-0 right-0 z-50 p-5">
+        <div
+          className={cn(
+            'mx-auto bg-white rounded-[25px] shadow-[4px_4px_24px_0_rgba(0,0,0,0.10)] overflow-hidden',
+            'transition-[max-width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
+            isOpen ? 'max-w-[1400px] delay-0' : 'max-w-[580px] delay-150'
+          )}
+        >
+          {/* Top bar */}
+          <div className="relative flex items-center justify-between ps-5 pe-4 py-4">
+            {/* Left: menu toggle */}
+            <button
+              type="button"
+              onClick={toggle}
+              className="flex items-center gap-2.5 text-text w-fit"
+              aria-label="Toggle menu"
+              aria-expanded={isOpen}
             >
-              BOOK A MEETING
-            </Button>
-            <Button
-              variant="default"
-              color="primary"
-              size="sm"
-              className="mono uppercase"
-            >
-              LOGIN
+              <MenuIcon isOpen={isOpen} />
+              <span className="mono">{isOpen ? 'CLOSE' : 'MENU'}</span>
+            </button>
+
+            {/* Center: logo — spans full bar, centers content, sits behind left/right controls */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <img
+                src="/PAPERHOUSE_ALT.svg"
+                alt="PaperHouse Agency"
+                className={cn('transition-opacity duration-150', isOpen ? 'opacity-0' : 'opacity-100')}
+                style={{ maxHeight: '16px', width: 'auto' }}
+              />
+              <img
+                src="/PAPERHOUSE.svg"
+                alt="PaperHouse Agency"
+                className={cn('absolute transition-opacity duration-150', isOpen ? 'opacity-100' : 'opacity-0')}
+                style={{ maxHeight: '16px', width: 'auto' }}
+              />
+            </div>
+
+            {/* Right: CTA buttons */}
+            <Button variant="tertiary" color="neutral" size="sm" hasIcon className="mono uppercase">
+              LET'S TALK
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <HamburgerMenu isOpen={isDrawerOpen} onClick={toggleDrawer} />
+          {/* Mega menu */}
+          <div
+            className={cn(
+              'overflow-hidden',
+              isOpen
+                ? 'max-h-[600px] opacity-100 transition-[max-height,opacity] duration-250 delay-300 ease-[cubic-bezier(0.16,1,0.3,1)]'
+                : 'max-h-0 opacity-0 transition-[max-height,opacity] duration-150 delay-0 ease-[cubic-bezier(0.16,1,0.3,1)]'
+            )}
+          >
+            <div className="h-px bg-bluishgray mx-6" />
+            <div className="grid grid-cols-4">
+              {MEGA_MENU_COLS.map((col, i) => (
+                <div
+                  key={col.title}
+                  className={cn(
+                    'px-8 py-8',
+                    i < MEGA_MENU_COLS.length - 1 && 'border-r border-bluishgray'
+                  )}
+                >
+                  <p className="mono-wide text-text/40 mb-6">{col.title}</p>
+                  <ul className="flex flex-col gap-4">
+                    {col.links.map((link) => (
+                      <li key={link.label}>
+                        <Link
+                          href={link.href}
+                          className="heading-3 text-text hover:text-primary transition-colors block"
+                          onClick={close}
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </header>
+
+      {/* Backdrop */}
+      <div
+        role="button"
+        tabIndex={-1}
+        aria-label="Close menu"
+        className={cn(
+          'fixed top-0 left-0 w-screen h-screen z-[48] bg-black/20 backdrop-blur-[2px] transition-opacity duration-300',
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        )}
+        style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
+        onClick={close}
+        onKeyDown={(e) => e.key === 'Escape' && close()}
+      />
 
       {/* Progressive blur — top */}
       <div className="fixed top-0 left-0 right-0 h-[220px] z-[49] pointer-events-none">
@@ -219,9 +190,6 @@ export function Header() {
         <div className="absolute inset-0" style={{ backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', maskImage: 'linear-gradient(to top, black 0%, transparent 78%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 78%)' }} />
         <div className="absolute inset-0" style={{ backdropFilter: 'blur(1px)', WebkitBackdropFilter: 'blur(1px)', maskImage: 'linear-gradient(to top, black 0%, transparent 95%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 95%)' }} />
       </div>
-
-      {/* Mobile Drawer */}
-      <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </>
   )
 }
