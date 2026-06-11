@@ -154,7 +154,7 @@ export function Header() {
 
   return (
     <>
-      <header className="w-full p-5">
+      <header className="fixed top-0 left-0 right-0 z-50 w-full p-5">
         <div className="flex items-center justify-between max-w-[1400px] mx-auto p-5 bg-white rounded-lg shadow-[4px_4px_16px_0_rgba(0,0,0,0.08)]">
           {/* Logo */}
           <div className="flex items-center h-[30px]">
