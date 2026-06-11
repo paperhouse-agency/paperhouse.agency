@@ -96,7 +96,7 @@ export function Header() {
             </button>
 
             {/* Center: logo — spans full bar, centers content, sits behind left/right controls */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-[100px] dt:px-0">
               <img
                 src="/PAPERHOUSE_ALT.svg"
                 alt="PaperHouse Agency"
@@ -113,36 +113,39 @@ export function Header() {
 
             {/* Right: CTA buttons */}
             <Button variant="tertiary" color="neutral" size="sm" hasIcon className="mono uppercase">
-              LET'S TALK
+              <span className="dt:hidden">TALK</span>
+              <span className="hidden dt:inline">LET'S TALK</span>
             </Button>
           </div>
 
           {/* Mega menu */}
           <div
             className={cn(
-              'overflow-hidden',
+              'overflow-y-auto',
               isOpen
-                ? 'max-h-[600px] opacity-100 transition-[max-height,opacity] duration-250 delay-300 ease-[cubic-bezier(0.16,1,0.3,1)]'
+                ? 'max-h-[calc(100dvh-72px)] dt:max-h-[600px] opacity-100 transition-[max-height,opacity] duration-250 delay-300 ease-[cubic-bezier(0.16,1,0.3,1)]'
                 : 'max-h-0 opacity-0 transition-[max-height,opacity] duration-150 delay-0 ease-[cubic-bezier(0.16,1,0.3,1)]'
             )}
           >
             <div className="h-px bg-bluishgray mx-6" />
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-2 dt:grid-cols-4">
               {MEGA_MENU_COLS.map((col, i) => (
                 <div
                   key={col.title}
                   className={cn(
-                    'px-8 py-8',
-                    i < MEGA_MENU_COLS.length - 1 && 'border-r border-bluishgray'
+                    'px-6 py-6 dt:px-8 dt:py-8',
+                    'border-b border-bluishgray dt:border-b-0',
+                    i % 2 === 0 && 'border-r border-bluishgray',
+                    i < MEGA_MENU_COLS.length - 1 && 'dt:border-r dt:border-bluishgray'
                   )}
                 >
-                  <p className="mono-wide text-text/40 mb-6">{col.title}</p>
-                  <ul className="flex flex-col gap-4">
+                  <p className="mono-wide text-text/40 mb-5">{col.title}</p>
+                  <ul className="flex flex-col gap-3 dt:gap-4">
                     {col.links.map((link) => (
                       <li key={link.label}>
                         <Link
                           href={link.href}
-                          className="heading-3 text-text hover:text-primary transition-colors block"
+                          className="heading-4 dt:heading-3 text-text hover:text-primary transition-colors block"
                           onClick={close}
                         >
                           {link.label}
@@ -172,7 +175,7 @@ export function Header() {
       />
 
       {/* Progressive blur — top */}
-      <div className="fixed top-0 left-0 right-0 h-[220px] z-[49] pointer-events-none">
+      <div className="fixed top-0 left-0 right-0 h-[120px] z-[49] pointer-events-none">
         <div className="absolute inset-0" style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 12%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 12%)' }} />
         <div className="absolute inset-0" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 25%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 25%)' }} />
         <div className="absolute inset-0" style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 42%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 42%)' }} />
@@ -182,7 +185,7 @@ export function Header() {
       </div>
 
       {/* Progressive blur — bottom */}
-      <div className="fixed bottom-0 left-0 right-0 h-[220px] z-[49] pointer-events-none">
+      <div className="fixed bottom-0 left-0 right-0 h-[120px] z-[49] pointer-events-none">
         <div className="absolute inset-0" style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', maskImage: 'linear-gradient(to top, black 0%, transparent 12%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 12%)' }} />
         <div className="absolute inset-0" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', maskImage: 'linear-gradient(to top, black 0%, transparent 25%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 25%)' }} />
         <div className="absolute inset-0" style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', maskImage: 'linear-gradient(to top, black 0%, transparent 42%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 42%)' }} />
