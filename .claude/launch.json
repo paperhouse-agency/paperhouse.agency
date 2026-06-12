@@ -8,6 +8,14 @@
       "env": { "PATH": "/Users/xianmalik/.bun/bin:/Users/xianmalik/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/usr/bin:/bin" },
       "port": 3001,
       "autoPort": false
+    },
+    {
+      "name": "storybook",
+      "runtimeExecutable": "/Users/xianmalik/.bun/bin/bun",
+      "runtimeArgs": ["run", "storybook"],
+      "env": { "PATH": "/Users/xianmalik/.bun/bin:/Users/xianmalik/.nvm/versions/node/v22.22.3/bin:/usr/local/bin:/usr/bin:/bin" },
+      "port": 6006,
+      "autoPort": false
     }
   ]
 }

@@ -117,9 +117,9 @@ export function Header() {
             <div className="grid grid-cols-2 dt:grid-cols-4 relative">
 
               {/* Column dividers — not full height */}
-              <div className="hidden dt:block absolute left-1/4 top-6 bottom-6 w-px bg-bluishgray" />
-              <div className="hidden dt:block absolute left-2/4 top-6 bottom-6 w-px bg-bluishgray" />
-              <div className="hidden dt:block absolute left-3/4 top-6 bottom-6 w-px bg-bluishgray" />
+              <div className="hidden dt:block absolute left-1/4 top-6 bottom-6 w-px bg-secondary/10" />
+              <div className="hidden dt:block absolute left-2/4 top-6 bottom-6 w-px bg-secondary/10" />
+              <div className="hidden dt:block absolute left-3/4 top-6 bottom-6 w-px bg-secondary/10" />
 
               {/* Col 1: Explore */}
               <div className="px-6 py-6 dt:px-8 dt:py-7 border-b border-bluishgray dt:border-b-0">
