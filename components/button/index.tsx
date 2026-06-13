@@ -143,9 +143,14 @@ const iconWrapperVariants = cva(
       variant: {
         default: '',
         outline: '',
-        tertiary: 'bg-primary! text-white!',
+        tertiary: '',
       },
     },
+    compoundVariants: [
+      { variant: 'tertiary', color: 'primary', className: 'bg-primary text-white' },
+      { variant: 'tertiary', color: 'secondary', className: 'bg-secondary text-white' },
+      { variant: 'tertiary', color: 'neutral', className: 'bg-black! text-white!' },
+    ],
     defaultVariants: {
       size: 'md',
       variant: 'default',

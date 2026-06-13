@@ -99,7 +99,8 @@ export function NewsletterBlock({
                     <div
                       className="cf-turnstile"
                       data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY}
-                      data-theme="dark"
+                      data-appearance="interaction-only"
+                      data-size="invisible"
                     />
 
                     {(emailError || turnstileError || serverError) && (

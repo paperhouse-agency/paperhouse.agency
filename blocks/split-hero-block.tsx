@@ -94,7 +94,7 @@ export function SplitHeroBlock({
   const [isPlaying, setIsPlaying] = useState(false)
 
   return (
-    <div className="wrapper mx-auto py-24 px-5">
+    <div className="wrapper mx-auto min-h-screen flex flex-col justify-center pt-28 pb-10 px-5">
       <div className="desktop-only grid grid-cols-2">
         <ContentWithButton
           headingType="h1"
