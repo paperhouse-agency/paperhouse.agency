@@ -52,6 +52,32 @@ export interface CmsPageSettings {
   publishedAt?: string
 }
 
+// ── Navigation types ──────────────────────────────────────────────────────────
+
+export interface CmsNavItem {
+  id: string
+  label: string
+  url: string
+  openInNewTab?: boolean
+}
+
+export interface CmsFooterColumn {
+  id: string
+  heading: string
+  items: CmsNavItem[]
+}
+
+export interface CmsNavigation {
+  header: {
+    items: CmsNavItem[]
+  }
+  footer: {
+    columns: CmsFooterColumn[]
+    legal: CmsNavItem[]
+  }
+  updatedAt: string
+}
+
 export type LucideIconName = string
 
 export type BlockType =

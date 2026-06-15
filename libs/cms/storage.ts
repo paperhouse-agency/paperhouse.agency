@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { list, put } from '@vercel/blob'
 import bcrypt from 'bcryptjs'
-import type { CmsPage, CmsUser } from './types'
+import type { CmsNavigation, CmsPage, CmsUser } from './types'
 
 // ── Filesystem helpers (pages) ────────────────────────────────────────────────
 // Pages are stored as content/{slug}.json (root slug → index.json)
@@ -130,9 +130,11 @@ export interface CmsPageMeta {
 export async function listPages(): Promise<CmsPageMeta[]> {
   try {
     const entries = await fs.readdir(CONTENT_DIR)
+    const NON_PAGE_FILES = new Set(['navigation.json'])
     const pages: CmsPageMeta[] = []
     for (const entry of entries) {
       if (!entry.endsWith('.json')) continue
+      if (NON_PAGE_FILES.has(entry)) continue
       const page = await readFile<CmsPage>(path.join(CONTENT_DIR, entry))
       if (!page) continue
       pages.push({
@@ -190,4 +192,22 @@ export async function isSlugTaken(slug: string, excludeId?: string): Promise<boo
     const pageSlug = p.slug === '/' ? '' : p.slug
     return pageSlug === normalised && p.id !== excludeId
   })
+}
+
+// ── Navigation (filesystem) ───────────────────────────────────────────────────
+
+const NAVIGATION_FILE = path.join(CONTENT_DIR, 'navigation.json')
+
+const DEFAULT_NAVIGATION: CmsNavigation = {
+  header: { items: [] },
+  footer: { columns: [], legal: [] },
+  updatedAt: new Date().toISOString(),
+}
+
+export async function readNavigation(): Promise<CmsNavigation> {
+  return (await readFile<CmsNavigation>(NAVIGATION_FILE)) ?? DEFAULT_NAVIGATION
+}
+
+export async function writeNavigation(nav: CmsNavigation) {
+  await writeFile(NAVIGATION_FILE, nav)
 }

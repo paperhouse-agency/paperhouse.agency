@@ -4,12 +4,13 @@ import { usePathname } from 'next/navigation'
 import { Link } from '@/components/link'
 import { LogoutButton } from './logout-button'
 
-export function AdminNavUI({ showUsers, initials }: { showUsers: boolean; initials: string }) {
+export function AdminNavUI({ showUsers, showNavigation, initials }: { showUsers: boolean; showNavigation: boolean; initials: string }) {
   const pathname = usePathname()
 
   const onUsers = pathname?.startsWith('/admin/users') ?? false
   const onMedia = pathname?.startsWith('/admin/media') ?? false
-  const onPages = !(onUsers || onMedia)
+  const onNavigation = pathname?.startsWith('/admin/settings') ?? false
+  const onPages = !(onUsers || onMedia || onNavigation)
 
   return (
     <header className="flex items-center justify-between h-[62px] px-[26px] bg-[var(--chrome)] border-b border-[var(--chrome-border)] flex-none relative z-10">
@@ -32,6 +33,14 @@ export function AdminNavUI({ showUsers, initials }: { showUsers: boolean; initia
           >
             Media
           </Link>
+          {showNavigation && (
+            <Link
+              href="/admin/settings"
+              className={`font-mono text-[12.5px] tracking-[0.06em] px-[14px] py-[7px] rounded-full cursor-pointer no-underline whitespace-nowrap transition-[background,color] duration-150 ${onNavigation ? 'bg-primary text-offwhite' : 'text-[var(--chrome-muted)] bg-transparent hover:text-[#1a1a1a] hover:bg-[rgba(26,26,26,0.06)]'}`}
+            >
+              Settings
+            </Link>
+          )}
           {showUsers && (
             <Link
               href="/admin/users"
