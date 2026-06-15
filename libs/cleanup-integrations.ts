@@ -33,7 +33,7 @@ export const REMOVAL_GUIDE: Record<string, RemovalGuide> = {
   Analytics: {
     dirs: [],
     pages: [],
-    notes: 'Remove GoogleAnalytics and GoogleTagManager from app/layout.tsx',
+    notes: 'Remove GoogleAnalytics, GoogleTagManager, and Microsoft Clarity scripts from app/layout.tsx',
   },
 }
 

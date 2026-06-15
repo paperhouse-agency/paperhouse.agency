@@ -9,8 +9,9 @@ import AppData from '@/package.json'
 import { themes } from '@/styles/colors'
 import '@/styles/css/index.css'
 
+import { MicrosoftClarity } from '@/integrations/clarity'
 import { GSAPRuntime } from '@/components/gsap/runtime'
-import { isSanityConfigured } from '@/integrations/check-integration'
+import { isClarityConfigured, isSanityConfigured } from '@/integrations/check-integration'
 import { SanityLive } from '@/integrations/sanity/live'
 import { OrchestraTools } from '@/orchestra'
 import { fontsVariable } from '@/styles/fonts'
@@ -111,6 +112,9 @@ export default async function Layout({ children }: PropsWithChildren) {
 
         {/* RAF management - lightweight, but don't patch in draft mode to avoid conflicts */}
         <ReactTempus patch={!isDraftMode} />
+
+        {/* Microsoft Clarity - only when project ID is configured */}
+        {isClarityConfigured() && <MicrosoftClarity />}
 
         {/* Visual editing - only in draft mode and if Sanity is configured */}
         {sanityConfigured && isDraftMode && (
