@@ -8,6 +8,7 @@ export async function AdminNav() {
   if (!session.isLoggedIn) return null
 
   const showUsers = session.role ? canPerform(session.role, 'manage_users') : false
+  const showNavigation = session.role ? canPerform(session.role, 'manage_settings') : false
 
   let initials = ''
   if (session.userId) {
@@ -27,5 +28,5 @@ export async function AdminNav() {
     }
   }
 
-  return <AdminNavUI showUsers={showUsers} initials={initials} />
+  return <AdminNavUI showUsers={showUsers} showNavigation={showNavigation} initials={initials} />
 }

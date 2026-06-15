@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { BlockData, CmsPage, CmsPageSeo, CmsPageSettings } from './types'
+import { useCmsStatus } from './status-store'
 
 const MAX_HISTORY = 50
 
@@ -115,6 +116,7 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     const newStatus: 'draft' | 'published' = page.status === 'draft' ? 'published' : 'draft'
     const updated: CmsPage = { ...page, status: newStatus }
     set({ page: updated, isSaving: true, saveError: null })
+    useCmsStatus.getState().markSaving()
     const res = await fetch(`/api/admin/pages/${page.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'x-requested-with': 'XMLHttpRequest' },
@@ -122,9 +124,11 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     })
     if (res.ok) {
       set({ isSaving: false, lastSaved: new Date(), isDirty: false })
+      useCmsStatus.getState().markSaved()
     } else {
       const err = (await res.json()) as { error?: string }
       set({ isSaving: false, saveError: err.error ?? 'Save failed' })
+      useCmsStatus.getState().markError()
     }
   },
 
@@ -163,6 +167,7 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     const { page } = get()
     if (!page) return
     set({ isSaving: true, saveError: null })
+    useCmsStatus.getState().markSaving()
     try {
       const res = await fetch(`/api/admin/pages/${page.id}`, {
         method: 'PUT',
@@ -174,8 +179,17 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
         throw new Error(err.error ?? 'Save failed')
       }
       set({ isSaving: false, lastSaved: new Date(), isDirty: false })
+      useCmsStatus.getState().markSaved()
     } catch (err) {
       set({ isSaving: false, saveError: err instanceof Error ? err.message : 'Save failed' })
+      useCmsStatus.getState().markError()
     }
   },
 }))
+
+// Sync isDirty to the global CMS status store
+useEditorStore.subscribe((state, prev) => {
+  if (state.isDirty && !prev.isDirty) {
+    useCmsStatus.getState().markDirty()
+  }
+})
