@@ -17,8 +17,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  revalidateTag('cms-navigation')
-  revalidateTag('cms-pages')
+  revalidateTag('cms-navigation', {})
+  revalidateTag('cms-pages', {})
 
   return NextResponse.json({ ok: true })
 }
