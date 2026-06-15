@@ -1,17 +1,14 @@
 import type { Metadata, Viewport } from 'next'
-import { draftMode } from 'next/headers'
-import { VisualEditing } from 'next-sanity/visual-editing'
-import type { PropsWithChildren } from 'react'
+import { Suspense, type PropsWithChildren } from 'react'
 import { ReactTempus } from 'tempus/react'
 import { RealViewport } from '@/components/real-viewport'
-import { DisableDraftMode } from '@/integrations/sanity/components/disable-draft-mode'
 import AppData from '@/package.json'
 import { themes } from '@/styles/colors'
 import '@/styles/css/index.css'
 
+import { MicrosoftClarity } from '@/integrations/clarity'
 import { GSAPRuntime } from '@/components/gsap/runtime'
-import { isSanityConfigured } from '@/integrations/check-integration'
-import { SanityLive } from '@/integrations/sanity/live'
+import { isClarityConfigured } from '@/integrations/check-integration'
 import { OrchestraTools } from '@/orchestra'
 import { fontsVariable } from '@/styles/fonts'
 
@@ -82,16 +79,12 @@ export const viewport: Viewport = {
   colorScheme: 'normal',
 }
 
-export default async function Layout({ children }: PropsWithChildren) {
-  const { isEnabled: isDraftMode } = await draftMode()
-  const sanityConfigured = isSanityConfigured()
-
+export default function Layout({ children }: PropsWithChildren) {
   return (
     <html
       lang="en"
       dir="ltr"
       className={fontsVariable}
-      // NOTE: This is due to the data-theme attribute being set which causes hydration errors
       suppressHydrationWarning
     >
       <body>
@@ -102,22 +95,18 @@ export default async function Layout({ children }: PropsWithChildren) {
         {children}
 
         {/* Development tools - dynamically imported */}
-        <OrchestraTools />
+        <Suspense>
+          <OrchestraTools />
+        </Suspense>
 
         {/* Animation framework */}
         <GSAPRuntime />
 
-        {/* RAF management - lightweight, but don't patch in draft mode to avoid conflicts */}
-        <ReactTempus patch={!isDraftMode} />
+        {/* RAF management */}
+        <ReactTempus />
 
-        {/* Visual editing - only in draft mode and if Sanity is configured */}
-        {sanityConfigured && isDraftMode && (
-          <>
-            <VisualEditing />
-            <DisableDraftMode />
-            <SanityLive />
-          </>
-        )}
+        {/* Microsoft Clarity - only when project ID is configured */}
+        {isClarityConfigured() && <MicrosoftClarity />}
       </body>
     </html>
   )

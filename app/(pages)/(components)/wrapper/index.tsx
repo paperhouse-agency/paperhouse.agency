@@ -4,7 +4,6 @@ import type { ComponentProps } from 'react'
 import type { ThemeName } from '@/styles/config'
 import { Canvas } from '@/webgl/components/canvas'
 import { Footer } from '../footer'
-import { Header } from '../header'
 import { Lenis } from '../lenis'
 import { Theme } from '../theme'
 
@@ -25,7 +24,6 @@ export function Wrapper({
   return (
     <Theme theme={theme} global>
       {webgl && <Canvas root {...(typeof webgl === 'object' && webgl)} />}
-      <Header />
       <main className={cn('relative flex flex-col grow', className)} {...props}>
         {children}
       </main>

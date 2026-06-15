@@ -1,0 +1,107 @@
+/* PaperHouse CMS — design-system-aligned admin styles
+ * Color tokens from root.css:
+ *   --color-primary, --color-text, --color-offwhite, --color-bluishgray,
+ *   --color-white, --color-accent, --color-secondary
+ * Font tokens (Next.js font variables on <html>):
+ *   --font-heading (Bianco Serif), --font-body (IBM Plex Sans),
+ *   --font-mono (PP Neue Montreal Mono)
+ */
+
+/* ── Admin-level chrome tokens ──────────────────────────────────── */
+:root {
+  --chrome: #eae7e1;
+  --chrome-border: rgba(26, 26, 26, 0.1);
+  --chrome-fg: var(--color-text);
+  --chrome-muted: rgba(26, 26, 26, 0.55);
+  --chrome-faint: rgba(26, 26, 26, 0.4);
+  --workspace: #fbfaf8;
+  --c-card: #ffffff;
+  --c-card-shadow: 4px 4px 5px rgba(0, 0, 0, 0.05);
+  --c-card-border: var(--color-bluishgray);
+  --field-border: #d5d2cd;
+}
+
+/* ── Shell ──────────────────────────────────────────────────────── */
+.cms-shell {
+  font-family: var(--font-body, 'IBM Plex Sans', system-ui, sans-serif);
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--workspace);
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollable area below the nav — list pages scroll here; editor fills it */
+.cms-shell-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.cms-shell * {
+  box-sizing: border-box;
+}
+
+.cms-shell a:not([datatype="paperhouse-button"]) {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.cms-shell a:hover {
+  text-decoration: none;
+}
+
+/* ── Toggle (checkbox) ──────────────────────────────────────────── */
+/* Kept in CSS because it relies on ::after pseudo-element */
+.cms-toggle {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 38px;
+  height: 22px;
+  min-width: 38px;
+  background: var(--color-bluishgray);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+  padding: 0;
+}
+
+.cms-toggle:checked {
+  background: var(--color-primary);
+}
+
+.cms-toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.18s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.cms-toggle:checked::after {
+  transform: translateX(16px);
+}
+
+/* ── Keyframe animations (referenced via Tailwind animate-[...]) ── */
+@keyframes cms-spin { to { transform: rotate(360deg); } }
+
+@keyframes cms-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cms-modal-in {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}

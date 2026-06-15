@@ -1,3 +1,4 @@
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { Image } from '@/components/image'
 
 export interface MetricCard {
@@ -98,4 +99,37 @@ export function BentoStatsBlock({
       </div>
     </section>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'bento-stats',
+  label: 'Bento Stats',
+  icon: 'LayoutGrid',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'OUR TRACK RECORD', description: 'Small label above the section' },
+    { key: 'metrics.large.value', label: 'Large — Value', type: 'text', required: true, placeholder: '200+' },
+    { key: 'metrics.large.heading', label: 'Large — Heading', type: 'text', required: true, placeholder: 'Projects delivered' },
+    { key: 'metrics.large.content', label: 'Large — Body', type: 'text' },
+    { key: 'metrics.image1', label: 'Image 1', type: 'image', span: 'full', required: true },
+    { key: 'metrics.medium.value', label: 'Medium — Value', type: 'text', required: true, placeholder: '98%' },
+    { key: 'metrics.medium.heading', label: 'Medium — Heading', type: 'text', required: true },
+    { key: 'metrics.medium.content', label: 'Medium — Body', type: 'text' },
+    { key: 'metrics.small.value', label: 'Small — Value', type: 'text', required: true, placeholder: '5★' },
+    { key: 'metrics.small.heading', label: 'Small — Heading', type: 'text', required: true },
+    { key: 'metrics.small.content', label: 'Small — Body', type: 'text' },
+    { key: 'metrics.image2', label: 'Image 2', type: 'image', span: 'full', required: true },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'bento-stats',
+    preheadingContent: '',
+    metrics: {
+      large: { value: '', heading: '', content: '' },
+      image1: { src: '', alt: '' },
+      medium: { value: '', heading: '', content: '' },
+      small: { value: '', heading: '', content: '' },
+      image2: { src: '', alt: '' },
+    },
+  }),
 }

@@ -1,0 +1,121 @@
+{
+  "header": {
+    "items": [
+      {
+        "id": "nav-home",
+        "label": "Home",
+        "url": "/",
+        "openInNewTab": false
+      },
+      {
+        "id": "nav-work",
+        "label": "Work",
+        "url": "/work",
+        "openInNewTab": false
+      },
+      {
+        "id": "nav-about",
+        "label": "About",
+        "url": "/about",
+        "openInNewTab": false
+      },
+      {
+        "id": "7d1e1c02-e0da-4cb4-ab88-c838eddbf3e1",
+        "label": "Blog",
+        "url": "/blog",
+        "openInNewTab": false
+      }
+    ]
+  },
+  "footer": {
+    "columns": [
+      {
+        "id": "col-company",
+        "heading": "Company",
+        "items": [
+          {
+            "id": "fc-about",
+            "label": "About",
+            "url": "/about",
+            "openInNewTab": false
+          },
+          {
+            "id": "fc-work",
+            "label": "Work",
+            "url": "/work",
+            "openInNewTab": false
+          },
+          {
+            "id": "fc-contact",
+            "label": "Contact",
+            "url": "/contact",
+            "openInNewTab": false
+          }
+        ]
+      },
+      {
+        "id": "col-services",
+        "heading": "Services",
+        "items": [
+          {
+            "id": "fs-web",
+            "label": "Web Design",
+            "url": "/services/web",
+            "openInNewTab": false
+          },
+          {
+            "id": "fs-brand",
+            "label": "Branding",
+            "url": "/services/branding",
+            "openInNewTab": false
+          },
+          {
+            "id": "fs-dev",
+            "label": "Development",
+            "url": "/services/development",
+            "openInNewTab": false
+          }
+        ]
+      },
+      {
+        "id": "col-social",
+        "heading": "Follow",
+        "items": [
+          {
+            "id": "fso-instagram",
+            "label": "Instagram",
+            "url": "https://instagram.com/paperhouseagency",
+            "openInNewTab": true
+          },
+          {
+            "id": "fso-linkedin",
+            "label": "LinkedIn",
+            "url": "https://linkedin.com/company/paperhouseagency",
+            "openInNewTab": true
+          },
+          {
+            "id": "fso-x",
+            "label": "X / Twitter",
+            "url": "https://x.com/paperhouseagency",
+            "openInNewTab": true
+          }
+        ]
+      }
+    ],
+    "legal": [
+      {
+        "id": "leg-privacy",
+        "label": "Privacy Policy",
+        "url": "/privacy",
+        "openInNewTab": false
+      },
+      {
+        "id": "leg-terms",
+        "label": "Terms of Service",
+        "url": "/terms",
+        "openInNewTab": false
+      }
+    ]
+  },
+  "updatedAt": "2026-06-15T08:31:27.643Z"
+}

@@ -64,14 +64,13 @@ This directory contains consolidated Cursor AI rules for the Satus project. The 
 **Purpose**: Guidelines for all third-party service integrations
 
 **Contents**:
-- **Sanity CMS**: Configuration, schema management, GROQ queries, visual editing, TypeScript generation
 - **HubSpot**: Form integration, newsletter subscriptions
 - General best practices (environment variables, API resilience, error handling)
 - Type safety and performance
 - Security and integration management
 - Webhook handling
 
-**When to reference**: Integrating with Sanity, HubSpot, or other third-party services
+**When to reference**: Integrating with HubSpot or other third-party services
 
 ---
 
@@ -103,7 +102,6 @@ This directory contains consolidated Cursor AI rules for the Satus project. The 
 - **Style with CSS Modules** → `styling.mdc` § CSS Modules
 - **Style with Tailwind** → `styling.mdc` § Tailwind CSS v4
 - **Use custom utilities** → `styling.mdc` § Project-Specific Custom Utilities
-- **Integrate Sanity CMS** → `integrations.mdc` § Sanity CMS Integration
 - **Integrate HubSpot** → `integrations.mdc` § HubSpot Forms
 - **Manage state** → `architecture.mdc` § State Management
 - **Add routing** → `architecture.mdc` § Routing & Navigation
@@ -120,21 +118,12 @@ This directory contains consolidated Cursor AI rules for the Satus project. The 
 
 ### What Changed?
 
-**Before (7 files)**:
-1. `main.mdc` - Overview
-2. `components.mdc` - React components
-3. `webgl.mdc` - WebGL/Three.js
-4. `styling.mdc` - CSS Modules
-5. `tailwind-css-v4.mdc` - Tailwind
-6. `integrations.mdc` - General integrations
-7. `sanity-opinionated.mdc` - Sanity-specific
-
-**After (5 files)**:
+**5 files**:
 1. `main.mdc` - Overview + cross-cutting concerns
-2. `components.mdc` - React + WebGL (merged)
-3. `styling.mdc` - CSS Modules + Tailwind (merged)
-4. `integrations.mdc` - All third-party integrations (merged Sanity)
-5. `architecture.mdc` - NEW: Architecture patterns
+2. `components.mdc` - React + WebGL
+3. `styling.mdc` - CSS Modules + Tailwind
+4. `integrations.mdc` - Third-party integrations (HubSpot, etc.)
+5. `architecture.mdc` - Architecture patterns
 
 ### Benefits of Consolidation
 
@@ -199,7 +188,7 @@ When adding new guidelines:
 | `main.mdc` | Overview & Cross-cutting | 244 | Tech stack, React 19.2, React Compiler, Images, Dev/Prod |
 | `components.mdc` | React & WebGL | 467 | Components, Forms, WebGL, Three.js, Shaders, Activity |
 | `styling.mdc` | All Styling | 467 | CSS Modules, Tailwind v4, Responsive, Custom utilities |
-| `integrations.mdc` | Third-party Services | 451 | Sanity, HubSpot, Best practices |
+| `integrations.mdc` | Third-party Services | 451 | HubSpot, Best practices |
 | `architecture.mdc` | Patterns & Quality | 391 | State, Routing, Performance, Security, Testing |
 
 **Total**: 2,020 lines of consolidated, focused guidelines

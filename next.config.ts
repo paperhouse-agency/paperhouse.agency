@@ -3,6 +3,7 @@ import type { NextConfig } from 'next'
 import './libs/validate-env.ts'
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['tempus'],
   reactStrictMode: true,
   reactCompiler: true,
   poweredByHeader: false,
@@ -101,6 +102,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'cdn.sanity.io',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
       },
     ],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days

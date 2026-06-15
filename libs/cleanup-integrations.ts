@@ -14,11 +14,6 @@ interface RemovalGuide {
 }
 
 export const REMOVAL_GUIDE: Record<string, RemovalGuide> = {
-  Sanity: {
-    dirs: ['integrations/sanity', 'app/studio'],
-    pages: ['app/(pages)/sanity'],
-    notes: 'Also remove Sanity imports from app/layout.tsx',
-  },
   HubSpot: {
     dirs: ['integrations/hubspot'],
     pages: ['app/(pages)/hubspot'],
@@ -33,7 +28,7 @@ export const REMOVAL_GUIDE: Record<string, RemovalGuide> = {
   Analytics: {
     dirs: [],
     pages: [],
-    notes: 'Remove GoogleAnalytics and GoogleTagManager from app/layout.tsx',
+    notes: 'Remove GoogleAnalytics, GoogleTagManager, and Microsoft Clarity scripts from app/layout.tsx',
   },
 }
 

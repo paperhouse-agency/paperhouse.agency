@@ -1,5 +1,5 @@
-import { Button } from '@/components/button'
-import { Image } from '@/components/image'
+import type { BlockSchema } from '@/libs/cms/block-schema'
+import { TeamCard } from '@/components/molecules/team-card'
 
 export interface TeamMember {
   name: string
@@ -53,37 +53,42 @@ export function PeopleGridBlock({
 
         <div className="grid grid-cols-1 dt:grid-cols-4 gap-5">
           {members.map((member, i) => (
-            <div
-              key={`${member.name}-${i}`}
-              className="flex flex-col gap-5 items-start"
-            >
-              <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden">
-                <Image
-                  src={member.image.src}
-                  alt={member.image.alt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2.5 flex-1">
-                <p className="heading-4 text-text">{member.name}</p>
-                <p className="body-large text-text/60">{member.role}</p>
-              </div>
-
-              <Button
-                variant="tertiary"
-                color="primary"
-                size="sm"
-                hasIcon
-                url={member.ctaUrl}
-              >
-                READ MORE
-              </Button>
-            </div>
+            <TeamCard key={`${member.name}-${i}`} {...member} />
           ))}
         </div>
       </div>
     </section>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'people-grid',
+  label: 'People Grid',
+  icon: 'Users',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'THE TEAM' },
+    { key: 'headingContent', label: 'Heading', type: 'text', required: true, span: 'full', description: 'Wrap text in <span> for accent color' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
+    {
+      key: 'members',
+      label: 'Team Members',
+      type: 'array',
+      span: 'full',
+      fields: [
+        { key: 'name', label: 'Name', type: 'text', required: true },
+        { key: 'role', label: 'Role', type: 'text', required: true },
+        { key: 'image', label: 'Photo', type: 'image', span: 'full', required: true },
+        { key: 'ctaUrl', label: 'Profile URL', type: 'url' },
+      ],
+    },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'people-grid',
+    preheadingContent: '',
+    headingContent: '',
+    bodyContent: '',
+    members: [],
+  }),
 }

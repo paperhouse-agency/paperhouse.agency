@@ -1,8 +1,8 @@
 'use client'
+import type { BlockSchema } from '@/libs/cms/block-schema'
 
 import { useActionState } from 'react'
 import Script from 'next/script'
-import { Button } from '@/components/button'
 import { hubspotNewsletterAction } from '@/integrations/hubspot/action'
 import type { FormState } from '@/components/form/types'
 
@@ -27,9 +27,9 @@ export interface NewsletterBlockProps {
 }
 
 export function NewsletterBlock({
-  preheadingContent = 'NEWSLETTER',
-  headingContent = 'Stay in the Loop',
-  bodyContent = 'Get the latest insights on design, development, and digital growth delivered straight to your inbox.',
+  preheadingContent = 'THE PAPER TRAIL',
+  headingContent = 'One sharp idea on design & building, every two weeks',
+  bodyContent = "No fluff, no spam. Just the things we're learning in the studio. Join 4,000+ founders and makers",
 }: NewsletterBlockProps) {
   const [state, formAction, isPending] = useActionState(
     hubspotNewsletterAction,
@@ -41,8 +41,7 @@ export function NewsletterBlock({
   const turnstileError = state.errors?.get('turnstile')?.message
   const serverError =
     state.status === 500
-      ? (errorMessages[state.message] ??
-        'Something went wrong. Please try again.')
+      ? (errorMessages[state.message] ?? 'Something went wrong. Please try again.')
       : null
 
   return (
@@ -51,69 +50,97 @@ export function NewsletterBlock({
         src="https://challenges.cloudflare.com/turnstile/v0/api.js"
         strategy="lazyOnload"
       />
-      <section className="py-15 px-5 bg-bluishgray">
-        <div className="wrapper mx-auto flex flex-col items-center text-center gap-10">
-          <div className="flex flex-col items-center gap-2.5">
-            <p className="mono-wide text-primary">{preheadingContent}</p>
-            <h2 className="heading-2 text-text">{headingContent}</h2>
-            <p className="body-large text-text/60 max-w-xl">{bodyContent}</p>
-          </div>
+      <section className="py-15 px-5">
+        <div className="wrapper mx-auto">
+          <div className="relative bg-primary rounded-3xl overflow-hidden px-8 py-12 dt:px-16 dt:py-20 flex flex-col dt:flex-row dt:items-center gap-10 dt:gap-20">
 
-          {isSuccess ? (
-            <div className="flex flex-col items-center gap-2.5">
-              <p className="heading-4 text-text">You're in!</p>
-              <p className="body-large text-text/60">
-                Thanks for subscribing. We'll be in touch.
-              </p>
+            {/* Decorative circles */}
+            <div className="absolute -top-24 -left-16 w-72 h-72 rounded-full bg-white/10 pointer-events-none" />
+            <div className="absolute -bottom-28 right-32 w-96 h-96 rounded-full bg-white/10 pointer-events-none" />
+            <div className="absolute top-8 right-8 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+
+            {/* Left: text content */}
+            <div className="relative flex flex-col gap-5 dt:flex-1">
+              <p className="mono-wide text-offwhite/70">{preheadingContent}</p>
+              <h2 className="heading-2 text-offwhite">{headingContent}</h2>
+              <p className="body text-offwhite/70">{bodyContent}</p>
             </div>
-          ) : (
-            <form
-              action={formAction}
-              className="flex flex-col items-center gap-5 w-full max-w-lg"
-            >
-              <div className="flex flex-col dt:flex-row gap-3 w-full">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Your email address"
-                  required
-                  defaultValue={state.inputs?.email}
-                  className="flex-1 bg-white border border-bluishgray rounded-full px-5 py-2 body text-text text-start placeholder:text-text/40 outline-none focus:border-text/40 transition-colors duration-500"
-                />
-                <Button
-                  type="submit"
-                  variant="default"
-                  color="primary"
-                  size="md"
-                  hasIcon
-                  disabled={isPending}
-                  className="body!"
-                >
-                  {isPending ? 'Subscribing...' : 'Subscribe'}
-                </Button>
-              </div>
 
-              <div
-                className="cf-turnstile"
-                data-sitekey={
-                  process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
-                }
-                data-theme="light"
-              />
+            {/* Right: form */}
+            <div className="relative flex flex-col gap-3 w-full dt:w-96 dt:shrink-0">
+              {isSuccess ? (
+                <div className="flex flex-col gap-2.5">
+                  <p className="heading-4 text-offwhite">You're in!</p>
+                  <p className="body text-offwhite/70">
+                    Thanks for subscribing. We'll be in touch.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <form action={formAction} className="flex flex-col gap-3">
+                    <div className="flex items-center bg-white rounded-full p-1.5 gap-2">
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="you@company.com"
+                        required
+                        defaultValue={state.inputs?.email}
+                        className="flex-1 bg-transparent pl-3 body text-text placeholder:text-text/40 outline-none"
+                      />
+                      <button
+                        type="submit"
+                        disabled={isPending}
+                        className="bg-text text-offwhite body rounded-full px-5 py-2 shrink-0 transition-colors duration-500 hover:bg-text/80 disabled:opacity-60"
+                      >
+                        {isPending ? 'Subscribing...' : 'Subscribe'}
+                      </button>
+                    </div>
 
-              {(emailError || turnstileError || serverError) && (
-                <p className="body-small text-red-500">
-                  {emailError && (errorMessages[emailError] ?? emailError)}
-                  {!emailError &&
-                    turnstileError &&
-                    'Security verification failed. Please try again.'}
-                  {!(emailError || turnstileError) && serverError}
-                </p>
+                    <div
+                      className="cf-turnstile"
+                      data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY}
+                      data-appearance="interaction-only"
+                      data-size="invisible"
+                    />
+
+                    {(emailError || turnstileError || serverError) && (
+                      <p className="body-small text-offwhite/80">
+                        {emailError && (errorMessages[emailError] ?? emailError)}
+                        {!emailError && turnstileError && 'Security verification failed. Please try again.'}
+                        {!(emailError || turnstileError) && serverError}
+                      </p>
+                    )}
+                  </form>
+
+                  <p className="mono-wide text-offwhite/60" style={{ fontSize: '11px' }}>
+                    Unsubscribe any time. We respect your inbox
+                  </p>
+                </>
               )}
-            </form>
-          )}
+            </div>
+
+          </div>
         </div>
       </section>
     </>
   )
+}
+
+
+export const cmsSchema: BlockSchema = {
+  type: 'newsletter',
+  label: 'Newsletter',
+  icon: 'Mail',
+  fields: [
+    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'THE PAPER TRAIL' },
+    { key: 'headingContent', label: 'Heading', type: 'text', span: 'full', placeholder: 'One sharp idea on design & building, every two weeks' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full', description: 'Short subheading below the main heading' },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'newsletter',
+    preheadingContent: '',
+    headingContent: '',
+    bodyContent: '',
+  }),
 }

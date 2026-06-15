@@ -20,7 +20,7 @@
       "!**/public",
       "!.github",
       "!.vercel",
-      "!pnpm-lock.yaml",
+      "!bun.lockb",
       "!bun.lock",
       "!**/*.md",
       "!**/*.mdx",

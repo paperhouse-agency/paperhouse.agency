@@ -1,24 +1,54 @@
 'use client'
 
+import type { BlockSchema } from '@/libs/cms/block-schema'
 import { useState } from 'react'
 import { Image } from '@/components/image'
 import { Button } from '@/components/button'
 import { ContentWithButton } from '@/components/content-with-button'
 
+export interface SplitHeroButton {
+  label: string
+  size?: 'sm' | 'md' | 'lg'
+  color?: 'primary' | 'secondary' | 'neutral'
+  hasIcon?: boolean
+  url?: string
+}
+
+export interface SplitHeroBlockProps {
+  headingContent?: string
+  bodyContent?: string
+  videoUrl?: string
+  videoPosterImage?: { src: string; alt: string }
+  buttons?: SplitHeroButton[]
+}
+
 function VideoEmbed({
+  videoUrl,
+  posterSrc,
+  posterAlt,
   isPlaying,
   onPlay,
 }: {
+  videoUrl: string
+  posterSrc: string
+  posterAlt: string
   isPlaying: boolean
   onPlay: () => void
 }) {
-  if (isPlaying) {
+  if (isPlaying && videoUrl) {
+    let embedUrl = videoUrl
+    if (videoUrl.includes('youtube.com/watch')) {
+      embedUrl = `${videoUrl.replace('watch?v=', 'embed/')}?autoplay=1`
+    } else if (videoUrl.includes('youtu.be/')) {
+      embedUrl = `${videoUrl.replace('youtu.be/', 'www.youtube.com/embed/')}?autoplay=1`
+    }
+
     return (
       <iframe
         width="100%"
         height="100%"
-        src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-        title="YouTube video player"
+        src={embedUrl}
+        title="Video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
         loading="lazy"
@@ -33,13 +63,15 @@ function VideoEmbed({
       onClick={onPlay}
       className="relative w-full h-full group cursor-pointer"
     >
-      <Image
-        src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&h=506&fit=crop"
-        alt="Video poster"
-        fill
-        priority
-        className="object-cover"
-      />
+      {posterSrc && (
+        <Image
+          src={posterSrc}
+          alt={posterAlt || 'Video poster'}
+          fill
+          priority
+          className="object-cover"
+        />
+      )}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-20 h-20 rounded-full bg-text/60 flex items-center justify-center group-hover:scale-110 transition-transform">
           <div className="w-0 h-0 ml-1 border-t-12 border-t-transparent border-l-20 border-l-primary border-b-12 border-b-transparent" />
@@ -49,31 +81,34 @@ function VideoEmbed({
   )
 }
 
-export function SplitHeroBlock() {
+export function SplitHeroBlock({
+  headingContent = 'AI—Driven <span>creative</span> \nagency, based in \nDhaka',
+  bodyContent = 'We help brands and company in marketing solution. As a cause-led digital marketing and brand agency, we harness the power of technology and creativity to drive positive feedback.',
+  videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  videoPosterImage = { src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&h=506&fit=crop', alt: 'Video poster' },
+  buttons = [
+    { label: 'Schedule a call', size: 'lg' },
+    { label: 'Explore Projects', size: 'lg', color: 'neutral', hasIcon: true },
+  ],
+}: SplitHeroBlockProps) {
   const [isPlaying, setIsPlaying] = useState(false)
 
   return (
-    <div className="wrapper mx-auto py-24 px-5">
-      {/* Desktop: original 2-column split layout */}
+    <div className="wrapper mx-auto min-h-screen flex flex-col justify-center pt-28 pb-10 px-5">
       <div className="desktop-only grid grid-cols-2">
         <ContentWithButton
           headingType="h1"
-          headingContent="AI—Driven <span>creative</span> \nagency, based in \nDhaka"
+          headingContent={headingContent}
           headingClassName="heading-1"
-          bodyContent="We help brands and company in marketing solution. As a cause-led digital marketing and brand agency, we harness the power of technology and creativity to drive positive feedback."
-          buttons={[
-            { label: 'Schedule a call', size: 'lg' },
-            {
-              label: 'Explore Projects',
-              size: 'lg',
-              color: 'neutral',
-              hasIcon: true,
-            },
-          ]}
+          bodyContent={bodyContent}
+          buttons={buttons}
         />
         <div className="flex items-center justify-end">
           <div className="relative w-[450px] h-[300px] rounded-[20px] overflow-hidden">
             <VideoEmbed
+              videoUrl={videoUrl ?? ''}
+              posterSrc={videoPosterImage?.src ?? ''}
+              posterAlt={videoPosterImage?.alt ?? ''}
               isPlaying={isPlaying}
               onPlay={() => setIsPlaying(true)}
             />
@@ -81,7 +116,6 @@ export function SplitHeroBlock() {
         </div>
       </div>
 
-      {/* Mobile: centered single-column — title > desc > vertical buttons > video */}
       <div className="mobile-only flex flex-col items-center text-center gap-6">
         <h1 className="heading-1">
           AI—Driven <span className="text-primary">creative</span>
@@ -90,21 +124,58 @@ export function SplitHeroBlock() {
           <br />
           Dhaka
         </h1>
-        <p className="body-large text-text/60">
-          We help brands and company in marketing solution. As a cause-led
-          digital marketing and brand agency, we harness the power of technology
-          and creativity to drive positive feedback.
-        </p>
+        <p className="body-large text-text/60">{bodyContent}</p>
         <div className="flex flex-row items-center gap-4">
-          <Button size="md">Schedule a call</Button>
-          <Button size="md" color="neutral" hasIcon>
-            Projects
-          </Button>
+          {buttons.map((btn) => (
+            <Button key={btn.label} size={btn.size ?? 'md'} color={btn.color} hasIcon={btn.hasIcon} url={btn.url}>
+              {btn.label}
+            </Button>
+          ))}
         </div>
         <div className="relative w-full aspect-video rounded-[20px] overflow-hidden">
-          <VideoEmbed isPlaying={isPlaying} onPlay={() => setIsPlaying(true)} />
+          <VideoEmbed
+            videoUrl={videoUrl ?? ''}
+            posterSrc={videoPosterImage?.src ?? ''}
+            posterAlt={videoPosterImage?.alt ?? ''}
+            isPlaying={isPlaying}
+            onPlay={() => setIsPlaying(true)}
+          />
         </div>
       </div>
     </div>
   )
+}
+
+export const cmsSchema: BlockSchema = {
+  type: 'split-hero',
+  label: 'Split Hero',
+  icon: 'PanelLeftOpen',
+  fields: [
+    { key: 'headingContent', label: 'Heading', type: 'text', required: true, span: 'full', placeholder: 'AI—Driven <span>creative</span> agency', description: 'Wrap text in <span> for accent. Use \\n for line breaks.' },
+    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
+    { key: 'videoUrl', label: 'Video URL', type: 'url', span: 'full', placeholder: 'https://youtube.com/watch?v=...', description: 'YouTube or direct video URL' },
+    { key: 'videoPosterImage', label: 'Video Poster', type: 'image', span: 'full', description: 'Thumbnail shown before the video plays' },
+    {
+      key: 'buttons',
+      label: 'Buttons',
+      type: 'array',
+      span: 'full',
+      fields: [
+        { key: 'label', label: 'Label', type: 'text', required: true },
+        { key: 'url', label: 'URL', type: 'url' },
+        { key: 'size', label: 'Size', type: 'select', options: [{ value: 'sm', label: 'Small' }, { value: 'md', label: 'Medium' }, { value: 'lg', label: 'Large' }] },
+        { key: 'color', label: 'Color', type: 'select', options: [{ value: 'primary', label: 'Primary' }, { value: 'secondary', label: 'Secondary' }, { value: 'neutral', label: 'Neutral' }] },
+        { key: 'hasIcon', label: 'Show arrow icon', type: 'boolean' },
+      ],
+    },
+  ],
+  defaultData: () => ({
+    _id: crypto.randomUUID(),
+    _type: 'split-hero',
+    headingContent: 'AI—Driven <span>creative</span> \nagency, based in \nDhaka',
+    bodyContent: '',
+    videoUrl: '',
+    videoPosterImage: { src: '', alt: '' },
+    buttons: [],
+  }),
 }
