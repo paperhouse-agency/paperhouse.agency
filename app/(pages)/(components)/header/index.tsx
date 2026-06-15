@@ -5,13 +5,7 @@ import { useState } from 'react'
 
 import { Button } from '@/components/button'
 import { Link } from '@/components/link'
-
-const EXPLORE_LINKS = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Services', href: '/services' },
-  { label: 'Process', href: '/process' },
-]
+import type { CmsNavItem } from '@/libs/cms/types'
 
 const PRODUCTS = [
   {
@@ -51,7 +45,7 @@ function MenuIcon({ isOpen }: { isOpen: boolean }) {
   )
 }
 
-export function Header() {
+export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => setIsOpen((v) => !v)
@@ -125,14 +119,15 @@ export function Header() {
               <div className="px-6 py-6 dt:px-8 dt:py-7 border-b border-bluishgray dt:border-b-0">
                 <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">Explore</p>
                 <ul className="flex flex-col gap-2">
-                  {EXPLORE_LINKS.map((link) => (
-                    <li key={link.label}>
+                  {navItems.map((item) => (
+                    <li key={item.id}>
                       <Link
-                        href={link.href}
+                        href={item.url}
                         className="heading-4 text-text hover:text-primary transition-colors block"
                         onClick={close}
+                        {...(item.openInNewTab && { target: '_blank', rel: 'noopener noreferrer' })}
                       >
-                        {link.label}
+                        {item.label}
                       </Link>
                     </li>
                   ))}

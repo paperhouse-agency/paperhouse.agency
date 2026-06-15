@@ -21,14 +21,8 @@
       },
       {
         "id": "7d1e1c02-e0da-4cb4-ab88-c838eddbf3e1",
-        "label": "Contact",
-        "url": "/contact",
-        "openInNewTab": false
-      },
-      {
-        "id": "79c5157c-6f9d-473a-8aac-3365f81f0914",
-        "label": "New Link",
-        "url": "/new-link",
+        "label": "Blog",
+        "url": "/blog",
         "openInNewTab": false
       }
     ]
@@ -123,5 +117,5 @@
       }
     ]
   },
-  "updatedAt": "2026-06-15T07:27:53.529Z"
+  "updatedAt": "2026-06-15T08:31:27.643Z"
 }

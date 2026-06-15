@@ -1,3 +1,4 @@
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
@@ -39,5 +40,6 @@ export async function PUT(req: Request) {
   }
 
   await writeNavigation(nav)
+  revalidateTag('cms-navigation', {})
   return NextResponse.json({ navigation: nav })
 }
