@@ -186,9 +186,6 @@ import {
   REMOVAL_GUIDE 
 } from '@/libs/cleanup-integrations'
 
-// Get specific integration removal guide
-const sanityGuide = getRemovalGuide('Sanity')
-
 // Print all cleanup instructions
 printCleanupInstructions()
 ```
@@ -217,25 +214,14 @@ const data = await fetchJSON<{ name: string }>('https://api.example.com/user', {
 Generate consistent metadata for SEO:
 
 ```typescript
-import { generatePageMetadata, generateSanityMetadata } from '@/libs/metadata'
+import { generatePageMetadata } from '@/libs/metadata'
 
-// For custom pages
 export async function generateMetadata({ params }) {
   return generatePageMetadata({
     title: 'My Page',
     description: 'Page description',
     url: `/page/${params.slug}`,
     image: { url: '/og-image.jpg' },
-  })
-}
-
-// For Sanity CMS pages
-export async function generateMetadata({ params }) {
-  const { data } = await sanityFetch({ query: pageQuery, params })
-  
-  return generateSanityMetadata({
-    document: data,
-    url: `/sanity/${params.slug}`,
   })
 }
 ```
@@ -251,4 +237,5 @@ import { validateEnv } from '@/libs/validate-env'
 import { getRemovalGuide } from '@/libs/cleanup-integrations'
 import { fetchWithTimeout } from '@/libs/fetch-with-timeout'
 import { generatePageMetadata } from '@/libs/metadata'
+import { getRemovalGuide } from '@/libs/cleanup-integrations'
 ```

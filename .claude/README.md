@@ -25,7 +25,7 @@ Comprehensive quick reference guide for Claude Code including:
 1. **main.mdc** - Tech stack, React 19.2, React Compiler, cross-cutting concerns
 2. **components.mdc** - React patterns, WebGL/Three.js, Activity component
 3. **styling.mdc** - CSS Modules, Tailwind v4, responsive design, custom utilities
-4. **integrations.mdc** - Sanity CMS, HubSpot, API best practices
+4. **integrations.mdc** - HubSpot, API best practices
 5. **architecture.mdc** - State management, routing, performance, security
 
 ## How It Works
@@ -51,7 +51,6 @@ When Claude Code operates in this repository:
 ✅ **Gate debug UI components** (not auto-stripped in production)
 ✅ **Validate env vars** with `@/libs/validate-env`
 ✅ **Use `fetchWithTimeout`** for external API calls
-✅ **Sanity GROQ**: Use `defineQuery` with `SCREAMING_SNAKE_CASE`
 ✅ **Bun is the package manager** for all operations
 
 ## Quick Command Reference
@@ -62,9 +61,6 @@ bun dev                    # Start dev server
 bun build                  # Production build
 bun lint                   # Run linter
 bun typecheck              # Type checking
-
-# Sanity
-bun sanity:typegen         # Generate types after schema changes
 
 # Analysis
 bun build:analyze          # Bundle size analysis

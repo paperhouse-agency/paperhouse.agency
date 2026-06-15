@@ -11,7 +11,7 @@ The rules are organized into 5 focused files (2,020 lines total):
 1. **`main.mdc`** - Technology stack, React 19.2 features, React Compiler, Image optimization, cross-cutting concerns
 2. **`components.mdc`** - React component patterns, WebGL/Three.js integration, Activity component
 3. **`styling.mdc`** - CSS Modules, Tailwind CSS v4, responsive design, custom utilities (`dr-*`)
-4. **`integrations.mdc`** - Sanity CMS (GROQ queries, schema), HubSpot, API best practices
+4. **`integrations.mdc`** - HubSpot, API best practices
 5. **`architecture.mdc`** - State management, routing, performance, security, testing, code quality
 
 **Quick reference guide** is in `.claude/rules/README.md` - consult it to find relevant sections.
@@ -57,12 +57,6 @@ bun validate:env           # Check environment variables
 bun cleanup:integrations   # List unused integrations for removal
 ```
 
-### Sanity CMS
-```bash
-bun sanity:schema-extract  # Extract Sanity schema
-bun sanity:typegen         # Generate TypeScript types from Sanity schema
-```
-
 ### Analysis & Testing
 ```bash
 bun build:analyze          # Analyze bundle size
@@ -90,7 +84,7 @@ bun build-storybook        # Build Storybook for production
 ├── blocks/                 # Reusable page sections/blocks
 ├── components/             # Reusable UI components
 ├── hooks/                  # Custom React hooks
-├── integrations/           # Third-party integrations (Sanity, HubSpot)
+├── integrations/           # Third-party integrations (HubSpot)
 ├── libs/                   # Utility functions and helpers
 ├── orchestra/              # Debug tools (dev-only, toggle with Cmd+O)
 ├── styles/                 # Global styles, config, and generation scripts
@@ -251,10 +245,6 @@ async function fetchData(id: string) {
 - Auto-excluded from production builds
 
 ### Integrations
-- **Sanity CMS**: Headless CMS with draft mode
-  - Requires `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_WRITE_TOKEN`
-  - Draft mode routes: `/api/draft-mode/enable`, `/api/draft-mode/disable`
-  - Run `bun sanity:typegen` after schema changes
 - **HubSpot**: Forms integration
   - Requires `HUBSPOT_ACCESS_TOKEN`, `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`
 
@@ -349,49 +339,6 @@ components/scene/
   scene.module.css
 ```
 
-### Sanity GROQ Queries (integrations.mdc)
-```tsx
-// ALWAYS use defineQuery and SCREAMING_SNAKE_CASE
-import { defineQuery } from 'groq'
-
-export const PAGE_QUERY = defineQuery(`*[
-  _type == "page"
-  && slug.current == $slug
-][0]{
-  _id,
-  title,
-  content,
-  author->{
-    _id,
-    name
-  }
-}`)
-```
-
-### Sanity Schema Patterns (integrations.mdc)
-```tsx
-// Use defineType, defineField, defineArrayMember
-import { defineType, defineField } from 'sanity'
-
-export const pageType = defineType({
-  name: 'page',
-  type: 'document',
-  fields: [
-    defineField({
-      name: 'title',
-      type: 'string',
-      validation: (rule) => rule.required().error('Title is required'),
-    }),
-    // Always array of references, never single reference
-    defineField({
-      name: 'categories',
-      type: 'array',
-      of: [{ type: 'reference', to: { type: 'category' } }],
-    }),
-  ],
-})
-```
-
 ### API Resilience (integrations.mdc)
 ```tsx
 import { fetchWithTimeout } from '@/libs/fetch-with-timeout'
@@ -459,8 +406,6 @@ function Input({ ref, ...props }: { ref?: React.Ref<HTMLInputElement> }) {
 import { validateEnv } from '@/libs/validate-env'
 
 validateEnv([
-  'NEXT_PUBLIC_SANITY_PROJECT_ID',
-  'SANITY_API_WRITE_TOKEN',
   'HUBSPOT_ACCESS_TOKEN'
 ])
 ```

@@ -13,7 +13,6 @@ A custom CMS built natively into the Next.js 16 app. Lives at `/admin`, stores p
 | Phase | Description | Status |
 |-------|-------------|--------|
 | Foundation | Types, storage, auth helpers, env config | ✅ Done |
-| Sanity removal | Delete integrations, clean layout | ✅ Done |
 | Auth routes + middleware | Login, TOTP, logout, rate limiting | ✅ Done |
 | Block registry + renderer | All 15 block schemas, BlockRenderer | ✅ Done |
 | CRUD API | Pages + users + images | ✅ Done |
@@ -43,8 +42,6 @@ A custom CMS built natively into the Next.js 16 app. Lives at `/admin`, stores p
 | `@dnd-kit/utilities` | DnD CSS transform helpers |
 | `zustand` | Editor client-side state |
 | `class-variance-authority` | Button variant system |
-
-**Note:** Sanity, next-sanity, and all `@sanity/*` packages have been removed.
 
 ---
 

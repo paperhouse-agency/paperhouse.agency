@@ -46,8 +46,7 @@ satus/
 ├── components/             # Reusable UI components
 ├── hooks/                  # Custom React hooks
 ├── integrations/           # Third-party service integrations
-│   ├── hubspot/           # HubSpot forms integration
-│   └── sanity/            # Headless CMS
+│   └── hubspot/           # HubSpot forms integration
 ├── libs/                   # Utility functions and helpers
 ├── orchestra/              # Debug and development tools
 │   ├── grid/              # Grid overlay
@@ -75,12 +74,6 @@ Remove unused integrations to reduce bundle size (~250-400KB potential savings).
 Create a `.env.local` file with:
 
 ```env
-# Sanity CMS
-NEXT_PUBLIC_SANITY_PROJECT_ID="your-project-id"
-NEXT_PUBLIC_SANITY_DATASET="production"
-NEXT_PUBLIC_SANITY_STUDIO_URL="http://localhost:3000/studio"
-SANITY_API_WRITE_TOKEN="your-write-token"
-
 # HubSpot
 HUBSPOT_ACCESS_TOKEN="your-access-token"
 NEXT_PUBLIC_HUBSPOT_PORTAL_ID="your-portal-id"
@@ -111,7 +104,6 @@ vercel
 
 ### Pre-deployment Checklist
 - [ ] Environment variables configured
-- [ ] Sanity webhooks set up
 - [ ] GSAP license valid (if using premium)
 - [ ] SSL certificates configured
 - [ ] Performance metrics validated
@@ -129,10 +121,6 @@ Supports any Next.js-compatible platform: Vercel, Netlify, AWS Amplify, Google C
 **GSAP & Animation**
 - Add `<GSAPRuntime />` in `app/layout.tsx` for ScrollTrigger + Lenis
 - No manual ticker setup needed
-
-**Sanity**
-- Requires draft mode routes: `/api/draft-mode/enable` and `/api/draft-mode/disable`
-- Must set `NEXT_PUBLIC_BASE_URL` for preview resolution
 
 **Orchestra**
 - Toggle debug tools with `Cmd/Ctrl + O`
