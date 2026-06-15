@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
-import { readPageById, renamePage, deletePage, isSlugTaken, slugToRepoPath } from '@/libs/cms/storage'
-import { isGitHubConfigured, deleteFile } from '@/libs/cms/github'
+import { readPageById, renamePage, deletePage, isSlugTaken } from '@/libs/cms/storage'
 import type { CmsPage } from '@/libs/cms/types'
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -91,16 +90,5 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   await deletePage(existing.slug)
-
-  // Remove from GitHub repo so the build no longer includes it
-  if (isGitHubConfigured()) {
-    const repoPath = slugToRepoPath(existing.slug)
-    try {
-      await deleteFile(repoPath, `cms: delete "${existing.title}" (${repoPath})`)
-    } catch (err) {
-      console.error('GitHub delete failed:', err)
-    }
-  }
-
   return NextResponse.json({ ok: true })
 }

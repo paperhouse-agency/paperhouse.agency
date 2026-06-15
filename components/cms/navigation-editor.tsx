@@ -279,10 +279,10 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
         <div>
           <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-primary mb-[10px] block">Settings</span>
           <h1 className="font-heading font-normal text-[40px] leading-none text-text m-0">
-            Navigation<span className="text-primary">.</span>
+            Site Slots<span className="text-primary">.</span>
           </h1>
           <p className="font-body text-[15px] text-[var(--chrome-muted)] mt-[10px] mb-0">
-            Manage header menu, footer columns, and legal links.
+            Manage header navigation, footer columns, and legal links.
           </p>
         </div>
         {canEdit && (
