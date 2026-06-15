@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
 import { readPageById, renamePage, deletePage, isSlugTaken, slugToRepoPath } from '@/libs/cms/storage'
-import { isGitHubConfigured, commitFile, deleteFile } from '@/libs/cms/github'
+import { isGitHubConfigured, deleteFile } from '@/libs/cms/github'
 import type { CmsPage } from '@/libs/cms/types'
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -68,23 +68,6 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   }
 
   await renamePage(existing.slug, updated)
-
-  // Push to GitHub when status changes (publish or unpublish)
-  const statusChanged = status !== undefined && status !== existing.status
-  if (statusChanged && isGitHubConfigured()) {
-    const action = updated.status === 'published' ? 'publish' : 'unpublish'
-    const repoPath = slugToRepoPath(updated.slug)
-    try {
-      await commitFile(
-        repoPath,
-        JSON.stringify(updated, null, 2),
-        `cms: ${action} "${updated.title}" (${repoPath})`,
-      )
-    } catch (err) {
-      // GitHub push failing should not roll back the local save
-      console.error('GitHub commit failed:', err)
-    }
-  }
 
   return NextResponse.json(updated)
 }

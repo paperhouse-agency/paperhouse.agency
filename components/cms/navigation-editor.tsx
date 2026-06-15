@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/button'
 import type { CmsFooterColumn, CmsNavigation, CmsNavItem } from '@/libs/cms/types'
+import { useCmsStatus } from '@/libs/cms/status-store'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -125,11 +126,17 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { markSaving, markSaved, markDirty, markError } = useCmsStatus()
+
+  function setNavDirty(updater: (prev: CmsNavigation) => CmsNavigation) {
+    setNav(updater)
+    markDirty()
+  }
 
   // ── Header items ────────────────────────────────────────────────────────────
 
   function updateHeaderItem(idx: number, updated: CmsNavItem) {
-    setNav((prev) => {
+    setNavDirty((prev) => {
       const items = [...prev.header.items]
       items[idx] = updated
       return { ...prev, header: { items } }
@@ -137,14 +144,14 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   }
 
   function deleteHeaderItem(idx: number) {
-    setNav((prev) => {
+    setNavDirty((prev) => {
       const items = prev.header.items.filter((_, i) => i !== idx)
       return { ...prev, header: { items } }
     })
   }
 
   function addHeaderItem() {
-    setNav((prev) => ({
+    setNavDirty((prev) => ({
       ...prev,
       header: { items: [...prev.header.items, emptyItem()] },
     }))
@@ -153,7 +160,7 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   // ── Footer columns ──────────────────────────────────────────────────────────
 
   function updateColumnHeading(colIdx: number, heading: string) {
-    setNav((prev) => {
+    setNavDirty((prev) => {
       const columns = prev.footer.columns.map((col, i) =>
         i === colIdx ? { ...col, heading } : col
       )
@@ -162,7 +169,7 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   }
 
   function updateColumnItem(colIdx: number, itemIdx: number, updated: CmsNavItem) {
-    setNav((prev) => {
+    setNavDirty((prev) => {
       const columns = prev.footer.columns.map((col, i) => {
         if (i !== colIdx) return col
         const items = [...col.items]
@@ -174,7 +181,7 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   }
 
   function deleteColumnItem(colIdx: number, itemIdx: number) {
-    setNav((prev) => {
+    setNavDirty((prev) => {
       const columns = prev.footer.columns.map((col, i) => {
         if (i !== colIdx) return col
         return { ...col, items: col.items.filter((_, j) => j !== itemIdx) }
@@ -184,7 +191,7 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   }
 
   function addColumnItem(colIdx: number) {
-    setNav((prev) => {
+    setNavDirty((prev) => {
       const columns = prev.footer.columns.map((col, i) => {
         if (i !== colIdx) return col
         return { ...col, items: [...col.items, emptyItem()] }
@@ -194,7 +201,7 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   }
 
   function deleteColumn(colIdx: number) {
-    setNav((prev) => {
+    setNavDirty((prev) => {
       const columns = prev.footer.columns.filter((_, i) => i !== colIdx)
       return { ...prev, footer: { ...prev.footer, columns } }
     })
@@ -202,7 +209,7 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
 
   function addColumn() {
     const col: CmsFooterColumn = { id: uid(), heading: '', items: [] }
-    setNav((prev) => ({
+    setNavDirty((prev) => ({
       ...prev,
       footer: { ...prev.footer, columns: [...prev.footer.columns, col] },
     }))
@@ -211,7 +218,7 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   // ── Footer legal ────────────────────────────────────────────────────────────
 
   function updateLegalItem(idx: number, updated: CmsNavItem) {
-    setNav((prev) => {
+    setNavDirty((prev) => {
       const legal = [...prev.footer.legal]
       legal[idx] = updated
       return { ...prev, footer: { ...prev.footer, legal } }
@@ -219,14 +226,14 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   }
 
   function deleteLegalItem(idx: number) {
-    setNav((prev) => ({
+    setNavDirty((prev) => ({
       ...prev,
       footer: { ...prev.footer, legal: prev.footer.legal.filter((_, i) => i !== idx) },
     }))
   }
 
   function addLegalItem() {
-    setNav((prev) => ({
+    setNavDirty((prev) => ({
       ...prev,
       footer: { ...prev.footer, legal: [...prev.footer.legal, emptyItem()] },
     }))
@@ -237,6 +244,7 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   async function handleSave() {
     setSaving(true)
     setError(null)
+    markSaving()
     try {
       const res = await fetch('/api/admin/settings', {
         method: 'PUT',
@@ -252,9 +260,11 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
       }
       setSaved(true)
       setTimeout(() => setSaved(false), 2500)
+      markSaved()
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save')
+      markError()
     } finally {
       setSaving(false)
     }

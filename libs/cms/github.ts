@@ -72,3 +72,65 @@ export async function deleteFile(repoPath: string, message: string): Promise<voi
     throw new Error(`GitHub API error: ${err.message ?? res.status}`)
   }
 }
+
+// Commits multiple files in a single git commit using the Tree API.
+// This triggers only one Vercel build regardless of how many files changed.
+export async function commitAllFiles(
+  files: { path: string; content: string }[],
+  message: string,
+): Promise<void> {
+  if (!isGitHubConfigured()) throw new Error('GitHub not configured')
+
+  // 1. Get the latest commit SHA on the branch
+  const refRes = await fetch(`${API}/repos/${OWNER}/${REPO}/git/ref/heads/${BRANCH}`, {
+    headers: baseHeaders(),
+  })
+  if (!refRes.ok) throw new Error('GitHub: failed to get branch ref')
+  const refData = (await refRes.json()) as { object: { sha: string } }
+  const latestCommitSha = refData.object.sha
+
+  // 2. Get the tree SHA from that commit
+  const commitRes = await fetch(`${API}/repos/${OWNER}/${REPO}/git/commits/${latestCommitSha}`, {
+    headers: baseHeaders(),
+  })
+  if (!commitRes.ok) throw new Error('GitHub: failed to get commit')
+  const commitData = (await commitRes.json()) as { tree: { sha: string } }
+  const baseTreeSha = commitData.tree.sha
+
+  // 3. Create a new tree with all the files
+  const tree = files.map(({ path, content }) => ({
+    path,
+    mode: '100644',
+    type: 'blob',
+    content,
+  }))
+
+  const treeRes = await fetch(`${API}/repos/${OWNER}/${REPO}/git/trees`, {
+    method: 'POST',
+    headers: baseHeaders(),
+    body: JSON.stringify({ base_tree: baseTreeSha, tree }),
+  })
+  if (!treeRes.ok) throw new Error('GitHub: failed to create tree')
+  const treeData = (await treeRes.json()) as { sha: string }
+
+  // 4. Create a new commit
+  const newCommitRes = await fetch(`${API}/repos/${OWNER}/${REPO}/git/commits`, {
+    method: 'POST',
+    headers: baseHeaders(),
+    body: JSON.stringify({
+      message,
+      tree: treeData.sha,
+      parents: [latestCommitSha],
+    }),
+  })
+  if (!newCommitRes.ok) throw new Error('GitHub: failed to create commit')
+  const newCommitData = (await newCommitRes.json()) as { sha: string }
+
+  // 5. Update the branch ref
+  const updateRes = await fetch(`${API}/repos/${OWNER}/${REPO}/git/refs/heads/${BRANCH}`, {
+    method: 'PATCH',
+    headers: baseHeaders(),
+    body: JSON.stringify({ sha: newCommitData.sha }),
+  })
+  if (!updateRes.ok) throw new Error('GitHub: failed to update branch ref')
+}

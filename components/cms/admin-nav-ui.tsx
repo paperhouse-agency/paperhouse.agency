@@ -3,6 +3,8 @@
 import { usePathname } from 'next/navigation'
 import { Link } from '@/components/link'
 import { LogoutButton } from './logout-button'
+import { PublishButton } from './publish-button'
+import { CmsSaveStatus } from './cms-save-status'
 
 export function AdminNavUI({ showUsers, showNavigation, initials }: { showUsers: boolean; showNavigation: boolean; initials: string }) {
   const pathname = usePathname()
@@ -53,6 +55,8 @@ export function AdminNavUI({ showUsers, showNavigation, initials }: { showUsers:
       </div>
 
       <div className="flex items-center gap-[12px]">
+        <CmsSaveStatus />
+        <PublishButton />
         {initials && (
           <span className="w-[30px] h-[30px] rounded-full bg-text text-offwhite font-mono text-[11px] inline-flex items-center justify-center font-medium flex-none tracking-[0.02em]">{initials}</span>
         )}
