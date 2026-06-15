@@ -44,8 +44,17 @@ export function isHubSpotConfigured(): boolean {
 export function isAnalyticsConfigured(): boolean {
   return Boolean(
     process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ||
-      process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID
+      process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID ||
+      process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
   )
+}
+
+/**
+ * Check if Microsoft Clarity is configured
+ * Requires: NEXT_PUBLIC_CLARITY_PROJECT_ID
+ */
+export function isClarityConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID)
 }
 
 /**
@@ -68,6 +77,7 @@ export function getConfiguredIntegrations(): string[] {
   if (isSanityConfigured()) integrations.push('Sanity')
   if (isHubSpotConfigured()) integrations.push('HubSpot')
   if (isTurnstileConfigured()) integrations.push('Turnstile')
+  if (isClarityConfigured()) integrations.push('Clarity')
 
   return integrations
 }
@@ -81,6 +91,7 @@ export function getUnconfiguredIntegrations(): string[] {
   if (!isSanityConfigured()) integrations.push('Sanity')
   if (!isHubSpotConfigured()) integrations.push('HubSpot')
   if (!isTurnstileConfigured()) integrations.push('Turnstile')
+  if (!isClarityConfigured()) integrations.push('Clarity')
 
   return integrations
 }

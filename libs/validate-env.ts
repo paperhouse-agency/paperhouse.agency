@@ -126,6 +126,12 @@ const ENV_VARIABLES: EnvValidation[] = [
     description: 'Facebook App ID for Open Graph',
     integration: 'Analytics',
   },
+  {
+    name: 'NEXT_PUBLIC_CLARITY_PROJECT_ID',
+    required: false,
+    description: 'Microsoft Clarity project ID for heatmaps and session recordings',
+    integration: 'Analytics',
+  },
 ]
 
 interface ValidationResult {

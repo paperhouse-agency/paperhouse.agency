@@ -33,6 +33,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@gsap/react": "^2.1.2",
     "@hubspot/api-client": "^13.4.0",
+    "@microsoft/clarity": "^1.0.2",
     "@portabletext/react": "^4.0.3",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
