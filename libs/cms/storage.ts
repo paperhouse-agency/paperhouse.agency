@@ -106,29 +106,49 @@ function rowToPage(r: Record<string, unknown>): CmsPage {
   }
 }
 
-// ── Navigation ────────────────────────────────────────────────────────────────
+// ── Slots ─────────────────────────────────────────────────────────────────────
 
-const DEFAULT_NAVIGATION: CmsNavigation = {
-  header: { items: [] },
-  footer: { columns: [], legal: [] },
-  updatedAt: new Date().toISOString(),
-}
-
-export async function readNavigation(): Promise<CmsNavigation> {
+export async function readSlot(id: string): Promise<unknown> {
   await getDb()
-  const { rows } = await sql`SELECT data FROM navigation WHERE id = 1 LIMIT 1`
-  return rows[0] ? (rows[0].data as CmsNavigation) : DEFAULT_NAVIGATION
+  const { rows } = await sql`SELECT data FROM slots WHERE id = ${id} LIMIT 1`
+  return rows[0]?.data ?? null
 }
 
-export async function writeNavigation(nav: CmsNavigation): Promise<void> {
+export async function writeSlot(id: string, data: unknown): Promise<void> {
   await getDb()
   await sql`
-    INSERT INTO navigation (id, data, updated_at)
-    VALUES (1, ${JSON.stringify(nav)}::jsonb, ${nav.updatedAt})
+    INSERT INTO slots (id, data, updated_at)
+    VALUES (${id}, ${JSON.stringify(data)}::jsonb, ${new Date().toISOString()})
     ON CONFLICT (id) DO UPDATE SET
       data       = EXCLUDED.data,
       updated_at = EXCLUDED.updated_at
   `
+}
+
+// ── Navigation (assembled from individual slots) ───────────────────────────────
+
+export async function readNavigation(): Promise<CmsNavigation> {
+  const [headerData, columnsData, legalData] = await Promise.all([
+    readSlot('header/navigation'),
+    readSlot('footer/columns'),
+    readSlot('footer/legal'),
+  ])
+  return {
+    header: (headerData as CmsNavigation['header']) ?? { items: [] },
+    footer: {
+      columns: (columnsData as CmsNavigation['footer']['columns']) ?? [],
+      legal: (legalData as CmsNavigation['footer']['legal']) ?? [],
+    },
+    updatedAt: new Date().toISOString(),
+  }
+}
+
+export async function writeNavigation(nav: CmsNavigation): Promise<void> {
+  await Promise.all([
+    writeSlot('header/navigation', nav.header),
+    writeSlot('footer/columns', nav.footer.columns),
+    writeSlot('footer/legal', nav.footer.legal),
+  ])
 }
 
 // ── Users (Vercel Blob — unchanged) ──────────────────────────────────────────

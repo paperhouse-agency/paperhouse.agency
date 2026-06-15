@@ -12,8 +12,12 @@ const CMS_PUBLIC_PATHS = [
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Maintenance mode
-  if (process.env.MAINTENANCE_MODE === 'true') {
+  // Maintenance mode — skipped in local dev and Vercel preview environments
+  const isDevOrPreview =
+    process.env.NODE_ENV === 'development' ||
+    process.env.VERCEL_ENV === 'preview'
+
+  if (process.env.MAINTENANCE_MODE === 'true' && !isDevOrPreview) {
     const bypassSecret = process.env.MAINTENANCE_BYPASS_SECRET
     const bypassCookie = request.cookies.get('maintenance_bypass')?.value
     if (!(bypassSecret && bypassCookie === bypassSecret)) {

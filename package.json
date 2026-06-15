@@ -16,6 +16,7 @@
     "format": "biome format --write .",
     "analyze": "cross-env ANALYZE=true next build",
     "typecheck": "tsc --noEmit --incremental false",
+    "seed:db": "bun ./scripts/seed-db.ts",
     "validate:env": "tsx ./libs/validate-env.ts",
     "cleanup:integrations": "tsx ./libs/cleanup-integrations.ts",
     "setup:styles": "tsx ./styles/scripts/setup-styles.ts",

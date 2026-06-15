@@ -1,16 +1,19 @@
-import { sql } from '@vercel/postgres'
+import { neon } from '@neondatabase/serverless'
 
-export { sql }
+async function main() {
+  const url = process.env.POSTGRES_URL
+  if (!url) {
+    console.error('Error: POSTGRES_URL is not set')
+    process.exit(1)
+  }
 
-let schemaReady: Promise<void> | null = null
+  const host = url.split('@')[1]?.split('/')[0] ?? 'unknown host'
+  console.log(`\nConnecting to: ${host}`)
 
-export function getDb(): Promise<void> {
-  if (!schemaReady) schemaReady = ensureSchema()
-  return schemaReady
-}
+  const sql = neon(url)
 
-async function ensureSchema(): Promise<void> {
-  await sql`
+  console.log('Creating tables...')
+  await sql(`
     CREATE TABLE IF NOT EXISTS pages (
       id          TEXT         PRIMARY KEY,
       title       TEXT         NOT NULL,
@@ -22,13 +25,20 @@ async function ensureSchema(): Promise<void> {
       created_at  TIMESTAMPTZ  NOT NULL,
       updated_at  TIMESTAMPTZ  NOT NULL
     )
-  `
-  await sql`CREATE UNIQUE INDEX IF NOT EXISTS pages_slug_idx ON pages (slug)`
-  await sql`
+  `)
+  await sql(`CREATE UNIQUE INDEX IF NOT EXISTS pages_slug_idx ON pages (slug)`)
+  await sql(`
     CREATE TABLE IF NOT EXISTS slots (
       id          TEXT         PRIMARY KEY,
       data        JSONB        NOT NULL,
       updated_at  TIMESTAMPTZ  NOT NULL
     )
-  `
+  `)
+  console.log('✓ Done')
+  process.exit(0)
 }
+
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})
