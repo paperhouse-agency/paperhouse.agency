@@ -11,7 +11,7 @@ export function AdminNavUI({ showUsers, showNavigation, initials }: { showUsers:
 
   const onUsers = pathname?.startsWith('/admin/users') ?? false
   const onMedia = pathname?.startsWith('/admin/media') ?? false
-  const onNavigation = pathname?.startsWith('/admin/settings') ?? false
+  const onNavigation = pathname?.startsWith('/admin/slots') ?? false
   const onPages = !(onUsers || onMedia || onNavigation)
 
   return (
@@ -37,10 +37,10 @@ export function AdminNavUI({ showUsers, showNavigation, initials }: { showUsers:
           </Link>
           {showNavigation && (
             <Link
-              href="/admin/settings"
+              href="/admin/slots"
               className={`font-mono text-[12.5px] tracking-[0.06em] px-[14px] py-[7px] rounded-full cursor-pointer no-underline whitespace-nowrap transition-[background,color] duration-150 ${onNavigation ? 'bg-primary text-offwhite' : 'text-[var(--chrome-muted)] bg-transparent hover:text-[#1a1a1a] hover:bg-[rgba(26,26,26,0.06)]'}`}
             >
-              Settings
+              Site Slots
             </Link>
           )}
           {showUsers && (

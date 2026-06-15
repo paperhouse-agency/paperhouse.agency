@@ -4,8 +4,18 @@ import { useState } from 'react'
 
 type State = 'idle' | 'loading' | 'success' | 'error'
 
+const isLocalDev = process.env.NODE_ENV === 'development'
+
 export function PublishButton() {
   const [state, setState] = useState<State>('idle')
+
+  if (isLocalDev) {
+    return (
+      <span className="font-mono text-[11.5px] tracking-[0.04em] text-[var(--chrome-muted)] whitespace-nowrap">
+        Commit changes to publish
+      </span>
+    )
+  }
 
   async function handlePublish() {
     if (state === 'loading') return
