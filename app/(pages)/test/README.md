@@ -11,8 +11,7 @@ Visit: **http://localhost:3000/test**
 ### Phase 1: `cacheSignal`
 
 **Data Fetching Section**
-- ✅ Sanity integration with automatic request cleanup
-- File: `integrations/sanity/fetch.ts`
+- ✅ `cacheSignal` with automatic request cleanup
 
 **Accordion with Activity**
 - ✅ Accordion panels wrapped with `<Activity />`

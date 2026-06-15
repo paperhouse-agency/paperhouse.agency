@@ -1,29 +1,13 @@
 export async function DataFetchingTest() {
-  // Test cacheSignal integration
-  let sanityStatus = 'Not configured'
-
-  try {
-    const { isSanityConfigured } = await import(
-      '@/integrations/check-integration'
-    )
-
-    if (isSanityConfigured()) {
-      sanityStatus = 'Configured ✓ (using cacheSignal)'
-      // You can test an actual fetch here if needed
-      // const { fetchPage } = await import('@/integrations/sanity')
-      // await fetchPage('test')
-    }
-  } catch {
-    sanityStatus = 'Error checking Sanity'
-  }
-
   return (
     <div className="space-y-4 p-6 border border-current/20 rounded-lg">
       <div className="space-y-2">
-        <h3 className="font-bold">Sanity Integration</h3>
-        <p className="text-sm opacity-70">{sanityStatus}</p>
+        <h3 className="font-bold">cacheSignal Integration</h3>
+        <p className="text-sm opacity-70">
+          cacheSignal automatically aborts requests when cache expires
+        </p>
         <code className="text-xs block p-2 bg-black/20 rounded">
-          fetchSanity() now uses cacheSignal for auto-cleanup
+          fetch() with cacheSignal uses auto-cleanup on cache expiry
         </code>
       </div>
 

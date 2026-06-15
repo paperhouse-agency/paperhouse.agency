@@ -16,15 +16,7 @@ app/
 │   ├── home/             # Homepage (/home → rewritten to /)
 │   ├── hubspot/          # HubSpot demo page
 │   ├── r3f/              # React Three Fiber demo
-│   ├── sanity/           # Sanity CMS pages
-│   │   └── [slug]/       # Dynamic article pages
 ├── api/                  # API routes
-│   ├── draft-mode/       # Sanity draft mode toggle
-│   │   ├── enable/
-│   │   └── disable/
-│   └── revalidate/       # Webhook revalidation endpoint
-├── studio/               # Sanity Studio
-│   └── [[...tool]]/
 ├── layout.tsx            # Root layout
 ├── loading.tsx           # Global loading state
 ├── error.tsx             # Error boundary
@@ -50,7 +42,6 @@ app/
 - Imports global styles
 - Sets up fonts, metadata, viewport
 - Includes global providers (RealViewport, GSAPRuntime, ReactTempus)
-- Conditionally loads Sanity visual editing in draft mode
 - Loads Orchestra debug tools (dev only)
 
 **`loading.tsx`** - Global loading UI
@@ -64,23 +55,6 @@ app/
 **`global-error.tsx`** - Critical error handler
 - Fallback for layout.tsx errors
 - Must include `<html>` and `<body>`
-
-## API Routes
-
-**`/api/draft-mode/enable`**
-- Enables Sanity draft mode
-- Sets draft mode cookie
-- Redirects to preview URL
-
-**`/api/draft-mode/disable`**
-- Disables Sanity draft mode
-- Clears draft mode cookie
-- Redirects to current page
-
-**`/api/revalidate`**
-- Webhook endpoint for content revalidation
-- Used by Sanity
-- Requires secret parameter
 
 ## Page Components Pattern
 

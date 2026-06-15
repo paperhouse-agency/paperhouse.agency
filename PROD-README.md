@@ -21,12 +21,6 @@ bun dev
 Required in `.env.local`:
 
 ```env
-# Sanity CMS
-NEXT_PUBLIC_SANITY_PROJECT_ID="your-project-id"
-NEXT_PUBLIC_SANITY_DATASET="production"
-NEXT_PUBLIC_SANITY_STUDIO_URL="http://localhost:3000/studio"
-SANITY_API_WRITE_TOKEN="your-write-token"
-
 # Base URL
 NEXT_PUBLIC_BASE_URL="https://your-domain.com"
 
@@ -35,11 +29,6 @@ GSAP_AUTH_TOKEN="your-gsap-token"
 ```
 
 ## Core Technologies
-
-### Content Management
-- **Sanity Studio**: Access at `/studio`
-- **Revalidation Webhook**: `https://your-domain.com/api/revalidate`
-- [Sanity Documentation](integrations/sanity/README.md)
 
 ### Animation
 - **GSAP**: General animations and timeline sequences
@@ -61,7 +50,7 @@ GSAP_AUTH_TOKEN="your-gsap-token"
 - Three.js, React Three Fiber, Theatre.js, GSAP
 
 **Integrations**
-- Sanity, HubSpot
+- HubSpot
 
 **UI & Styling**
 - CSS Modules, Tailwind CSS, Base UI
@@ -96,7 +85,7 @@ project/
 ├── app/                # Next.js pages and routes
 │   └── (pages)/       # Page components
 ├── components/         # Reusable UI components
-├── integrations/       # Third-party integrations (Sanity, HubSpot)
+├── integrations/       # Third-party integrations (HubSpot)
 ├── libs/              # Utilities and helpers
 ├── styles/            # Styling system
 └── webgl/             # 3D graphics and WebGL
@@ -114,37 +103,14 @@ project/
 
 ### Pre-deployment Checklist
 1. ✅ Environment variables set in Vercel
-2. ✅ Sanity webhooks configured
-3. ✅ GSAP license valid (if using premium)
-4. ✅ SSL certificates configured
-5. ✅ Performance metrics validated
+2. ✅ GSAP license valid (if using premium)
+3. ✅ SSL certificates configured
+4. ✅ Performance metrics validated
 
 ### Monitoring
 - Vercel Analytics Dashboard
 - Lighthouse CI Reports
 - Performance hooks (`hooks/use-performance.ts`)
-
-### Content Updates
-- Content changes via Sanity auto-update via webhooks
-- Code changes deploy via Vercel
-- Manual cache clear: `https://your-domain.com/api/revalidate`
-
-## Common Issues
-
-**Sanity Visual Editor Not Working**
-- Check environment variables
-- Verify draft mode configuration (`/api/draft-mode/enable`)
-- Ensure `NEXT_PUBLIC_BASE_URL` is set
-
-**Style Updates Not Reflecting**
-- Run `bun setup:styles`
-- Clear browser cache
-- Verify deployment status
-
-**Performance Issues**
-- Check Theatre.js sequences
-- Monitor GSAP animations
-- Verify WebGL performance
 
 ---
 

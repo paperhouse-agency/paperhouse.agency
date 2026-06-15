@@ -3,28 +3,7 @@
  *
  * Utilities to check if integrations are configured via environment variables.
  * This helps with tree-shaking unused integrations from the bundle.
- *
- * Usage:
- * ```ts
- * import { isSanityConfigured } from '@/integrations/check-integration'
- *
- * if (isSanityConfigured()) {
- *   // Only import and use Sanity code if configured
- *   const { sanityFetch } = await import('@/integrations/sanity/live')
- * }
- * ```
  */
-
-/**
- * Check if Sanity CMS is configured
- * Requires: NEXT_PUBLIC_SANITY_PROJECT_ID and NEXT_PUBLIC_SANITY_DATASET
- */
-export function isSanityConfigured(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
-      process.env.NEXT_PUBLIC_SANITY_DATASET
-  )
-}
 
 /**
  * Check if HubSpot is configured
@@ -74,7 +53,6 @@ export function isTurnstileConfigured(): boolean {
 export function getConfiguredIntegrations(): string[] {
   const integrations: string[] = []
 
-  if (isSanityConfigured()) integrations.push('Sanity')
   if (isHubSpotConfigured()) integrations.push('HubSpot')
   if (isTurnstileConfigured()) integrations.push('Turnstile')
   if (isClarityConfigured()) integrations.push('Clarity')
@@ -88,7 +66,6 @@ export function getConfiguredIntegrations(): string[] {
 export function getUnconfiguredIntegrations(): string[] {
   const integrations: string[] = []
 
-  if (!isSanityConfigured()) integrations.push('Sanity')
   if (!isHubSpotConfigured()) integrations.push('HubSpot')
   if (!isTurnstileConfigured()) integrations.push('Turnstile')
   if (!isClarityConfigured()) integrations.push('Clarity')
