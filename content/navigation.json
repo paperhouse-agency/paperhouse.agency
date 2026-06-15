@@ -21,7 +21,7 @@
       },
       {
         "id": "7d1e1c02-e0da-4cb4-ab88-c838eddbf3e1",
-        "label": "Blog",
+        "label": "Blog Test",
         "url": "/blog",
         "openInNewTab": false
       }
@@ -117,5 +117,5 @@
       }
     ]
   },
-  "updatedAt": "2026-06-15T09:15:20.476Z"
+  "updatedAt": "2026-06-15T09:14:28.716Z"
 }

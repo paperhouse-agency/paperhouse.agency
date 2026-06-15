@@ -1,13 +1,25 @@
 // GitHub Contents API — used in production to commit content changes to the repo.
 // Requires GITHUB_TOKEN (PAT with `contents: write`), GITHUB_OWNER, GITHUB_REPO.
-// GITHUB_BRANCH defaults to "main".
+// Branch is auto-detected: Vercel sets VERCEL_GIT_COMMIT_REF, local falls back to `git branch`.
 //
 // Only active when GITHUB_TOKEN is present — development falls back to filesystem only.
+
+import { execSync } from 'node:child_process'
+
+function getCurrentBranch(): string {
+  if (process.env.VERCEL_GIT_COMMIT_REF) return process.env.VERCEL_GIT_COMMIT_REF
+  if (process.env.GITHUB_BRANCH) return process.env.GITHUB_BRANCH
+  try {
+    return execSync('git rev-parse --abbrev-ref HEAD', { stdio: 'pipe' }).toString().trim()
+  } catch {
+    return 'dev'
+  }
+}
 
 const TOKEN = process.env.GITHUB_TOKEN
 const OWNER = process.env.GITHUB_OWNER
 const REPO = process.env.GITHUB_REPO
-const BRANCH = process.env.VERCEL_GIT_COMMIT_REF ?? process.env.GITHUB_BRANCH ?? 'dev'
+const BRANCH = getCurrentBranch()
 
 const API = 'https://api.github.com'
 
