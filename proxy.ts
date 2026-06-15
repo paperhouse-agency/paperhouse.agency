@@ -18,11 +18,7 @@ export async function proxy(request: NextRequest) {
     process.env.VERCEL_ENV === 'preview'
 
   if (process.env.MAINTENANCE_MODE === 'true' && !isDevOrPreview) {
-    const bypassSecret = process.env.MAINTENANCE_BYPASS_SECRET
-    const bypassCookie = request.cookies.get('maintenance_bypass')?.value
-    if (!(bypassSecret && bypassCookie === bypassSecret)) {
-      return NextResponse.rewrite(new URL('/maintenance', request.url))
-    }
+    return NextResponse.rewrite(new URL('/maintenance', request.url))
   }
 
   // CMS auth guard
@@ -57,6 +53,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!maintenance|api/maintenance-bypass|_next/static|_next/image|favicon\\.ico).*)',
+    '/((?!maintenance|_next/static|_next/image|favicon\\.ico).*)',
   ],
 }
