@@ -1,50 +1,137 @@
-import fs from 'node:fs/promises'
-import path from 'node:path'
 import { list, put } from '@vercel/blob'
 import bcrypt from 'bcryptjs'
+import { getDb, sql } from './db'
 import type { CmsNavigation, CmsPage, CmsUser } from './types'
 
-// ── Filesystem helpers (pages) ────────────────────────────────────────────────
-// Pages are stored as content/{slug}.json (root slug → index.json)
+// ── Page helpers ──────────────────────────────────────────────────────────────
 
-const CONTENT_DIR = path.join(process.cwd(), 'content')
-
-function validateSlug(slug: string) {
-  if (slug !== '' && !/^[a-z0-9-]+$/.test(slug)) {
-    throw new Error(`Invalid slug: "${slug}"`)
-  }
-  const resolved = path.resolve(CONTENT_DIR, `${slug === '' ? 'index' : slug}.json`)
-  if (!resolved.startsWith(CONTENT_DIR + path.sep) && resolved !== path.join(CONTENT_DIR, 'index.json')) {
-    throw new Error('Path traversal detected')
-  }
+export interface CmsPageMeta {
+  id: string
+  title: string
+  slug: string
+  status: 'draft' | 'published'
+  updatedAt: string
+  blockCount: number
+  author?: string
 }
 
-function slugToFile(slug: string): string {
+export async function listPages(): Promise<CmsPageMeta[]> {
+  await getDb()
+  const { rows } = await sql`
+    SELECT id, title, slug, status, settings, blocks, updated_at
+    FROM pages
+    ORDER BY title ASC
+  `
+  return rows.map((r) => ({
+    id: r.id as string,
+    title: r.title as string,
+    slug: r.slug as string,
+    status: r.status as 'draft' | 'published',
+    updatedAt: r.updated_at as string,
+    blockCount: Array.isArray(r.blocks) ? (r.blocks as unknown[]).length : 0,
+    author: (r.settings as CmsPage['settings'])?.author,
+  }))
+}
+
+export async function readPage(slug: string): Promise<CmsPage | null> {
+  await getDb()
   const name = slug === '' || slug === '/' ? 'index' : slug
-  return path.join(CONTENT_DIR, `${name}.json`)
+  const { rows } = await sql`SELECT * FROM pages WHERE slug = ${name} LIMIT 1`
+  return rows[0] ? rowToPage(rows[0]) : null
 }
 
-// Repo-relative path used for GitHub API calls (e.g. "content/index.json")
-export function slugToRepoPath(slug: string): string {
+export async function readPageById(id: string): Promise<CmsPage | null> {
+  await getDb()
+  const { rows } = await sql`SELECT * FROM pages WHERE id = ${id} LIMIT 1`
+  return rows[0] ? rowToPage(rows[0]) : null
+}
+
+export async function writePage(page: CmsPage): Promise<void> {
+  await getDb()
+  await sql`
+    INSERT INTO pages (id, title, slug, status, seo, settings, blocks, created_at, updated_at)
+    VALUES (
+      ${page.id},
+      ${page.title},
+      ${page.slug},
+      ${page.status},
+      ${JSON.stringify(page.seo)}::jsonb,
+      ${JSON.stringify(page.settings ?? null)}::jsonb,
+      ${JSON.stringify(page.blocks)}::jsonb,
+      ${page.createdAt},
+      ${page.updatedAt}
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      title      = EXCLUDED.title,
+      slug       = EXCLUDED.slug,
+      status     = EXCLUDED.status,
+      seo        = EXCLUDED.seo,
+      settings   = EXCLUDED.settings,
+      blocks     = EXCLUDED.blocks,
+      updated_at = EXCLUDED.updated_at
+  `
+}
+
+export async function renamePage(oldSlug: string, page: CmsPage): Promise<void> {
+  await writePage(page)
+}
+
+export async function deletePage(slug: string): Promise<void> {
+  await getDb()
   const name = slug === '' || slug === '/' ? 'index' : slug
-  return `content/${name}.json`
+  await sql`DELETE FROM pages WHERE slug = ${name}`
 }
 
-async function readFile<T>(filePath: string): Promise<T | null> {
-  try {
-    const raw = await fs.readFile(filePath, 'utf-8')
-    return JSON.parse(raw) as T
-  } catch {
-    return null
+export async function isSlugTaken(slug: string, excludeId?: string): Promise<boolean> {
+  await getDb()
+  const name = slug === '/' ? '' : slug
+  const { rows } = excludeId
+    ? await sql`SELECT id FROM pages WHERE slug = ${name} AND id != ${excludeId} LIMIT 1`
+    : await sql`SELECT id FROM pages WHERE slug = ${name} LIMIT 1`
+  return rows.length > 0
+}
+
+
+function rowToPage(r: Record<string, unknown>): CmsPage {
+  return {
+    id: r.id as string,
+    title: r.title as string,
+    slug: r.slug as string,
+    status: r.status as 'draft' | 'published',
+    seo: (r.seo as CmsPage['seo']) ?? {},
+    settings: r.settings as CmsPage['settings'],
+    blocks: (r.blocks as CmsPage['blocks']) ?? [],
+    createdAt: r.created_at as string,
+    updatedAt: r.updated_at as string,
   }
 }
 
-async function writeFile(filePath: string, data: unknown) {
-  await fs.mkdir(path.dirname(filePath), { recursive: true })
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8')
+// ── Navigation ────────────────────────────────────────────────────────────────
+
+const DEFAULT_NAVIGATION: CmsNavigation = {
+  header: { items: [] },
+  footer: { columns: [], legal: [] },
+  updatedAt: new Date().toISOString(),
 }
 
-// ── Blob helpers (users + images) ────────────────────────────────────────────
+export async function readNavigation(): Promise<CmsNavigation> {
+  await getDb()
+  const { rows } = await sql`SELECT data FROM navigation WHERE id = 1 LIMIT 1`
+  return rows[0] ? (rows[0].data as CmsNavigation) : DEFAULT_NAVIGATION
+}
+
+export async function writeNavigation(nav: CmsNavigation): Promise<void> {
+  await getDb()
+  await sql`
+    INSERT INTO navigation (id, data, updated_at)
+    VALUES (1, ${JSON.stringify(nav)}::jsonb, ${nav.updatedAt})
+    ON CONFLICT (id) DO UPDATE SET
+      data       = EXCLUDED.data,
+      updated_at = EXCLUDED.updated_at
+  `
+}
+
+// ── Users (Vercel Blob — unchanged) ──────────────────────────────────────────
 
 const USERS_BLOB_PATH = 'content/users.json'
 
@@ -64,8 +151,6 @@ async function writeBlobJson(pathname: string, data: unknown) {
     allowOverwrite: true,
   })
 }
-
-// ── Users (Vercel Blob) ───────────────────────────────────────────────────────
 
 export async function readUsers(): Promise<CmsUser[]> {
   return (await readBlobJson<CmsUser[]>(USERS_BLOB_PATH)) ?? []
@@ -113,101 +198,4 @@ export async function ensureRootUser(): Promise<void> {
   }
   await writeUsers([...users, root])
   rootEnsured = true
-}
-
-// ── Pages (filesystem) ────────────────────────────────────────────────────────
-
-export interface CmsPageMeta {
-  id: string
-  title: string
-  slug: string
-  status: 'draft' | 'published'
-  updatedAt: string
-  blockCount: number
-  author?: string
-}
-
-export async function listPages(): Promise<CmsPageMeta[]> {
-  try {
-    const entries = await fs.readdir(CONTENT_DIR)
-    const NON_PAGE_FILES = new Set(['navigation.json'])
-    const pages: CmsPageMeta[] = []
-    for (const entry of entries) {
-      if (!entry.endsWith('.json')) continue
-      if (NON_PAGE_FILES.has(entry)) continue
-      const page = await readFile<CmsPage>(path.join(CONTENT_DIR, entry))
-      if (!page) continue
-      pages.push({
-        id: page.id,
-        title: page.title,
-        slug: page.slug,
-        status: page.status,
-        updatedAt: page.updatedAt,
-        blockCount: Array.isArray(page.blocks) ? page.blocks.length : 0,
-        author: page.settings?.author,
-      })
-    }
-    return pages.sort((a, b) => a.title.localeCompare(b.title))
-  } catch {
-    return []
-  }
-}
-
-export async function readPage(slug: string): Promise<CmsPage | null> {
-  validateSlug(slug)
-  return readFile<CmsPage>(slugToFile(slug))
-}
-
-export async function readPageById(id: string): Promise<CmsPage | null> {
-  const pages = await listPages()
-  const meta = pages.find((p) => p.id === id)
-  if (!meta) return null
-  return readPage(meta.slug)
-}
-
-export async function writePage(page: CmsPage) {
-  validateSlug(page.slug)
-  await writeFile(slugToFile(page.slug), page)
-}
-
-export async function renamePage(oldSlug: string, page: CmsPage) {
-  validateSlug(oldSlug)
-  validateSlug(page.slug)
-  // If slug changed, delete the old file and write at new path
-  if (oldSlug !== page.slug && oldSlug !== '') {
-    await fs.unlink(slugToFile(oldSlug)).catch(() => null)
-  }
-  await writePage(page)
-}
-
-export async function deletePage(slug: string) {
-  validateSlug(slug)
-  await fs.unlink(slugToFile(slug)).catch(() => null)
-}
-
-export async function isSlugTaken(slug: string, excludeId?: string): Promise<boolean> {
-  const pages = await listPages()
-  const normalised = slug === '/' ? '' : slug
-  return pages.some((p) => {
-    const pageSlug = p.slug === '/' ? '' : p.slug
-    return pageSlug === normalised && p.id !== excludeId
-  })
-}
-
-// ── Navigation (filesystem) ───────────────────────────────────────────────────
-
-const NAVIGATION_FILE = path.join(CONTENT_DIR, 'navigation.json')
-
-const DEFAULT_NAVIGATION: CmsNavigation = {
-  header: { items: [] },
-  footer: { columns: [], legal: [] },
-  updatedAt: new Date().toISOString(),
-}
-
-export async function readNavigation(): Promise<CmsNavigation> {
-  return (await readFile<CmsNavigation>(NAVIGATION_FILE)) ?? DEFAULT_NAVIGATION
-}
-
-export async function writeNavigation(nav: CmsNavigation) {
-  await writeFile(NAVIGATION_FILE, nav)
 }
