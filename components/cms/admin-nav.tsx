@@ -11,11 +11,13 @@ export async function AdminNav() {
   const showNavigation = session.role ? canPerform(session.role, 'manage_settings') : false
 
   let initials = ''
+  let name = ''
   if (session.userId) {
     try {
       const users = await readUsers()
       const user = users.find((u) => u.id === session.userId)
       if (user) {
+        name = user.name
         initials = user.name
           .split(' ')
           .map((w) => w[0])
@@ -28,5 +30,5 @@ export async function AdminNav() {
     }
   }
 
-  return <AdminNavUI showUsers={showUsers} showNavigation={showNavigation} initials={initials} />
+  return <AdminNavUI showUsers={showUsers} showNavigation={showNavigation} initials={initials} name={name} />
 }

@@ -19,32 +19,6 @@ const ENV_VARIABLES: EnvValidation[] = [
     description: 'Base URL for the application (defaults to localhost:3000)',
   },
 
-  // Sanity CMS
-  {
-    name: 'NEXT_PUBLIC_SANITY_PROJECT_ID',
-    required: false,
-    description: 'Sanity project ID',
-    integration: 'Sanity',
-  },
-  {
-    name: 'NEXT_PUBLIC_SANITY_DATASET',
-    required: false,
-    description: 'Sanity dataset name',
-    integration: 'Sanity',
-  },
-  {
-    name: 'NEXT_PUBLIC_SANITY_STUDIO_URL',
-    required: false,
-    description: 'Sanity Studio URL',
-    integration: 'Sanity',
-  },
-  {
-    name: 'SANITY_API_WRITE_TOKEN',
-    required: false,
-    description: 'Sanity API write token for draft mode',
-    integration: 'Sanity',
-  },
-
   // HubSpot
   {
     name: 'HUBSPOT_ACCESS_TOKEN',
