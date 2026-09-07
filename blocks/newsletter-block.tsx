@@ -1,5 +1,4 @@
 'use client'
-import type { BlockSchema } from '@/libs/cms/block-schema'
 
 import { useActionState } from 'react'
 import Script from 'next/script'
@@ -24,12 +23,18 @@ export interface NewsletterBlockProps {
   preheadingContent?: string
   headingContent?: string
   bodyContent?: string
+  emailPlaceholder: string
+  subscribeLabel: string
+  subscribingLabel: string
 }
 
 export function NewsletterBlock({
-  preheadingContent = 'THE PAPER TRAIL',
-  headingContent = 'One sharp idea on design & building, every two weeks',
-  bodyContent = "No fluff, no spam. Just the things we're learning in the studio. Join 4,000+ founders and makers",
+  preheadingContent,
+  headingContent,
+  bodyContent,
+  emailPlaceholder,
+  subscribeLabel,
+  subscribingLabel,
 }: NewsletterBlockProps) {
   const [state, formAction, isPending] = useActionState(
     hubspotNewsletterAction,
@@ -82,7 +87,7 @@ export function NewsletterBlock({
                       <input
                         type="email"
                         name="email"
-                        placeholder="you@company.com"
+                        placeholder={emailPlaceholder}
                         required
                         defaultValue={state.inputs?.email}
                         className="flex-1 bg-transparent pl-3 body text-text placeholder:text-text/40 outline-none"
@@ -92,7 +97,7 @@ export function NewsletterBlock({
                         disabled={isPending}
                         className="bg-text text-offwhite body rounded-full px-5 py-2 shrink-0 transition-colors duration-500 hover:bg-text/80 disabled:opacity-60"
                       >
-                        {isPending ? 'Subscribing...' : 'Subscribe'}
+                        {isPending ? subscribingLabel : subscribeLabel}
                       </button>
                     </div>
 
@@ -131,39 +136,4 @@ export function NewsletterBlock({
       </section>
     </>
   )
-}
-
-export const cmsSchema: BlockSchema = {
-  type: 'newsletter',
-  label: 'Newsletter',
-  icon: 'Mail',
-  fields: [
-    {
-      key: 'preheadingContent',
-      label: 'Preheading',
-      type: 'text',
-      placeholder: 'THE PAPER TRAIL',
-    },
-    {
-      key: 'headingContent',
-      label: 'Heading',
-      type: 'text',
-      span: 'full',
-      placeholder: 'One sharp idea on design & building, every two weeks',
-    },
-    {
-      key: 'bodyContent',
-      label: 'Body',
-      type: 'textarea',
-      span: 'full',
-      description: 'Short subheading below the main heading',
-    },
-  ],
-  defaultData: () => ({
-    _id: crypto.randomUUID(),
-    _type: 'newsletter',
-    preheadingContent: '',
-    headingContent: '',
-    bodyContent: '',
-  }),
 }

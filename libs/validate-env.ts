@@ -33,18 +33,19 @@ const ENV_VARIABLES: EnvValidation[] = [
     integration: 'HubSpot',
   },
 
-  // CMS
+  // SEO/GEO — data managed in HQ (hq.paperhouse.agency), read from Neon
   {
-    name: 'CMS_SESSION_SECRET',
+    name: 'POSTGRES_URL',
     required: false,
-    description: 'iron-session AES-256-GCM key (32+ chars)',
-    integration: 'CMS',
+    description: 'Neon Postgres connection string (read-only SEO/GEO data)',
+    integration: 'SEO',
   },
   {
-    name: 'BLOB_READ_WRITE_TOKEN',
+    name: 'REVALIDATE_SECRET',
     required: false,
-    description: 'Vercel Blob read/write token',
-    integration: 'CMS',
+    description:
+      'Shared bearer secret HQ uses to call POST /api/revalidate and GET /api/routes',
+    integration: 'SEO',
   },
 
   // Mailchimp

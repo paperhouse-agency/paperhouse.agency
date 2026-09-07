@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { Button } from '@/components/button'
 import { Image } from '@/components/image'
 import { Link } from '@/components/link'
-import type { CmsNavItem } from '@/libs/cms/types'
+import type { NavItem } from '@/content/navigation'
 
 const PRODUCTS = [
   {
@@ -46,7 +46,7 @@ function MenuIcon({ isOpen }: { isOpen: boolean }) {
   )
 }
 
-export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
+export function Header({ navItems = [] }: { navItems?: NavItem[] }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => setIsOpen((v) => !v)

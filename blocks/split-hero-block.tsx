@@ -1,6 +1,5 @@
 'use client'
 
-import type { BlockSchema } from '@/libs/cms/block-schema'
 import { useState } from 'react'
 import { Image } from '@/components/image'
 import { Button } from '@/components/button'
@@ -15,11 +14,11 @@ export interface SplitHeroButton {
 }
 
 export interface SplitHeroBlockProps {
-  headingContent?: string
-  bodyContent?: string
-  videoUrl?: string
-  videoPosterImage?: { src: string; alt: string }
-  buttons?: SplitHeroButton[]
+  headingContent: string
+  bodyContent: string
+  videoUrl: string
+  videoPosterImage: { src: string; alt: string }
+  buttons: SplitHeroButton[]
 }
 
 function VideoEmbed({
@@ -82,17 +81,11 @@ function VideoEmbed({
 }
 
 export function SplitHeroBlock({
-  headingContent = 'AI—Driven <span>creative</span> \nagency, based in \nDhaka',
-  bodyContent = 'We help brands and company in marketing solution. As a cause-led digital marketing and brand agency, we harness the power of technology and creativity to drive positive feedback.',
-  videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  videoPosterImage = {
-    src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&h=506&fit=crop',
-    alt: 'Video poster',
-  },
-  buttons = [
-    { label: 'Schedule a call', size: 'lg' },
-    { label: 'Explore Projects', size: 'lg', color: 'neutral', hasIcon: true },
-  ],
+  headingContent,
+  bodyContent,
+  videoUrl,
+  videoPosterImage,
+  buttons,
 }: SplitHeroBlockProps) {
   const [isPlaying, setIsPlaying] = useState(false)
 
@@ -153,78 +146,4 @@ export function SplitHeroBlock({
       </div>
     </div>
   )
-}
-
-export const cmsSchema: BlockSchema = {
-  type: 'split-hero',
-  label: 'Split Hero',
-  icon: 'PanelLeftOpen',
-  fields: [
-    {
-      key: 'headingContent',
-      label: 'Heading',
-      type: 'text',
-      required: true,
-      span: 'full',
-      placeholder: 'AI—Driven <span>creative</span> agency',
-      description: 'Wrap text in <span> for accent. Use \\n for line breaks.',
-    },
-    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
-    {
-      key: 'videoUrl',
-      label: 'Video URL',
-      type: 'url',
-      span: 'full',
-      placeholder: 'https://youtube.com/watch?v=...',
-      description: 'YouTube or direct video URL',
-    },
-    {
-      key: 'videoPosterImage',
-      label: 'Video Poster',
-      type: 'image',
-      span: 'full',
-      description: 'Thumbnail shown before the video plays',
-    },
-    {
-      key: 'buttons',
-      label: 'Buttons',
-      type: 'array',
-      span: 'full',
-      fields: [
-        { key: 'label', label: 'Label', type: 'text', required: true },
-        { key: 'url', label: 'URL', type: 'url' },
-        {
-          key: 'size',
-          label: 'Size',
-          type: 'select',
-          options: [
-            { value: 'sm', label: 'Small' },
-            { value: 'md', label: 'Medium' },
-            { value: 'lg', label: 'Large' },
-          ],
-        },
-        {
-          key: 'color',
-          label: 'Color',
-          type: 'select',
-          options: [
-            { value: 'primary', label: 'Primary' },
-            { value: 'secondary', label: 'Secondary' },
-            { value: 'neutral', label: 'Neutral' },
-          ],
-        },
-        { key: 'hasIcon', label: 'Show arrow icon', type: 'boolean' },
-      ],
-    },
-  ],
-  defaultData: () => ({
-    _id: crypto.randomUUID(),
-    _type: 'split-hero',
-    headingContent:
-      'AI—Driven <span>creative</span> \nagency, based in \nDhaka',
-    bodyContent: '',
-    videoUrl: '',
-    videoPosterImage: { src: '', alt: '' },
-    buttons: [],
-  }),
 }

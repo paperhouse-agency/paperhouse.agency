@@ -1,19 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/button'
 import { ArticleCard } from '@/components/molecules/article-card'
-import type { CmsPostSummary } from '@/libs/cms/storage'
+import { POSTS } from '@/content/posts'
+
+const POSTS_PER_PAGE = 6
 
 export interface PostsGridBlockProps {
   preheadingContent?: string
   headingContent: string
   bodyContent?: string
-}
-
-interface PostsResponse {
-  posts: CmsPostSummary[]
-  hasMore: boolean
 }
 
 function parseHeading(content: string) {
@@ -36,42 +33,12 @@ export function PostsGridBlock({
   headingContent,
   bodyContent,
 }: PostsGridBlockProps) {
-  const [posts, setPosts] = useState<CmsPostSummary[]>([])
   const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    let cancelled = false
-    async function loadFirstPage() {
-      const res = await fetch('/api/posts?page=1')
-      const data = (await res.json()) as PostsResponse
-      if (cancelled) return
-      setPosts(data.posts)
-      setHasMore(data.hasMore)
-      setIsLoading(false)
-    }
-    loadFirstPage()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const posts = POSTS.slice(0, page * POSTS_PER_PAGE)
+  const hasMore = posts.length < POSTS.length
 
-  async function loadMore() {
-    setIsLoading(true)
-    try {
-      const nextPage = page + 1
-      const res = await fetch(`/api/posts?page=${nextPage}`)
-      const data = (await res.json()) as PostsResponse
-      setPosts((prev) => [...prev, ...data.posts])
-      setPage(nextPage)
-      setHasMore(data.hasMore)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  if (!isLoading && posts.length === 0) return null
+  if (POSTS.length === 0) return null
 
   return (
     <section className="py-15 dt:px-5">
@@ -107,10 +74,9 @@ export function PostsGridBlock({
                 variant="outline"
                 color="primary"
                 size="md"
-                onClick={loadMore}
-                disabled={isLoading}
+                onClick={() => setPage((p) => p + 1)}
               >
-                {isLoading ? 'Loading…' : 'Load More'}
+                Load More
               </Button>
             </div>
           )}

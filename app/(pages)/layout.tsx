@@ -1,12 +1,11 @@
 import type { PropsWithChildren } from 'react'
-import { getNavigation } from '@/libs/cms/get-navigation'
+import { NAVIGATION } from '@/content/navigation'
 import { Header } from './(components)/header'
 
-export default async function PagesLayout({ children }: PropsWithChildren) {
-  const navigation = await getNavigation()
+export default function PagesLayout({ children }: PropsWithChildren) {
   return (
     <>
-      <Header navItems={navigation.header.items} />
+      <Header navItems={NAVIGATION.header.items} />
       {children}
     </>
   )

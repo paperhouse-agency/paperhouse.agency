@@ -1,10 +1,6 @@
-import type { BlockSchema } from '@/libs/cms/block-schema'
-import type { BlockData } from '@/libs/cms/types'
-
 export interface SectionBlockProps {
   backgroundColor?: 'offwhite' | 'bluishgray' | 'white' | 'text'
   paddingSize?: 'none' | 'sm' | 'md' | 'lg'
-  children?: BlockData[]
 }
 
 const bgMap: Record<string, string> = {
@@ -30,43 +26,4 @@ export function SectionBlock({
       className={`${bgMap[backgroundColor] ?? ''} ${paddingMap[paddingSize] ?? ''}`}
     />
   )
-}
-
-export const cmsSchema: BlockSchema = {
-  type: 'section',
-  label: 'Section (Wrapper)',
-  icon: 'Square',
-  isWrapper: true,
-  fields: [
-    {
-      key: 'backgroundColor',
-      label: 'Background',
-      type: 'select',
-      options: [
-        { value: 'offwhite', label: 'Off White' },
-        { value: 'bluishgray', label: 'Bluish Gray' },
-        { value: 'white', label: 'White' },
-        { value: 'text', label: 'Text (Dark)' },
-      ],
-    },
-    {
-      key: 'paddingSize',
-      label: 'Vertical Padding',
-      type: 'select',
-      options: [
-        { value: 'none', label: 'None' },
-        { value: 'sm', label: 'Small' },
-        { value: 'md', label: 'Medium' },
-        { value: 'lg', label: 'Large' },
-      ],
-    },
-    { key: 'children', label: 'Nested Blocks', type: 'blocks', span: 'full' },
-  ],
-  defaultData: () => ({
-    _id: crypto.randomUUID(),
-    _type: 'section',
-    backgroundColor: 'offwhite' as const,
-    paddingSize: 'md' as const,
-    children: [],
-  }),
 }

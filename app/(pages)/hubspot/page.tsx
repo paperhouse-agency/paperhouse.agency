@@ -3,6 +3,12 @@ import { Form } from '@/components/form'
 import { getForm } from '@/integrations/hubspot/fetch-form'
 import { Subscribe } from './(components)/subscribe'
 
+// Internal demo route — never indexed, not managed from HQ.
+export const metadata = {
+  title: 'HubSpot Integration',
+  robots: { index: false, follow: false },
+}
+
 export default async function Hubspot() {
   // @ts-expect-error Server Component
   const { form } = await getForm(process.env.NEXT_HUBSPOT_FORM_ID)

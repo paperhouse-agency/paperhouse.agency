@@ -1,5 +1,4 @@
 'use client'
-import type { BlockSchema } from '@/libs/cms/block-schema'
 
 import { useActionState } from 'react'
 import Script from 'next/script'
@@ -7,27 +6,45 @@ import { Button } from '@/components/button'
 import { contactFormAction } from './contact-action'
 import type { ContactFormState } from './contact-action'
 
+export interface FormCtaPlaceholders {
+  fullName: string
+  email: string
+  budget: string
+  referral: string
+  details: string
+}
+
 export interface FormCtaBlockProps {
   headingLine1?: string
   headingLine2?: string
+  headingHighlight: string
   bodyContent?: string
+  placeholders: FormCtaPlaceholders
+  submitLabel: string
+  submittingLabel: string
+  submittedLabel: string
 }
 
 const initialState: ContactFormState = { status: 'idle', message: '' }
 
 export function FormCtaBlock({
-  headingLine1 = 'Have a project?',
-  headingLine2 = "Let's",
-  bodyContent = 'Explore our portfolio of exceptional web design and custom websites that drive results for businesses worldwide.',
+  headingLine1,
+  headingLine2,
+  headingHighlight,
+  bodyContent,
+  placeholders,
+  submitLabel: submitLabelText,
+  submittingLabel,
+  submittedLabel,
 }: FormCtaBlockProps) {
   const [state, formAction, isPending] = useActionState(
     contactFormAction,
     initialState
   )
 
-  let submitLabel = 'Send Message'
-  if (isPending) submitLabel = 'Sending...'
-  if (state.status === 'success') submitLabel = 'Message Sent!'
+  let submitLabel = submitLabelText
+  if (isPending) submitLabel = submittingLabel
+  if (state.status === 'success') submitLabel = submittedLabel
 
   return (
     <>
@@ -43,7 +60,7 @@ export function FormCtaBlock({
               <h2 className="heading-2 text-offwhite">
                 {headingLine1}
                 <br />
-                {headingLine2} <span className="text-primary">Talk!</span>
+                {headingLine2} <span className="text-primary">{headingHighlight}</span>
               </h2>
               <p className="body-large text-offwhite/60">{bodyContent}</p>
             </div>
@@ -54,14 +71,14 @@ export function FormCtaBlock({
                 <input
                   type="text"
                   name="fullName"
-                  placeholder="Full Name"
+                  placeholder={placeholders.fullName}
                   required
                   className="bg-text border border-bluishgray rounded px-2.5 py-2 body text-offwhite placeholder:text-offwhite/40 outline-none focus:border-offwhite/60 transition-colors duration-500"
                 />
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email"
+                  placeholder={placeholders.email}
                   required
                   className="bg-text border border-bluishgray rounded px-2.5 py-2 body text-offwhite placeholder:text-offwhite/40 outline-none focus:border-offwhite/60 transition-colors duration-500"
                 />
@@ -71,20 +88,20 @@ export function FormCtaBlock({
                 <input
                   type="text"
                   name="budget"
-                  placeholder="Budget"
+                  placeholder={placeholders.budget}
                   className="bg-text border border-bluishgray rounded px-2.5 py-2 body text-offwhite placeholder:text-offwhite/40 outline-none focus:border-offwhite/60 transition-colors duration-500"
                 />
                 <input
                   type="text"
                   name="referral"
-                  placeholder="How did you hear about us?"
+                  placeholder={placeholders.referral}
                   className="bg-text border border-bluishgray rounded px-2.5 py-2 body text-offwhite placeholder:text-offwhite/40 outline-none focus:border-offwhite/60 transition-colors duration-500"
                 />
               </div>
 
               <textarea
                 name="message"
-                placeholder="Enter details here..."
+                placeholder={placeholders.details}
                 rows={4}
                 className="bg-text border border-bluishgray rounded px-2.5 py-2 body text-offwhite placeholder:text-offwhite/40 outline-none focus:border-offwhite/60 transition-colors duration-500 resize-none"
               />
@@ -118,33 +135,4 @@ export function FormCtaBlock({
       </section>
     </>
   )
-}
-
-export const cmsSchema: BlockSchema = {
-  type: 'form-cta',
-  label: 'Form CTA',
-  icon: 'FormInput',
-  fields: [
-    {
-      key: 'headingLine1',
-      label: 'Heading Line 1',
-      type: 'text',
-      placeholder: 'Have a project?',
-    },
-    {
-      key: 'headingLine2',
-      label: 'Heading Line 2',
-      type: 'text',
-      placeholder: "Let's",
-      description: 'Followed by "Talk!" in accent color',
-    },
-    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
-  ],
-  defaultData: () => ({
-    _id: crypto.randomUUID(),
-    _type: 'form-cta',
-    headingLine1: 'Have a project?',
-    headingLine2: "Let's",
-    bodyContent: '',
-  }),
 }
