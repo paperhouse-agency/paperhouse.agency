@@ -66,14 +66,25 @@ export function CardGridBlock({
   )
 }
 
-
 export const cmsSchema: BlockSchema = {
   type: 'card-grid',
   label: 'Card Grid',
   icon: 'Grid3X3',
   fields: [
-    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'LATEST WORK', description: 'Optional label above the heading' },
-    { key: 'headingContent', label: 'Heading', type: 'text', required: true, span: 'full' },
+    {
+      key: 'preheadingContent',
+      label: 'Preheading',
+      type: 'text',
+      placeholder: 'LATEST WORK',
+      description: 'Optional label above the heading',
+    },
+    {
+      key: 'headingContent',
+      label: 'Heading',
+      type: 'text',
+      required: true,
+      span: 'full',
+    },
     { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
     {
       key: 'articles',
@@ -82,9 +93,20 @@ export const cmsSchema: BlockSchema = {
       span: 'full',
       description: 'Each card links to a case study or article',
       fields: [
-        { key: 'image', label: 'Image', type: 'image', span: 'full', required: true },
+        {
+          key: 'image',
+          label: 'Image',
+          type: 'image',
+          span: 'full',
+          required: true,
+        },
         { key: 'heading', label: 'Heading', type: 'text', required: true },
-        { key: 'content', label: 'Description', type: 'textarea', span: 'full' },
+        {
+          key: 'content',
+          label: 'Description',
+          type: 'textarea',
+          span: 'full',
+        },
         { key: 'ctaUrl', label: 'Link URL', type: 'url' },
       ],
     },

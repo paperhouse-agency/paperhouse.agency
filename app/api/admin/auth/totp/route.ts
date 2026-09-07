@@ -28,7 +28,11 @@ export async function POST(req: Request) {
   }
 
   if (!user.totpEnrolled) {
-    await updateUser({ ...user, totpEnrolled: true, updatedAt: new Date().toISOString() })
+    await updateUser({
+      ...user,
+      totpEnrolled: true,
+      updatedAt: new Date().toISOString(),
+    })
   }
 
   const forwarded = req.headers.get('x-forwarded-for')

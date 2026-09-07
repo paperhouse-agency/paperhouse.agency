@@ -2,7 +2,11 @@ import { notFound } from 'next/navigation'
 import { readPageById, readUsers, listPages } from '@/libs/cms/storage'
 import { PageEditor } from '@/components/cms/page-editor'
 
-export default async function PageEditorPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function PageEditorPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
   const { id } = await params
   const page = await readPageById(id)
   if (!page) notFound()

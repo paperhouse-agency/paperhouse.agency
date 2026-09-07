@@ -61,14 +61,25 @@ export function PeopleGridBlock({
   )
 }
 
-
 export const cmsSchema: BlockSchema = {
   type: 'people-grid',
   label: 'People Grid',
   icon: 'Users',
   fields: [
-    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'THE TEAM' },
-    { key: 'headingContent', label: 'Heading', type: 'text', required: true, span: 'full', description: 'Wrap text in <span> for accent color' },
+    {
+      key: 'preheadingContent',
+      label: 'Preheading',
+      type: 'text',
+      placeholder: 'THE TEAM',
+    },
+    {
+      key: 'headingContent',
+      label: 'Heading',
+      type: 'text',
+      required: true,
+      span: 'full',
+      description: 'Wrap text in <span> for accent color',
+    },
     { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
     {
       key: 'members',
@@ -78,7 +89,13 @@ export const cmsSchema: BlockSchema = {
       fields: [
         { key: 'name', label: 'Name', type: 'text', required: true },
         { key: 'role', label: 'Role', type: 'text', required: true },
-        { key: 'image', label: 'Photo', type: 'image', span: 'full', required: true },
+        {
+          key: 'image',
+          label: 'Photo',
+          type: 'image',
+          span: 'full',
+          required: true,
+        },
         { key: 'ctaUrl', label: 'Profile URL', type: 'url' },
       ],
     },

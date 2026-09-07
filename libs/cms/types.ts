@@ -35,7 +35,12 @@ export interface CmsPageSeo {
 }
 
 export type PageVisibility = 'public' | 'private' | 'password-protected'
-export type PageTemplate = 'default' | 'landing-page' | 'article' | 'contact' | 'blank'
+export type PageTemplate =
+  | 'default'
+  | 'landing-page'
+  | 'article'
+  | 'contact'
+  | 'blank'
 
 export interface CmsPageSettings {
   /** Who can view this page */
@@ -120,7 +125,12 @@ export interface CardGridBlockData extends BaseBlockData {
   preheadingContent?: string
   headingContent: string
   bodyContent?: string
-  articles: Array<{ image: CmsImage; heading: string; content: string; ctaUrl?: string }>
+  articles: Array<{
+    image: CmsImage
+    heading: string
+    content: string
+    ctaUrl?: string
+  }>
 }
 
 export interface FeatureCardsBlockData extends BaseBlockData {
@@ -157,7 +167,12 @@ export interface ImageContentCardsBlockData extends BaseBlockData {
     hasIcon?: boolean
     url?: string
   }>
-  cards: Array<{ icon: LucideIconName; heading: string; content: string; alternate?: boolean }>
+  cards: Array<{
+    icon: LucideIconName
+    heading: string
+    content: string
+    alternate?: boolean
+  }>
   image: CmsImage
 }
 
@@ -196,7 +211,12 @@ export interface PeopleGridBlockData extends BaseBlockData {
   preheadingContent?: string
   headingContent: string
   bodyContent?: string
-  members: Array<{ name: string; role: string; image: CmsImage; ctaUrl?: string }>
+  members: Array<{
+    name: string
+    role: string
+    image: CmsImage
+    ctaUrl?: string
+  }>
 }
 
 export interface SplitHeroBlockData extends BaseBlockData {

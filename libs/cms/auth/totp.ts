@@ -4,7 +4,10 @@ export function generateTotpSecret(): string {
   return generateSecret()
 }
 
-export async function verifyTotp(token: string, secret: string): Promise<boolean> {
+export async function verifyTotp(
+  token: string,
+  secret: string
+): Promise<boolean> {
   const result = await verify({ token, secret })
   return result.valid
 }

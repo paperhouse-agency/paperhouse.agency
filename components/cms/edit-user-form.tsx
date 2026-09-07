@@ -46,7 +46,7 @@ export function EditUserForm({ user }: { user: SafeUser }) {
     setLoading(false)
 
     if (!res.ok) {
-      setError(data.error as string ?? 'Update failed')
+      setError((data.error as string) ?? 'Update failed')
       return
     }
 
@@ -58,9 +58,15 @@ export function EditUserForm({ user }: { user: SafeUser }) {
     <div className="py-[40px] px-[40px] pb-[60px] max-w-[1200px] mx-auto w-full">
       <div className="flex items-end justify-between gap-[24px] flex-wrap mb-[26px]">
         <div>
-          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-primary mb-[10px] block">Team &amp; access</span>
-          <h1 className="font-heading font-normal text-[40px] leading-none text-text m-0">Edit user<span className="text-primary">.</span></h1>
-          <p className="font-body text-[15px] text-[var(--chrome-muted)] mt-[10px] mb-0">{user.email}</p>
+          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-primary mb-[10px] block">
+            Team &amp; access
+          </span>
+          <h1 className="font-heading font-normal text-[40px] leading-none text-text m-0">
+            Edit user<span className="text-primary">.</span>
+          </h1>
+          <p className="font-body text-[15px] text-[var(--chrome-muted)] mt-[10px] mb-0">
+            {user.email}
+          </p>
         </div>
       </div>
 
@@ -68,11 +74,18 @@ export function EditUserForm({ user }: { user: SafeUser }) {
         <form onSubmit={handleSubmit}>
           <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
             <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
-              <h3 className="font-heading font-normal text-[19px] m-0 text-text">Account details</h3>
+              <h3 className="font-heading font-normal text-[19px] m-0 text-text">
+                Account details
+              </h3>
             </div>
             <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
               <div className="flex flex-col gap-[8px]">
-                <label htmlFor="name" className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]">Name <span className="text-primary">*</span></label>
+                <label
+                  htmlFor="name"
+                  className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]"
+                >
+                  Name <span className="text-primary">*</span>
+                </label>
                 <input
                   id="name"
                   type="text"
@@ -84,7 +97,12 @@ export function EditUserForm({ user }: { user: SafeUser }) {
               </div>
 
               <div className="flex flex-col gap-[8px]">
-                <label htmlFor="role" className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]">Role</label>
+                <label
+                  htmlFor="role"
+                  className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]"
+                >
+                  Role
+                </label>
                 <select
                   id="role"
                   value={role}
@@ -98,7 +116,12 @@ export function EditUserForm({ user }: { user: SafeUser }) {
               </div>
 
               <div className="flex flex-col gap-[8px]">
-                <label htmlFor="password" className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]">New password</label>
+                <label
+                  htmlFor="password"
+                  className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]"
+                >
+                  New password
+                </label>
                 <input
                   id="password"
                   type="password"
@@ -110,8 +133,28 @@ export function EditUserForm({ user }: { user: SafeUser }) {
                 />
               </div>
 
-              {error && <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-primary)' }}>{error}</p>}
-              {saved && <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#1f8a5b' }}>Changes saved.</p>}
+              {error && (
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 13,
+                    color: 'var(--color-primary)',
+                  }}
+                >
+                  {error}
+                </p>
+              )}
+              {saved && (
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 13,
+                    color: '#1f8a5b',
+                  }}
+                >
+                  Changes saved.
+                </p>
+              )}
             </div>
           </div>
 

@@ -37,12 +37,15 @@ export async function POST(req: Request) {
 
   const body = (await req.json()) as Record<string, string>
   const { email, password, name, role } = body
-  if (!(((email && password ) && name ) && role)) {
+  if (!(email && password && name && role)) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
   }
 
   if (password.length < 8) {
-    return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'Password must be at least 8 characters' },
+      { status: 400 }
+    )
   }
 
   const users = await readUsers()

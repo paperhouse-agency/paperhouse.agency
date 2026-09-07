@@ -44,7 +44,10 @@ export async function POST(req: Request) {
   }
 
   if (await isSlugTaken(slug)) {
-    return NextResponse.json({ error: 'A page with this slug already exists' }, { status: 409 })
+    return NextResponse.json(
+      { error: 'A page with this slug already exists' },
+      { status: 409 }
+    )
   }
 
   const now = new Date().toISOString()

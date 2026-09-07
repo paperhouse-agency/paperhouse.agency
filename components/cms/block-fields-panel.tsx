@@ -8,43 +8,76 @@ import type { FieldDef } from '@/libs/cms/block-registry'
 import { useEditorStore } from '@/libs/cms/editor-store'
 import type { BlockData } from '@/libs/cms/types'
 
-const inputSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
-const inputSmErrorCls = 'w-full bg-[var(--c-card)] border border-primary rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
-const textareaSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)] resize-y min-h-[80px] leading-[1.5]'
-const textareaSmErrorCls = 'w-full bg-[var(--c-card)] border border-primary rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)] resize-y min-h-[80px] leading-[1.5]'
-const fieldLabelCls = 'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
-const fieldHintCls = 'font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]'
+const inputSmCls =
+  'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
+const inputSmErrorCls =
+  'w-full bg-[var(--c-card)] border border-primary rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
+const textareaSmCls =
+  'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)] resize-y min-h-[80px] leading-[1.5]'
+const textareaSmErrorCls =
+  'w-full bg-[var(--c-card)] border border-primary rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)] resize-y min-h-[80px] leading-[1.5]'
+const fieldLabelCls =
+  'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
+const fieldHintCls =
+  'font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]'
 
 export function BlockFieldsPanel({ block }: { block: BlockData }) {
   const { updateBlock } = useEditorStore()
   const entry = getBlockEntry(block._type)
   if (!entry) {
     return (
-      <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--chrome-muted)', fontStyle: 'italic' }}>
+      <p
+        style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: 13,
+          color: 'var(--chrome-muted)',
+          fontStyle: 'italic',
+        }}
+      >
         Unknown block type: {block._type}
       </p>
     )
   }
   if (entry.fields.length === 0) {
     return (
-      <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--chrome-muted)', fontStyle: 'italic' }}>
+      <p
+        style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: 13,
+          color: 'var(--chrome-muted)',
+          fontStyle: 'italic',
+        }}
+      >
         This block has no configurable fields.
       </p>
     )
   }
 
-  function getNestedValue(obj: Record<string, unknown>, path: string[]): unknown {
-    return path.reduce((acc, key) => (acc as Record<string, unknown>)?.[key], obj as unknown)
+  function getNestedValue(
+    obj: Record<string, unknown>,
+    path: string[]
+  ): unknown {
+    return path.reduce(
+      (acc, key) => (acc as Record<string, unknown>)?.[key],
+      obj as unknown
+    )
   }
 
   function setNestedValue(
     obj: Record<string, unknown>,
     path: string[],
-    value: unknown,
+    value: unknown
   ): Record<string, unknown> {
     const [head, ...rest] = path
     if (rest.length === 0) return { ...obj, [head]: value }
-    return { ...obj, [head]: setNestedValue((obj[head] as Record<string, unknown>) ?? {}, rest, value) }
+    return {
+      ...obj,
+      [head]: setNestedValue(
+        (obj[head] as Record<string, unknown>) ?? {},
+        rest,
+        value
+      ),
+    }
   }
 
   function handleChange(key: string, value: unknown) {
@@ -52,13 +85,20 @@ export function BlockFieldsPanel({ block }: { block: BlockData }) {
     if (parts.length === 1) {
       updateBlock(block._id, { [key]: value } as Partial<BlockData>)
     } else {
-      const updated = setNestedValue(block as unknown as Record<string, unknown>, parts, value)
+      const updated = setNestedValue(
+        block as unknown as Record<string, unknown>,
+        parts,
+        value
+      )
       updateBlock(block._id, updated as Partial<BlockData>)
     }
   }
 
   function getValue(key: string): unknown {
-    return getNestedValue(block as unknown as Record<string, unknown>, key.split('.'))
+    return getNestedValue(
+      block as unknown as Record<string, unknown>,
+      key.split('.')
+    )
   }
 
   return (
@@ -77,11 +117,20 @@ export function BlockFieldsPanel({ block }: { block: BlockData }) {
   )
 }
 
-function FieldGroup({ field, children }: { field: FieldDef; children: React.ReactNode }) {
+function FieldGroup({
+  field,
+  children,
+}: {
+  field: FieldDef
+  children: React.ReactNode
+}) {
   const isFullSpan =
-    field.span === 'full' || ['textarea', 'array', 'image', 'blocks'].includes(field.type)
+    field.span === 'full' ||
+    ['textarea', 'array', 'image', 'blocks'].includes(field.type)
   return (
-    <div className={`flex flex-col gap-[8px]${isFullSpan ? ' col-span-2' : ''}`}>
+    <div
+      className={`flex flex-col gap-[8px]${isFullSpan ? ' col-span-2' : ''}`}
+    >
       {children}
     </div>
   )
@@ -151,7 +200,14 @@ function FieldEditor({
 
     case 'boolean':
       return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4 }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            paddingTop: 4,
+          }}
+        >
           <input
             type="checkbox"
             id={fieldId}
@@ -161,7 +217,12 @@ function FieldEditor({
           />
           <label
             htmlFor={fieldId}
-            style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--color-text)', cursor: 'pointer' }}
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 13.5,
+              color: 'var(--color-text)',
+              cursor: 'pointer',
+            }}
           >
             {field.label}
           </label>
@@ -284,7 +345,9 @@ function ArrayField({
   return (
     <div className="flex flex-col gap-[8px] mt-[4px]">
       {items.length === 0 && (
-        <p className="text-[13px] text-[var(--chrome-muted)] italic font-body">No items yet.</p>
+        <p className="text-[13px] text-[var(--chrome-muted)] italic font-body">
+          No items yet.
+        </p>
       )}
       {items.map((item, i) => (
         <ArrayItem
@@ -344,10 +407,17 @@ function ArrayItem({
           className="flex items-center gap-[7px] bg-none border-none cursor-pointer p-0 font-mono flex-1 text-left min-w-0"
           onClick={() => setOpen(!open)}
         >
-          <span className="text-[12px] text-[var(--chrome-muted)] flex-none">{open ? '▾' : '▸'}</span>
-          <span className="font-mono text-[11.5px] text-[var(--chrome-muted)]">Item {index + 1}</span>
+          <span className="text-[12px] text-[var(--chrome-muted)] flex-none">
+            {open ? '▾' : '▸'}
+          </span>
+          <span className="font-mono text-[11.5px] text-[var(--chrome-muted)]">
+            Item {index + 1}
+          </span>
           {preview && (
-            <span className="font-body text-[13px] text-text"> — {preview}</span>
+            <span className="font-body text-[13px] text-text">
+              {' '}
+              — {preview}
+            </span>
           )}
         </button>
         <div className="flex gap-[2px] flex-none text-[var(--chrome-faint)]">
@@ -398,10 +468,15 @@ function ArrayItem({
   )
 }
 
-function getItemPreview(item: Record<string, unknown>, fields: FieldDef[]): string {
+function getItemPreview(
+  item: Record<string, unknown>,
+  fields: FieldDef[]
+): string {
   const textField = fields.find((f) => f.type === 'text' && item[f.key])
   if (textField) return String(item[textField.key]).slice(0, 40)
-  const nameField = ['name', 'label', 'heading', 'title', 'question'].find((k) => item[k])
+  const nameField = ['name', 'label', 'heading', 'title', 'question'].find(
+    (k) => item[k]
+  )
   if (nameField) return String(item[nameField]).slice(0, 40)
   return ''
 }
@@ -434,7 +509,10 @@ function ImageField({
         </div>
         <div className="flex-1 flex flex-col gap-[8px]">
           {src && (
-            <p className="font-mono text-[11px] text-[var(--chrome-muted)] overflow-hidden text-ellipsis whitespace-nowrap max-w-full m-0" title={src}>
+            <p
+              className="font-mono text-[11px] text-[var(--chrome-muted)] overflow-hidden text-ellipsis whitespace-nowrap max-w-full m-0"
+              title={src}
+            >
               {src.split('/').pop()}
             </p>
           )}

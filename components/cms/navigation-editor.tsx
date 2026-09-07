@@ -3,7 +3,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/button'
-import type { CmsFooterColumn, CmsNavigation, CmsNavItem } from '@/libs/cms/types'
+import type {
+  CmsFooterColumn,
+  CmsNavigation,
+  CmsNavItem,
+} from '@/libs/cms/types'
 import { useCmsStatus } from '@/libs/cms/status-store'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -56,43 +60,64 @@ function ItemRow({
         onClick={onDelete}
         className="w-[30px] h-[30px] flex-none rounded-[7px] inline-flex items-center justify-center border border-[var(--c-card-border)] bg-[var(--c-card)] text-[var(--chrome-muted)] cursor-pointer transition-[background,color,border-color] duration-100 hover:bg-[#fff5f4] hover:text-primary hover:border-[#ffc4bc] disabled:opacity-30 disabled:pointer-events-none"
       >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /></svg>
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+        </svg>
       </button>
     </div>
   )
 }
 
-function Toggle({ checked, onChange, label, disabled }: { checked: boolean; onChange: (v: boolean) => void; label: string; disabled?: boolean }) {
+function Toggle({
+  checked,
+  onChange,
+  label,
+  disabled,
+}: {
+  checked: boolean
+  onChange: (v: boolean) => void
+  label: string
+  disabled?: boolean
+}) {
   return (
-    <label className="flex items-center gap-[6px] cursor-pointer select-none group" style={{ opacity: disabled ? 0.4 : 1, pointerEvents: disabled ? 'none' : 'auto' }}>
-      <span
-        role="switch"
-        aria-checked={checked}
-        onClick={() => onChange(!checked)}
-        className="relative inline-flex flex-none items-center rounded-full transition-colors duration-200 cursor-pointer"
-        style={{
-          width: 28,
-          height: 16,
-          background: checked ? 'var(--color-text)' : 'var(--c-card-border)',
-        }}
-      >
-        <span
-          className="absolute rounded-full bg-white transition-transform duration-200"
-          style={{
-            width: 12,
-            height: 12,
-            left: 2,
-            transform: checked ? 'translateX(12px)' : 'translateX(0)',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.18)',
-          }}
-        />
+    <label
+      className="flex items-center gap-[6px] cursor-pointer select-none group"
+      style={{
+        opacity: disabled ? 0.4 : 1,
+        pointerEvents: disabled ? 'none' : 'auto',
+      }}
+    >
+      <input
+        type="checkbox"
+        className="cms-toggle cms-toggle--sm"
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      <span className="font-mono text-[11.5px] text-[var(--chrome-muted)] whitespace-nowrap">
+        {label}
       </span>
-      <span className="font-mono text-[11.5px] text-[var(--chrome-muted)] whitespace-nowrap">{label}</span>
     </label>
   )
 }
 
-function SectionCard({ title, children }: { title: React.ReactNode; children: React.ReactNode }) {
+function SectionCard({
+  title,
+  children,
+}: {
+  title: React.ReactNode
+  children: React.ReactNode
+}) {
   return (
     <div className="bg-[var(--c-card)] rounded-[14px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden mb-[28px]">
       <div className="px-[28px] py-[18px] border-b border-[var(--c-card-border)] bg-bluishgray flex items-center justify-between">
@@ -106,7 +131,13 @@ function SectionCard({ title, children }: { title: React.ReactNode; children: Re
 function AddItemButton({ onClick }: { onClick: () => void }) {
   return (
     <div className="py-[8px]">
-      <Button variant="default" color="neutral" size="sm" hasIcon={false} onClick={onClick}>
+      <Button
+        variant="default"
+        color="neutral"
+        size="sm"
+        hasIcon={false}
+        onClick={onClick}
+      >
         + Add item
       </Button>
     </div>
@@ -168,7 +199,11 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
     })
   }
 
-  function updateColumnItem(colIdx: number, itemIdx: number, updated: CmsNavItem) {
+  function updateColumnItem(
+    colIdx: number,
+    itemIdx: number,
+    updated: CmsNavItem
+  ) {
     setNavDirty((prev) => {
       const columns = prev.footer.columns.map((col, i) => {
         if (i !== colIdx) return col
@@ -228,7 +263,10 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
   function deleteLegalItem(idx: number) {
     setNavDirty((prev) => ({
       ...prev,
-      footer: { ...prev.footer, legal: prev.footer.legal.filter((_, i) => i !== idx) },
+      footer: {
+        ...prev.footer,
+        legal: prev.footer.legal.filter((_, i) => i !== idx),
+      },
     }))
   }
 
@@ -277,7 +315,9 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
       {/* Page header */}
       <div className="flex items-end justify-between gap-[24px] flex-wrap mb-[36px]">
         <div>
-          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-primary mb-[10px] block">Settings</span>
+          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-primary mb-[10px] block">
+            Settings
+          </span>
           <h1 className="font-heading font-normal text-[40px] leading-none text-text m-0">
             Site Slots<span className="text-primary">.</span>
           </h1>
@@ -288,10 +328,14 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
         {canEdit && (
           <div className="flex items-center gap-[12px]">
             {error && (
-              <span className="font-mono text-[12px] text-primary">{error}</span>
+              <span className="font-mono text-[12px] text-primary">
+                {error}
+              </span>
             )}
             {saved && (
-              <span className="font-mono text-[12px] text-[#1f8a5b]">Saved</span>
+              <span className="font-mono text-[12px] text-[#1f8a5b]">
+                Saved
+              </span>
             )}
             <button
               type="button"
@@ -308,12 +352,12 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
       {/* ── Header Menu ── */}
       <SectionCard
         title={
-          <>
-            <div>
-              <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] block mb-[2px]">Menu</span>
-              <span className="font-heading text-[18px] text-text">Header</span>
-            </div>
-          </>
+          <div>
+            <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] block mb-[2px]">
+              Menu
+            </span>
+            <span className="font-heading text-[18px] text-text">Header</span>
+          </div>
         }
       >
         {nav.header.items.map((item, idx) => (
@@ -326,7 +370,9 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
           />
         ))}
         {nav.header.items.length === 0 && (
-          <p className="font-body text-[13.5px] text-[var(--chrome-faint)] py-[12px]">No header items yet.</p>
+          <p className="font-body text-[13.5px] text-[var(--chrome-faint)] py-[12px]">
+            No header items yet.
+          </p>
         )}
         {canEdit && <AddItemButton onClick={addHeaderItem} />}
       </SectionCard>
@@ -334,8 +380,12 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
       {/* ── Footer Columns ── */}
       <div className="mb-[4px] flex items-center justify-between">
         <div>
-          <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] block mb-[4px]">Menu</span>
-          <span className="font-heading text-[18px] text-text">Footer columns</span>
+          <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] block mb-[4px]">
+            Menu
+          </span>
+          <span className="font-heading text-[18px] text-text">
+            Footer columns
+          </span>
         </div>
         {canEdit && (
           <button
@@ -343,15 +393,33 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
             onClick={addColumn}
             className="inline-flex items-center gap-[6px] h-[34px] px-[16px] rounded-full border border-[var(--c-card-border)] bg-[var(--c-card)] font-mono text-[12px] tracking-[0.05em] text-[var(--chrome-muted)] cursor-pointer hover:text-text hover:border-[#b8b5b0] transition-[color,border-color] duration-100"
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
             Add column
           </button>
         )}
       </div>
 
-      <div className="grid gap-[16px] mb-[28px]" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+      <div
+        className="grid gap-[16px] mb-[28px]"
+        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
+      >
         {nav.footer.columns.map((col, colIdx) => (
-          <div key={col.id} className="bg-[var(--c-card)] rounded-[14px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
+          <div
+            key={col.id}
+            className="bg-[var(--c-card)] rounded-[14px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden"
+          >
             <div className="px-[20px] py-[14px] border-b border-[var(--c-card-border)] bg-bluishgray flex items-center gap-[10px]">
               <input
                 value={col.heading}
@@ -367,31 +435,61 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
                   onClick={() => deleteColumn(colIdx)}
                   className="flex-none w-[26px] h-[26px] rounded-[6px] inline-flex items-center justify-center text-[var(--chrome-muted)] cursor-pointer transition-[color] duration-100 hover:text-primary"
                 >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /></svg>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                  </svg>
                 </button>
               )}
             </div>
             <div className="px-[20px]">
               {col.items.map((item, itemIdx) => (
-                <div key={item.id} className="flex items-center gap-[8px] py-[8px] border-b border-[var(--c-card-border)] last:border-b-0">
+                <div
+                  key={item.id}
+                  className="flex items-center gap-[8px] py-[8px] border-b border-[var(--c-card-border)] last:border-b-0"
+                >
                   <div className="flex-1 min-w-0 flex flex-col gap-[4px]">
                     <input
                       value={item.label}
-                      onChange={(e) => updateColumnItem(colIdx, itemIdx, { ...item, label: e.target.value })}
+                      onChange={(e) =>
+                        updateColumnItem(colIdx, itemIdx, {
+                          ...item,
+                          label: e.target.value,
+                        })
+                      }
                       placeholder="Label"
                       disabled={!canEdit}
                       className="w-full border border-[var(--c-card-border)] rounded-[6px] px-[9px] py-[5px] font-body text-[12.5px] text-text bg-[var(--workspace)] outline-none focus:border-[var(--color-text)] transition-colors placeholder:text-[var(--chrome-faint)] disabled:opacity-60"
                     />
                     <input
                       value={item.url}
-                      onChange={(e) => updateColumnItem(colIdx, itemIdx, { ...item, url: e.target.value })}
+                      onChange={(e) =>
+                        updateColumnItem(colIdx, itemIdx, {
+                          ...item,
+                          url: e.target.value,
+                        })
+                      }
                       placeholder="URL or /path"
                       disabled={!canEdit}
                       className="w-full border border-[var(--c-card-border)] rounded-[6px] px-[9px] py-[5px] font-mono text-[11.5px] text-text bg-[var(--workspace)] outline-none focus:border-[var(--color-text)] transition-colors placeholder:text-[var(--chrome-faint)] disabled:opacity-60"
                     />
                     <Toggle
                       checked={item.openInNewTab ?? false}
-                      onChange={(v) => updateColumnItem(colIdx, itemIdx, { ...item, openInNewTab: v })}
+                      onChange={(v) =>
+                        updateColumnItem(colIdx, itemIdx, {
+                          ...item,
+                          openInNewTab: v,
+                        })
+                      }
                       label="New tab"
                       disabled={!canEdit}
                     />
@@ -403,14 +501,32 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
                       onClick={() => deleteColumnItem(colIdx, itemIdx)}
                       className="flex-none w-[26px] h-[26px] rounded-[6px] inline-flex items-center justify-center text-[var(--chrome-muted)] cursor-pointer transition-[color] duration-100 hover:text-primary"
                     >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M18 6L6 18M6 6l12 12" />
+                      </svg>
                     </button>
                   )}
                 </div>
               ))}
               {canEdit && (
                 <div className="py-[8px]">
-                  <Button variant="default" color="neutral" size="sm" hasIcon={false} onClick={() => addColumnItem(colIdx)}>
+                  <Button
+                    variant="default"
+                    color="neutral"
+                    size="sm"
+                    hasIcon={false}
+                    onClick={() => addColumnItem(colIdx)}
+                  >
                     + Add link
                   </Button>
                 </div>
@@ -420,7 +536,9 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
         ))}
 
         {nav.footer.columns.length === 0 && (
-          <p className="font-body text-[13.5px] text-[var(--chrome-faint)] col-span-full py-[4px]">No footer columns yet.</p>
+          <p className="font-body text-[13.5px] text-[var(--chrome-faint)] col-span-full py-[4px]">
+            No footer columns yet.
+          </p>
         )}
       </div>
 
@@ -428,8 +546,12 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
       <SectionCard
         title={
           <div>
-            <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] block mb-[2px]">Footer</span>
-            <span className="font-heading text-[18px] text-text">Legal links</span>
+            <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] block mb-[2px]">
+              Footer
+            </span>
+            <span className="font-heading text-[18px] text-text">
+              Legal links
+            </span>
           </div>
         }
       >
@@ -443,7 +565,9 @@ export function NavigationEditor({ initialNavigation, canEdit }: Props) {
           />
         ))}
         {nav.footer.legal.length === 0 && (
-          <p className="font-body text-[13.5px] text-[var(--chrome-faint)] py-[12px]">No legal links yet.</p>
+          <p className="font-body text-[13.5px] text-[var(--chrome-faint)] py-[12px]">
+            No legal links yet.
+          </p>
         )}
         {canEdit && <AddItemButton onClick={addLegalItem} />}
       </SectionCard>

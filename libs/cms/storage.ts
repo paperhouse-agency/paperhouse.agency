@@ -72,7 +72,10 @@ export async function writePage(page: CmsPage): Promise<void> {
   `
 }
 
-export async function renamePage(oldSlug: string, page: CmsPage): Promise<void> {
+export async function renamePage(
+  _oldSlug: string,
+  page: CmsPage
+): Promise<void> {
   await writePage(page)
 }
 
@@ -82,7 +85,10 @@ export async function deletePage(slug: string): Promise<void> {
   await sql`DELETE FROM pages WHERE slug = ${name}`
 }
 
-export async function isSlugTaken(slug: string, excludeId?: string): Promise<boolean> {
+export async function isSlugTaken(
+  slug: string,
+  excludeId?: string
+): Promise<boolean> {
   await getDb()
   const name = slug === '/' ? '' : slug
   const { rows } = excludeId
@@ -91,6 +97,64 @@ export async function isSlugTaken(slug: string, excludeId?: string): Promise<boo
   return rows.length > 0
 }
 
+export interface CmsPostSummary {
+  id: string
+  title: string
+  slug: string
+  excerpt: string
+  image: { src: string; alt: string }
+  author?: string
+  publishedAt: string
+}
+
+export interface ListPostsResult {
+  posts: CmsPostSummary[]
+  page: number
+  limit: number
+  hasMore: boolean
+}
+
+const DEFAULT_POST_IMAGE = {
+  src: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=440&h=293&fit=crop',
+  alt: '',
+}
+
+export async function listPublishedPosts(
+  page: number,
+  limit: number
+): Promise<ListPostsResult> {
+  await getDb()
+  const offset = (page - 1) * limit
+  // Fetch one extra row to cheaply detect whether another page exists.
+  const { rows } = await sql`
+    SELECT id, title, slug, seo, settings, updated_at
+    FROM pages
+    WHERE status = 'published' AND slug != 'index'
+    ORDER BY COALESCE((settings->>'publishedAt')::timestamptz, updated_at) DESC
+    LIMIT ${limit + 1}
+    OFFSET ${offset}
+  `
+
+  const hasMore = rows.length > limit
+  const posts = rows.slice(0, limit).map((r) => {
+    const seo = (r.seo as CmsPage['seo']) ?? {}
+    const settings = r.settings as CmsPage['settings']
+    return {
+      id: r.id as string,
+      title: r.title as string,
+      slug: r.slug as string,
+      excerpt: seo.description ?? '',
+      image: seo.ogImage
+        ? { src: seo.ogImage, alt: r.title as string }
+        : DEFAULT_POST_IMAGE,
+      author: settings?.author,
+      publishedAt: (settings?.publishedAt ??
+        (r.updated_at as string)) as string,
+    }
+  })
+
+  return { posts, page, limit, hasMore }
+}
 
 function rowToPage(r: Record<string, unknown>): CmsPage {
   return {

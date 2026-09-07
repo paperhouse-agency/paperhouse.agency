@@ -5,7 +5,10 @@ import { hashPassword } from '@/libs/cms/auth/credentials'
 import { readUsers, writeUsers } from '@/libs/cms/storage'
 import type { UserRole } from '@/libs/cms/types'
 
-export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = await getSession()
   if (!(session.isLoggedIn && session.role)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -24,7 +27,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   return NextResponse.json(safe)
 }
 
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   if (req.headers.get('x-requested-with') !== 'XMLHttpRequest') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
@@ -56,7 +62,10 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   return NextResponse.json(safe)
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   if (req.headers.get('x-requested-with') !== 'XMLHttpRequest') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
@@ -72,7 +81,10 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   const { id } = await params
   if (id === session.userId) {
-    return NextResponse.json({ error: 'Cannot delete your own account' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'Cannot delete your own account' },
+      { status: 400 }
+    )
   }
 
   const users = await readUsers()

@@ -4,7 +4,11 @@ import { canPerform } from '@/libs/cms/auth/permissions'
 import { readUsers } from '@/libs/cms/storage'
 import { EditUserForm } from '@/components/cms/edit-user-form'
 
-export default async function EditUserPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditUserPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
   const session = await getSession()
   if (!(session.role && canPerform(session.role, 'manage_users'))) {
     redirect('/admin/pages' as string as never)

@@ -15,7 +15,8 @@ export const useCmsStatus = create<CmsStatusState>((set) => ({
   isDirty: false,
   lastSaved: null,
   markSaving: () => set({ isSaving: true }),
-  markSaved: () => set({ isSaving: false, lastSaved: new Date(), isDirty: false }),
+  markSaved: () =>
+    set({ isSaving: false, lastSaved: new Date(), isDirty: false }),
   markDirty: () => set({ isDirty: true }),
   markError: () => set({ isSaving: false }),
 }))

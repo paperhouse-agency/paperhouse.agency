@@ -4,15 +4,22 @@ import { getSession } from '@/libs/cms/auth/session'
 
 const MAX_SIZE = 10 * 1024 * 1024
 const PREFIX = 'cms-media/'
-const STORAGE_LIMIT = Number(process.env.BLOB_STORAGE_LIMIT_MB ?? 500) * 1024 * 1024
+const STORAGE_LIMIT =
+  Number(process.env.BLOB_STORAGE_LIMIT_MB ?? 500) * 1024 * 1024
 
 function inferContentType(pathname: string): string {
   const ext = pathname.split('.').pop()?.toLowerCase() ?? ''
   const types: Record<string, string> = {
-    jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
-    gif: 'image/gif', webp: 'image/webp', avif: 'image/avif',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+    gif: 'image/gif',
+    webp: 'image/webp',
+    avif: 'image/avif',
     svg: 'image/svg+xml',
-    mp4: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime',
+    mp4: 'video/mp4',
+    webm: 'video/webm',
+    mov: 'video/quicktime',
     avi: 'video/x-msvideo',
     pdf: 'application/pdf',
     doc: 'application/msword',
@@ -41,7 +48,13 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const blobs: { url: string; pathname: string; size: number; uploadedAt: string; contentType: string }[] = []
+  const blobs: {
+    url: string
+    pathname: string
+    size: number
+    uploadedAt: string
+    contentType: string
+  }[] = []
   let cursor: string | undefined
 
   do {
@@ -69,13 +82,22 @@ export async function POST(req: Request) {
   }
 
   const mimeFromHeader = req.headers.get('content-type')?.split(';')[0] ?? ''
-  if (!mimeFromHeader.startsWith('image/') && mimeFromHeader !== 'image/svg+xml') {
-    return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 })
+  if (
+    !mimeFromHeader.startsWith('image/') &&
+    mimeFromHeader !== 'image/svg+xml'
+  ) {
+    return NextResponse.json(
+      { error: 'Only image files are allowed' },
+      { status: 400 }
+    )
   }
 
   const buffer = await req.arrayBuffer()
   if (buffer.byteLength > MAX_SIZE) {
-    return NextResponse.json({ error: 'File too large (max 10 MB)' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'File too large (max 10 MB)' },
+      { status: 400 }
+    )
   }
 
   if (mimeFromHeader in MAGIC) {
@@ -85,7 +107,10 @@ export async function POST(req: Request) {
       patterns.length === 0 ||
       patterns.some((magic) => magic.every((b, i) => bytes[i] === b))
     if (!valid) {
-      return NextResponse.json({ error: 'File content does not match declared type' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'File content does not match declared type' },
+        { status: 400 }
+      )
     }
   }
 

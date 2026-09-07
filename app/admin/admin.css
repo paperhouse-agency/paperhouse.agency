@@ -23,7 +23,7 @@
 
 /* ── Shell ──────────────────────────────────────────────────────── */
 .cms-shell {
-  font-family: var(--font-body, 'IBM Plex Sans', system-ui, sans-serif);
+  font-family: var(--font-body, "IBM Plex Sans", system-ui, sans-serif);
   font-size: 14px;
   color: var(--color-text);
   background: var(--workspace);
@@ -77,7 +77,7 @@
 }
 
 .cms-toggle::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 18px;
   height: 18px;
@@ -93,15 +93,44 @@
   transform: translateX(16px);
 }
 
+.cms-toggle--sm {
+  width: 28px;
+  height: 16px;
+  min-width: 28px;
+}
+
+.cms-toggle--sm::after {
+  width: 12px;
+  height: 12px;
+}
+
+.cms-toggle--sm:checked::after {
+  transform: translateX(12px);
+}
+
 /* ── Keyframe animations (referenced via Tailwind animate-[...]) ── */
-@keyframes cms-spin { to { transform: rotate(360deg); } }
+@keyframes cms-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 @keyframes cms-backdrop-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes cms-modal-in {
-  from { opacity: 0; transform: scale(0.96) translateY(8px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }

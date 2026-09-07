@@ -7,8 +7,12 @@ export async function AdminNav() {
   const session = await getSession()
   if (!session.isLoggedIn) return null
 
-  const showUsers = session.role ? canPerform(session.role, 'manage_users') : false
-  const showNavigation = session.role ? canPerform(session.role, 'manage_settings') : false
+  const showUsers = session.role
+    ? canPerform(session.role, 'manage_users')
+    : false
+  const showNavigation = session.role
+    ? canPerform(session.role, 'manage_settings')
+    : false
 
   let initials = ''
   let name = ''
@@ -30,5 +34,12 @@ export async function AdminNav() {
     }
   }
 
-  return <AdminNavUI showUsers={showUsers} showNavigation={showNavigation} initials={initials} name={name} />
+  return (
+    <AdminNavUI
+      showUsers={showUsers}
+      showNavigation={showNavigation}
+      initials={initials}
+      name={name}
+    />
+  )
 }

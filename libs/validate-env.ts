@@ -103,7 +103,8 @@ const ENV_VARIABLES: EnvValidation[] = [
   {
     name: 'NEXT_PUBLIC_CLARITY_PROJECT_ID',
     required: false,
-    description: 'Microsoft Clarity project ID for heatmaps and session recordings',
+    description:
+      'Microsoft Clarity project ID for heatmaps and session recordings',
     integration: 'Analytics',
   },
 ]

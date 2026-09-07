@@ -17,7 +17,12 @@ export function DuplicatePageButton({ id }: { id: string }) {
   }
 
   return (
-    <Button variant="outline" color="neutral" size="sm" onClick={handleDuplicate}>
+    <Button
+      variant="outline"
+      color="neutral"
+      size="sm"
+      onClick={handleDuplicate}
+    >
       Duplicate
     </Button>
   )

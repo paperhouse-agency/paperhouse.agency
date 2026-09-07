@@ -47,7 +47,13 @@ function UserDropdown({ initials, name }: { initials: string; name: string }) {
           aria-hidden="true"
           className={`text-[var(--chrome-muted)] flex-none transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
         >
-          <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M2 4l4 4 4-4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
 
@@ -58,7 +64,17 @@ function UserDropdown({ initials, name }: { initials: string; name: string }) {
             onClick={handleSignOut}
             className="w-full flex items-center gap-[8px] px-[14px] py-[10px] font-mono text-[12.5px] tracking-[0.04em] text-primary cursor-pointer border-none bg-transparent text-left whitespace-nowrap"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
               <path d="M16 17l5-5-5-5M21 12H9" />
             </svg>
@@ -70,7 +86,17 @@ function UserDropdown({ initials, name }: { initials: string; name: string }) {
   )
 }
 
-export function AdminNavUI({ showUsers, showNavigation, initials, name }: { showUsers: boolean; showNavigation: boolean; initials: string; name: string }) {
+export function AdminNavUI({
+  showUsers,
+  showNavigation,
+  initials,
+  name,
+}: {
+  showUsers: boolean
+  showNavigation: boolean
+  initials: string
+  name: string
+}) {
   const pathname = usePathname()
 
   const onUsers = pathname?.startsWith('/admin/users') ?? false
@@ -81,9 +107,16 @@ export function AdminNavUI({ showUsers, showNavigation, initials, name }: { show
   return (
     <header className="flex items-center justify-between h-[62px] px-[26px] bg-[var(--chrome)] border-b border-[var(--chrome-border)] flex-none relative z-10">
       <div className="flex items-center gap-[28px]">
-        <Link href="/admin/pages" className="flex items-center gap-[9px] no-underline">
-          <span className="font-body font-bold text-[20px] tracking-[-0.015em] text-primary leading-none">paperhouse</span>
-          <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--chrome-muted)] border border-[var(--chrome-border)] rounded-[4px] px-[6px] py-[3px] leading-none">CMS</span>
+        <Link
+          href="/admin/pages"
+          className="flex items-center gap-[9px] no-underline"
+        >
+          <span className="font-body font-bold text-[20px] tracking-[-0.015em] text-primary leading-none">
+            paperhouse
+          </span>
+          <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--chrome-muted)] border border-[var(--chrome-border)] rounded-[4px] px-[6px] py-[3px] leading-none">
+            CMS
+          </span>
         </Link>
 
         <nav className="flex items-center gap-[4px]">

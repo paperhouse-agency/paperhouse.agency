@@ -21,9 +21,14 @@ const paddingMap: Record<string, string> = {
   lg: 'py-24',
 }
 
-export function SectionBlock({ backgroundColor = 'offwhite', paddingSize = 'md' }: SectionBlockProps) {
+export function SectionBlock({
+  backgroundColor = 'offwhite',
+  paddingSize = 'md',
+}: SectionBlockProps) {
   return (
-    <section className={`${bgMap[backgroundColor] ?? ''} ${paddingMap[paddingSize] ?? ''}`} />
+    <section
+      className={`${bgMap[backgroundColor] ?? ''} ${paddingMap[paddingSize] ?? ''}`}
+    />
   )
 }
 
@@ -33,8 +38,28 @@ export const cmsSchema: BlockSchema = {
   icon: 'Square',
   isWrapper: true,
   fields: [
-    { key: 'backgroundColor', label: 'Background', type: 'select', options: [{ value: 'offwhite', label: 'Off White' }, { value: 'bluishgray', label: 'Bluish Gray' }, { value: 'white', label: 'White' }, { value: 'text', label: 'Text (Dark)' }] },
-    { key: 'paddingSize', label: 'Vertical Padding', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'sm', label: 'Small' }, { value: 'md', label: 'Medium' }, { value: 'lg', label: 'Large' }] },
+    {
+      key: 'backgroundColor',
+      label: 'Background',
+      type: 'select',
+      options: [
+        { value: 'offwhite', label: 'Off White' },
+        { value: 'bluishgray', label: 'Bluish Gray' },
+        { value: 'white', label: 'White' },
+        { value: 'text', label: 'Text (Dark)' },
+      ],
+    },
+    {
+      key: 'paddingSize',
+      label: 'Vertical Padding',
+      type: 'select',
+      options: [
+        { value: 'none', label: 'None' },
+        { value: 'sm', label: 'Small' },
+        { value: 'md', label: 'Medium' },
+        { value: 'lg', label: 'Large' },
+      ],
+    },
     { key: 'children', label: 'Nested Blocks', type: 'blocks', span: 'full' },
   ],
   defaultData: () => ({

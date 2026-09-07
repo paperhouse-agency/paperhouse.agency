@@ -1,7 +1,10 @@
 import bcrypt from 'bcryptjs'
 import { readUsers } from '@/libs/cms/storage'
 
-export async function verifyPassword(plain: string, hash: string): Promise<boolean> {
+export async function verifyPassword(
+  plain: string,
+  hash: string
+): Promise<boolean> {
   return bcrypt.compare(plain, hash)
 }
 

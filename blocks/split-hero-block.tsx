@@ -85,7 +85,10 @@ export function SplitHeroBlock({
   headingContent = 'AI—Driven <span>creative</span> \nagency, based in \nDhaka',
   bodyContent = 'We help brands and company in marketing solution. As a cause-led digital marketing and brand agency, we harness the power of technology and creativity to drive positive feedback.',
   videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  videoPosterImage = { src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&h=506&fit=crop', alt: 'Video poster' },
+  videoPosterImage = {
+    src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&h=506&fit=crop',
+    alt: 'Video poster',
+  },
   buttons = [
     { label: 'Schedule a call', size: 'lg' },
     { label: 'Explore Projects', size: 'lg', color: 'neutral', hasIcon: true },
@@ -127,7 +130,13 @@ export function SplitHeroBlock({
         <p className="body-large text-text/60">{bodyContent}</p>
         <div className="flex flex-row items-center gap-4">
           {buttons.map((btn) => (
-            <Button key={btn.label} size={btn.size ?? 'md'} color={btn.color} hasIcon={btn.hasIcon} url={btn.url}>
+            <Button
+              key={btn.label}
+              size={btn.size ?? 'md'}
+              color={btn.color}
+              hasIcon={btn.hasIcon}
+              url={btn.url}
+            >
               {btn.label}
             </Button>
           ))}
@@ -151,10 +160,31 @@ export const cmsSchema: BlockSchema = {
   label: 'Split Hero',
   icon: 'PanelLeftOpen',
   fields: [
-    { key: 'headingContent', label: 'Heading', type: 'text', required: true, span: 'full', placeholder: 'AI—Driven <span>creative</span> agency', description: 'Wrap text in <span> for accent. Use \\n for line breaks.' },
+    {
+      key: 'headingContent',
+      label: 'Heading',
+      type: 'text',
+      required: true,
+      span: 'full',
+      placeholder: 'AI—Driven <span>creative</span> agency',
+      description: 'Wrap text in <span> for accent. Use \\n for line breaks.',
+    },
     { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
-    { key: 'videoUrl', label: 'Video URL', type: 'url', span: 'full', placeholder: 'https://youtube.com/watch?v=...', description: 'YouTube or direct video URL' },
-    { key: 'videoPosterImage', label: 'Video Poster', type: 'image', span: 'full', description: 'Thumbnail shown before the video plays' },
+    {
+      key: 'videoUrl',
+      label: 'Video URL',
+      type: 'url',
+      span: 'full',
+      placeholder: 'https://youtube.com/watch?v=...',
+      description: 'YouTube or direct video URL',
+    },
+    {
+      key: 'videoPosterImage',
+      label: 'Video Poster',
+      type: 'image',
+      span: 'full',
+      description: 'Thumbnail shown before the video plays',
+    },
     {
       key: 'buttons',
       label: 'Buttons',
@@ -163,8 +193,26 @@ export const cmsSchema: BlockSchema = {
       fields: [
         { key: 'label', label: 'Label', type: 'text', required: true },
         { key: 'url', label: 'URL', type: 'url' },
-        { key: 'size', label: 'Size', type: 'select', options: [{ value: 'sm', label: 'Small' }, { value: 'md', label: 'Medium' }, { value: 'lg', label: 'Large' }] },
-        { key: 'color', label: 'Color', type: 'select', options: [{ value: 'primary', label: 'Primary' }, { value: 'secondary', label: 'Secondary' }, { value: 'neutral', label: 'Neutral' }] },
+        {
+          key: 'size',
+          label: 'Size',
+          type: 'select',
+          options: [
+            { value: 'sm', label: 'Small' },
+            { value: 'md', label: 'Medium' },
+            { value: 'lg', label: 'Large' },
+          ],
+        },
+        {
+          key: 'color',
+          label: 'Color',
+          type: 'select',
+          options: [
+            { value: 'primary', label: 'Primary' },
+            { value: 'secondary', label: 'Secondary' },
+            { value: 'neutral', label: 'Neutral' },
+          ],
+        },
         { key: 'hasIcon', label: 'Show arrow icon', type: 'boolean' },
       ],
     },
@@ -172,7 +220,8 @@ export const cmsSchema: BlockSchema = {
   defaultData: () => ({
     _id: crypto.randomUUID(),
     _type: 'split-hero',
-    headingContent: 'AI—Driven <span>creative</span> \nagency, based in \nDhaka',
+    headingContent:
+      'AI—Driven <span>creative</span> \nagency, based in \nDhaka',
     bodyContent: '',
     videoUrl: '',
     videoPosterImage: { src: '', alt: '' },

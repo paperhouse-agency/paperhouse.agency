@@ -83,17 +83,47 @@ export function ImageContentCardsBlock({
   )
 }
 
-
 export const cmsSchema: BlockSchema = {
   type: 'image-content-cards',
   label: 'Image Content Cards',
   icon: 'Image',
   fields: [
-    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'OUR APPROACH' },
-    { key: 'headingType', label: 'Heading Tag', type: 'select', options: [{ value: 'h1', label: 'H1' }, { value: 'h2', label: 'H2' }, { value: 'h3', label: 'H3' }, { value: 'h4', label: 'H4' }, { value: 'h5', label: 'H5' }, { value: 'h6', label: 'H6' }], defaultValue: 'h2' },
-    { key: 'headingContent', label: 'Heading', type: 'text', required: true, span: 'full', description: 'Wrap text in <span> for accent color' },
+    {
+      key: 'preheadingContent',
+      label: 'Preheading',
+      type: 'text',
+      placeholder: 'OUR APPROACH',
+    },
+    {
+      key: 'headingType',
+      label: 'Heading Tag',
+      type: 'select',
+      options: [
+        { value: 'h1', label: 'H1' },
+        { value: 'h2', label: 'H2' },
+        { value: 'h3', label: 'H3' },
+        { value: 'h4', label: 'H4' },
+        { value: 'h5', label: 'H5' },
+        { value: 'h6', label: 'H6' },
+      ],
+      defaultValue: 'h2',
+    },
+    {
+      key: 'headingContent',
+      label: 'Heading',
+      type: 'text',
+      required: true,
+      span: 'full',
+      description: 'Wrap text in <span> for accent color',
+    },
     { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
-    { key: 'image', label: 'Section Image', type: 'image', span: 'full', required: true },
+    {
+      key: 'image',
+      label: 'Section Image',
+      type: 'image',
+      span: 'full',
+      required: true,
+    },
     {
       key: 'buttons',
       label: 'Buttons',
@@ -102,8 +132,26 @@ export const cmsSchema: BlockSchema = {
       fields: [
         { key: 'label', label: 'Label', type: 'text', required: true },
         { key: 'url', label: 'URL', type: 'url' },
-        { key: 'size', label: 'Size', type: 'select', options: [{ value: 'sm', label: 'Small' }, { value: 'md', label: 'Medium' }, { value: 'lg', label: 'Large' }] },
-        { key: 'color', label: 'Color', type: 'select', options: [{ value: 'primary', label: 'Primary' }, { value: 'secondary', label: 'Secondary' }, { value: 'neutral', label: 'Neutral' }] },
+        {
+          key: 'size',
+          label: 'Size',
+          type: 'select',
+          options: [
+            { value: 'sm', label: 'Small' },
+            { value: 'md', label: 'Medium' },
+            { value: 'lg', label: 'Large' },
+          ],
+        },
+        {
+          key: 'color',
+          label: 'Color',
+          type: 'select',
+          options: [
+            { value: 'primary', label: 'Primary' },
+            { value: 'secondary', label: 'Secondary' },
+            { value: 'neutral', label: 'Neutral' },
+          ],
+        },
         { key: 'hasIcon', label: 'Show arrow icon', type: 'boolean' },
       ],
     },
@@ -113,9 +161,21 @@ export const cmsSchema: BlockSchema = {
       type: 'array',
       span: 'full',
       fields: [
-        { key: 'icon', label: 'Icon', type: 'icon', required: true, placeholder: 'Zap', description: 'Lucide icon name' },
+        {
+          key: 'icon',
+          label: 'Icon',
+          type: 'icon',
+          required: true,
+          placeholder: 'Zap',
+          description: 'Lucide icon name',
+        },
         { key: 'heading', label: 'Heading', type: 'text', required: true },
-        { key: 'content', label: 'Description', type: 'textarea', span: 'full' },
+        {
+          key: 'content',
+          label: 'Description',
+          type: 'textarea',
+          span: 'full',
+        },
         { key: 'alternate', label: 'Alternate style', type: 'boolean' },
       ],
     },

@@ -4,10 +4,7 @@ import type { NextRequest } from 'next/server'
 import { sessionOptions } from '@/libs/cms/auth/session-config'
 import type { AdminSession } from '@/libs/cms/types'
 
-const CMS_PUBLIC_PATHS = [
-  '/admin/login',
-  '/api/admin/auth/',
-]
+const CMS_PUBLIC_PATHS = ['/admin/login', '/api/admin/auth/']
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -25,7 +22,9 @@ export async function proxy(request: NextRequest) {
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
     const isPublic = CMS_PUBLIC_PATHS.some((p) => pathname.startsWith(p))
     if (!isPublic) {
-      const cookieValue = request.cookies.get(sessionOptions.cookieName as string)?.value
+      const cookieValue = request.cookies.get(
+        sessionOptions.cookieName as string
+      )?.value
       let isLoggedIn = false
       if (cookieValue) {
         try {
@@ -52,7 +51,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!maintenance|_next/static|_next/image|favicon\\.ico).*)',
-  ],
+  matcher: ['/((?!maintenance|_next/static|_next/image|favicon\\.ico).*)'],
 }

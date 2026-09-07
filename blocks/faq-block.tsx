@@ -49,11 +49,16 @@ export function FaqBlock({
           <Accordion.Group>
             <div className="flex flex-col border-t border-text/20">
               {items.map((item) => (
-                <Accordion.Root key={item.question} className="border-b border-text/20">
+                <Accordion.Root
+                  key={item.question}
+                  className="border-b border-text/20"
+                >
                   {({ isOpen }) => (
                     <>
                       <Accordion.Button className="flex items-center justify-between w-full py-5 text-left gap-4">
-                        <span className="heading-5 text-text">{item.question}</span>
+                        <span className="heading-5 text-text">
+                          {item.question}
+                        </span>
                         <ChevronDown
                           size={20}
                           className={`shrink-0 text-text/60 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
@@ -74,16 +79,31 @@ export function FaqBlock({
   )
 }
 
-
 export const cmsSchema: BlockSchema = {
   type: 'faq',
   label: 'FAQ',
   icon: 'HelpCircle',
   fields: [
-    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'KNOWLEDGE BASE' },
-    { key: 'headingContent', label: 'Heading', type: 'text', span: 'full', placeholder: 'Questions, answered' },
+    {
+      key: 'preheadingContent',
+      label: 'Preheading',
+      type: 'text',
+      placeholder: 'KNOWLEDGE BASE',
+    },
+    {
+      key: 'headingContent',
+      label: 'Heading',
+      type: 'text',
+      span: 'full',
+      placeholder: 'Questions, answered',
+    },
     { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full' },
-    { key: 'ctaLabel', label: 'CTA Label', type: 'text', placeholder: 'Get In Touch' },
+    {
+      key: 'ctaLabel',
+      label: 'CTA Label',
+      type: 'text',
+      placeholder: 'Get In Touch',
+    },
     { key: 'ctaUrl', label: 'CTA URL', type: 'url', placeholder: '/contact' },
     {
       key: 'items',
@@ -91,8 +111,20 @@ export const cmsSchema: BlockSchema = {
       type: 'array',
       span: 'full',
       fields: [
-        { key: 'question', label: 'Question', type: 'text', required: true, span: 'full' },
-        { key: 'answer', label: 'Answer', type: 'textarea', required: true, span: 'full' },
+        {
+          key: 'question',
+          label: 'Question',
+          type: 'text',
+          required: true,
+          span: 'full',
+        },
+        {
+          key: 'answer',
+          label: 'Answer',
+          type: 'textarea',
+          required: true,
+          span: 'full',
+        },
       ],
     },
   ],

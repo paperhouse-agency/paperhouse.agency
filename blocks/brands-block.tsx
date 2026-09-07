@@ -24,7 +24,10 @@ export function BrandsBlock({ items = DEFAULT_ITEMS }: BrandsBlockProps) {
       <Marquee repeat={4} speed={0.4} scrollVelocity={false}>
         <div className="flex items-center gap-12 pr-12">
           {items.map((brand) => (
-            <span key={brand.name} className="mono-wide text-text/30 whitespace-nowrap shrink-0">
+            <span
+              key={brand.name}
+              className="mono-wide text-text/30 whitespace-nowrap shrink-0"
+            >
               {brand.name}
             </span>
           ))}
@@ -46,7 +49,13 @@ export const cmsSchema: BlockSchema = {
       span: 'full',
       description: 'Names scrolling in the marquee strip',
       fields: [
-        { key: 'name', label: 'Brand Name', type: 'text', required: true, placeholder: 'e.g. Stripe' },
+        {
+          key: 'name',
+          label: 'Brand Name',
+          type: 'text',
+          required: true,
+          placeholder: 'e.g. Stripe',
+        },
       ],
     },
   ],

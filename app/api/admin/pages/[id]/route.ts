@@ -1,17 +1,28 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
-import { readPageById, renamePage, deletePage, isSlugTaken } from '@/libs/cms/storage'
+import {
+  readPageById,
+  renamePage,
+  deletePage,
+  isSlugTaken,
+} from '@/libs/cms/storage'
 import type { CmsPage } from '@/libs/cms/types'
 
-export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const { id } = await params
   const page = await readPageById(id)
   if (!page) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json(page)
 }
 
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   if (req.headers.get('x-requested-with') !== 'XMLHttpRequest') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
@@ -27,14 +38,18 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
   const { id } = await params
   const existing = await readPageById(id)
-  if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (!existing)
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = (await req.json()) as Partial<CmsPage>
   const { title, slug, status, seo, settings, blocks } = body
 
   if (slug !== undefined && slug !== existing.slug) {
     if (await isSlugTaken(slug, existing.id)) {
-      return NextResponse.json({ error: 'A page with this slug already exists' }, { status: 409 })
+      return NextResponse.json(
+        { error: 'A page with this slug already exists' },
+        { status: 409 }
+      )
     }
   }
 
@@ -46,12 +61,16 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       ? new Date().toISOString()
       : existing.settings?.publishedAt
 
-  const mergedSettings =
-    settings !== undefined
-      ? { ...existing.settings, ...settings, ...(publishedAt ? { publishedAt } : {}) }
-      : publishedAt && !existing.settings?.publishedAt
-        ? { ...existing.settings, publishedAt }
-        : existing.settings
+  let mergedSettings = existing.settings
+  if (settings !== undefined) {
+    mergedSettings = {
+      ...existing.settings,
+      ...settings,
+      ...(publishedAt ? { publishedAt } : {}),
+    }
+  } else if (publishedAt && !existing.settings?.publishedAt) {
+    mergedSettings = { ...existing.settings, publishedAt }
+  }
 
   const updated: CmsPage = {
     ...existing,
@@ -71,7 +90,10 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   return NextResponse.json(updated)
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   if (req.headers.get('x-requested-with') !== 'XMLHttpRequest') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
@@ -87,7 +109,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   const { id } = await params
   const existing = await readPageById(id)
-  if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (!existing)
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   await deletePage(existing.slug)
   return NextResponse.json({ ok: true })

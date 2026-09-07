@@ -18,7 +18,10 @@ export default function LoginPage() {
 
     const res = await fetch('/api/admin/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-requested-with': 'XMLHttpRequest' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-requested-with': 'XMLHttpRequest',
+      },
       body: JSON.stringify({ email, password }),
     })
 
@@ -40,12 +43,26 @@ export default function LoginPage() {
   return (
     <div className="min-h-[100svh] flex items-center justify-center bg-[var(--workspace)] p-[24px]">
       <div className="bg-[var(--c-card)] border border-[var(--c-card-border)] rounded-[14px] shadow-[0_4px_24px_rgba(0,0,0,0.08)] p-[40px] w-full max-w-[380px]">
-        <div className="font-body font-bold text-[22px] tracking-[-0.015em] text-primary leading-none mb-[4px]">paperhouse</div>
-        <h1 className="font-heading font-normal text-[26px] text-text m-0 mb-[6px] leading-[1.2]">Sign in</h1>
-        <p className="font-body text-[14px] text-[var(--chrome-muted)] m-0 mb-[28px]">Sign in to manage your content.</p>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+        <div className="font-body font-bold text-[22px] tracking-[-0.015em] text-primary leading-none mb-[4px]">
+          paperhouse
+        </div>
+        <h1 className="font-heading font-normal text-[26px] text-text m-0 mb-[6px] leading-[1.2]">
+          Sign in
+        </h1>
+        <p className="font-body text-[14px] text-[var(--chrome-muted)] m-0 mb-[28px]">
+          Sign in to manage your content.
+        </p>
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}
+        >
           <div className="flex flex-col gap-[8px]">
-            <label htmlFor="email" className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]">Email</label>
+            <label
+              htmlFor="email"
+              className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]"
+            >
+              Email
+            </label>
             <input
               id="email"
               type="text"
@@ -58,7 +75,12 @@ export default function LoginPage() {
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <label htmlFor="password" className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]">Password</label>
+            <label
+              htmlFor="password"
+              className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]"
+            >
+              Password
+            </label>
             <input
               id="password"
               type="password"
@@ -70,12 +92,16 @@ export default function LoginPage() {
               placeholder="••••••••"
             />
           </div>
-          {error && <p className="text-primary font-body text-[12px] mt-[4px] mb-0">{error}</p>}
+          {error && (
+            <p className="text-primary font-body text-[12px] mt-[4px] mb-0">
+              {error}
+            </p>
+          )}
           <Button
-            variant='default'
-            color='neutral'
-            size='md'
-            type='submit'
+            variant="default"
+            color="neutral"
+            size="md"
+            type="submit"
             disabled={loading}
           >
             {loading ? 'Signing in…' : 'Sign in'}

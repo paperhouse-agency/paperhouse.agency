@@ -9,19 +9,19 @@ import {
   Search,
   Shuffle,
 } from 'lucide-react'
-import { SplitHeroBlock } from '@/blocks/split-hero-block'
-import { BrandsBlock } from '@/blocks/brands-block'
-import { ImageContentCardsBlock } from '@/blocks/image-content-cards-block'
-import { TaglineMarqueeBlock } from '@/blocks/tagline-marquee-block'
-import { FeatureCardsBlock } from '@/blocks/feature-cards-block'
-import { NumberedStepsBlock } from '@/blocks/numbered-steps-block'
 import { BentoStatsBlock } from '@/blocks/bento-stats-block'
-import { CardGridBlock } from '@/blocks/card-grid-block'
-import { NewsletterBlock } from '@/blocks/newsletter-block'
-import { PeopleGridBlock } from '@/blocks/people-grid-block'
+import { BrandsBlock } from '@/blocks/brands-block'
 import { CtaManifestoBlock } from '@/blocks/cta-manifesto-block'
 import { FaqBlock } from '@/blocks/faq-block'
+import { FeatureCardsBlock } from '@/blocks/feature-cards-block'
 import { FormCtaBlock } from '@/blocks/form-cta-block'
+import { ImageContentCardsBlock } from '@/blocks/image-content-cards-block'
+import { NewsletterBlock } from '@/blocks/newsletter-block'
+import { NumberedStepsBlock } from '@/blocks/numbered-steps-block'
+import { PeopleGridBlock } from '@/blocks/people-grid-block'
+import { PostsGridBlock } from '@/blocks/posts-grid-block'
+import { SplitHeroBlock } from '@/blocks/split-hero-block'
+import { TaglineMarqueeBlock } from '@/blocks/tagline-marquee-block'
 import { Wrapper } from '../(components)/wrapper'
 
 export default function Home() {
@@ -127,7 +127,7 @@ export default function Home() {
             number: '01',
             heading: 'Insight & Discovery',
             content:
-              "We begin by uncovering insights that shape your product’s direction. Through research, interviews, and market analysis, we identify opportunities, clarify goals, and build a shared vision. This step lays the foundation for everything ahead—like unfolding a fresh sheet of paper to reveal possibilities within your idea.",
+              'We begin by uncovering insights that shape your product’s direction. Through research, interviews, and market analysis, we identify opportunities, clarify goals, and build a shared vision. This step lays the foundation for everything ahead—like unfolding a fresh sheet of paper to reveal possibilities within your idea.',
             alternate: true,
           },
           {
@@ -171,14 +171,12 @@ export default function Home() {
           medium: {
             value: '95%',
             heading: 'Client Satisfaction Rate',
-            content:
-              'Measured across every project, from discovery to launch.',
+            content: 'Measured across every project, from discovery to launch.',
           },
           small: {
             value: '+20%',
             heading: 'Average Revenue Growth',
-            content:
-              'Seen by clients within 6 months of launching with us.',
+            content: 'Seen by clients within 6 months of launching with us.',
           },
           image2: {
             src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=300&fit=crop',
@@ -187,46 +185,11 @@ export default function Home() {
         }}
       />
 
-      {/* 8. Recent Works — article card grid */}
-      <CardGridBlock
+      {/* 8. Recent Works — paginated posts grid */}
+      <PostsGridBlock
         preheadingContent="KNOWLEDGE BASE"
         headingContent="Some of our recent <span>Articles!</span>"
         bodyContent="Insights on design, development, and digital growth — straight from our studio."
-        articles={[
-          {
-            image: {
-              src: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=440&h=293&fit=crop',
-              alt: 'React performance optimization',
-            },
-            heading:
-              'React Performance Optimization: 5 Patterns That Actually Matter',
-            content:
-              'Not all performance tips are created equal. We break down the React optimization patterns that deliver real-world improvements — from code splitting to state management.',
-            ctaUrl: '/blog/react-performance',
-          },
-          {
-            image: {
-              src: 'https://images.unsplash.com/photo-1586717799252-bd134ad00e26?w=440&h=293&fit=crop',
-              alt: 'UX and design thinking',
-            },
-            heading:
-              'The Hidden Cost of Bad UX: Why Design-First Development Wins',
-            content:
-              "Poor user experience doesn't just frustrate customers — it bleeds revenue. Learn how integrating design thinking reduces technical debt and creates products users love.",
-            ctaUrl: '/blog/design-first-development',
-          },
-          {
-            image: {
-              src: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?w=440&h=293&fit=crop',
-              alt: 'Figma to production workflow',
-            },
-            heading:
-              'From Figma to Production: Bridging the Designer-Developer Gap',
-            content:
-              "Design handoffs shouldn't feel like a game of telephone. Discover the workflows and communication patterns that turn design systems into living codebases.",
-            ctaUrl: '/blog/figma-to-production',
-          },
-        ]}
       />
 
       {/* 9. Newsletter */}
@@ -291,17 +254,17 @@ export default function Home() {
           {
             question: 'How long does a typical project take?',
             answer:
-              'Most projects range from 4 to 16 weeks depending on scope. A brand identity project typically takes 4–6 weeks, while a full product build can run 3–4 months. We\'ll give you a clear timeline in the discovery phase.',
+              "Most projects range from 4 to 16 weeks depending on scope. A brand identity project typically takes 4–6 weeks, while a full product build can run 3–4 months. We'll give you a clear timeline in the discovery phase.",
           },
           {
             question: 'Do you work with startups or established businesses?',
             answer:
-              'Both. We\'ve worked with early-stage startups finding their footing and established companies looking to rebrand or scale. What matters to us is the ambition behind the project.',
+              "Both. We've worked with early-stage startups finding their footing and established companies looking to rebrand or scale. What matters to us is the ambition behind the project.",
           },
           {
             question: 'What does your process look like?',
             answer:
-              'We follow four phases: Insight & Discovery, Concept & Craft, Build & Engineer, and Launch & Evolve. Each phase ends with a clear checkpoint so you\'re always in the loop and in control.',
+              "We follow four phases: Insight & Discovery, Concept & Craft, Build & Engineer, and Launch & Evolve. Each phase ends with a clear checkpoint so you're always in the loop and in control.",
           },
           {
             question: 'How do I get started?',

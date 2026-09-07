@@ -46,5 +46,8 @@ export async function POST(req: Request) {
   session.isLoggedIn = false
   await session.save()
 
-  return NextResponse.json({ requiresTotp: true, totpEnrolled: user.totpEnrolled })
+  return NextResponse.json({
+    requiresTotp: true,
+    totpEnrolled: user.totpEnrolled,
+  })
 }

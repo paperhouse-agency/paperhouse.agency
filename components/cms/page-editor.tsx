@@ -33,8 +33,15 @@ import { Undo2, Redo2 } from 'lucide-react'
 
 type Tab = 'blocks' | 'seo' | 'settings'
 
-interface PageAuthor { id: string; name: string }
-interface PageRef { id: string; title: string; slug: string }
+interface PageAuthor {
+  id: string
+  name: string
+}
+interface PageRef {
+  id: string
+  title: string
+  slug: string
+}
 
 export function PageEditor({
   initialPage,
@@ -78,18 +85,25 @@ export function PageEditor({
   const [previewOpen, setPreviewOpen] = useState(true)
   const [sidebarWidth, setSidebarWidth] = useState(268)
 
-  const { containerRef, previewWidth, available, isDragging: isResizing, startResize: startPreviewResize } =
-    useSplitResize({
-      defaultRatio: 0.5,
-      getReservedWidth: () => (sidebarOpen ? sidebarWidth + 4 : 0) + 14,
-    })
+  const {
+    containerRef,
+    previewWidth,
+    available,
+    isDragging: isResizing,
+    startResize: startPreviewResize,
+  } = useSplitResize({
+    defaultRatio: 0.5,
+    getReservedWidth: () => (sidebarOpen ? sidebarWidth + 4 : 0) + 14,
+  })
 
   function startSidebarResize(e: React.MouseEvent) {
     e.preventDefault()
     const startX = e.clientX
     const startW = sidebarWidth
     function onMove(ev: MouseEvent) {
-      setSidebarWidth(Math.max(160, Math.min(480, startW + ev.clientX - startX)))
+      setSidebarWidth(
+        Math.max(160, Math.min(480, startW + ev.clientX - startX))
+      )
     }
     function onUp() {
       document.removeEventListener('mousemove', onMove)
@@ -147,10 +161,15 @@ export function PageEditor({
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
-  if (!page) return <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Loading…</p>
+  if (!page)
+    return (
+      <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>
+        Loading…
+      </p>
+    )
 
   function handleDragStart(event: DragStartEvent) {
     setActiveDragId(String(event.active.id))
@@ -186,13 +205,14 @@ export function PageEditor({
   const canRedo = historyIndex < history.length - 1
   const isHomepage = page.slug === '' || page.slug === 'index'
   const activePaletteEntry = activeDragId?.startsWith('palette-')
-    ? BLOCK_REGISTRY.find((e) => e.type === activeDragId.slice('palette-'.length))
+    ? BLOCK_REGISTRY.find(
+        (e) => e.type === activeDragId.slice('palette-'.length)
+      )
     : null
 
   const filteredPalette = BLOCK_REGISTRY.filter((e) =>
-    e.label.toLowerCase().includes(sidebarSearch.toLowerCase()),
+    e.label.toLowerCase().includes(sidebarSearch.toLowerCase())
   )
-
 
   return (
     <DndContext
@@ -201,8 +221,10 @@ export function PageEditor({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div ref={containerRef} className="relative flex-1 flex min-h-0 overflow-hidden">
-
+      <div
+        ref={containerRef}
+        className="relative flex-1 flex min-h-0 overflow-hidden"
+      >
         {/* Floating sidebar collapse/expand button — anchored to shell */}
         <button
           type="button"
@@ -211,10 +233,22 @@ export function PageEditor({
           onClick={() => setSidebarOpen((v) => !v)}
           title={sidebarOpen ? 'Hide blocks panel' : 'Show blocks panel'}
         >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            {sidebarOpen
-              ? <path d="M15 18l-6-6 6-6" />
-              : <path d="M9 18l6-6-6-6" />}
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            {sidebarOpen ? (
+              <path d="M15 18l-6-6 6-6" />
+            ) : (
+              <path d="M9 18l6-6-6-6" />
+            )}
           </svg>
         </button>
 
@@ -223,60 +257,88 @@ export function PageEditor({
           className={`relative flex-none bg-[var(--chrome)] flex flex-col overflow-hidden transition-[width,min-width] duration-200${sidebarOpen ? '' : ' !w-0 min-w-0'}`}
           style={sidebarOpen ? { width: sidebarWidth } : undefined}
         >
-          {sidebarOpen && <>
-          <div className="px-[20px] pt-[22px] pb-[14px] flex-none">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Blocks</span>
-            </div>
-            <p className="mt-[8px] mb-0 font-body text-[12.5px] leading-[1.45] text-[var(--chrome-muted)]">Drag a block onto the page.</p>
-            <div className="mt-[14px] flex items-center gap-[9px] px-[14px] h-[38px] rounded-full bg-[rgba(26,26,26,0.05)] border border-transparent text-[var(--chrome-faint)]">
-              <span style={{ flex: 'none', opacity: 0.5, lineHeight: 1, fontSize: 14 }}>⌕</span>
-              <input
-                type="text"
-                value={sidebarSearch}
-                onChange={(e) => setSidebarSearch(e.target.value)}
-                className="border-none bg-transparent outline-none flex-1 font-body text-[13px] text-text min-w-0 placeholder:text-[var(--chrome-faint)]"
-                placeholder="Search blocks…"
-              />
-            </div>
-          </div>
+          {sidebarOpen && (
+            <>
+              <div className="px-[20px] pt-[22px] pb-[14px] flex-none">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">
+                    Blocks
+                  </span>
+                </div>
+                <p className="mt-[8px] mb-0 font-body text-[12.5px] leading-[1.45] text-[var(--chrome-muted)]">
+                  Drag a block onto the page.
+                </p>
+                <div className="mt-[14px] flex items-center gap-[9px] px-[14px] h-[38px] rounded-full bg-[rgba(26,26,26,0.05)] border border-transparent text-[var(--chrome-faint)]">
+                  <span
+                    style={{
+                      flex: 'none',
+                      opacity: 0.5,
+                      lineHeight: 1,
+                      fontSize: 14,
+                    }}
+                  >
+                    ⌕
+                  </span>
+                  <input
+                    type="text"
+                    value={sidebarSearch}
+                    onChange={(e) => setSidebarSearch(e.target.value)}
+                    className="border-none bg-transparent outline-none flex-1 font-body text-[13px] text-text min-w-0 placeholder:text-[var(--chrome-faint)]"
+                    placeholder="Search blocks…"
+                  />
+                </div>
+              </div>
 
-          <div className="flex-1 overflow-y-auto px-[14px] pb-[18px] pt-[4px] flex flex-col gap-[7px]">
-            {filteredPalette.length === 0 && (
-              <p className="font-body text-[13px] text-[var(--chrome-muted)] py-[14px] px-[4px]">No blocks match "{sidebarSearch}".</p>
-            )}
-            {filteredPalette.map((entry) => (
-              <PaletteItem
-                key={entry.type}
-                entry={entry}
-                onAdd={() => {
-                  const block = entry.defaultData()
-                  addBlock(block)
-                  setSelectedBlockId(block._id)
-                  setActiveTab('blocks')
-                }}
-              />
-            ))}
-          </div>
-          </>}
+              <div className="flex-1 overflow-y-auto px-[14px] pb-[18px] pt-[4px] flex flex-col gap-[7px]">
+                {filteredPalette.length === 0 && (
+                  <p className="font-body text-[13px] text-[var(--chrome-muted)] py-[14px] px-[4px]">
+                    No blocks match "{sidebarSearch}".
+                  </p>
+                )}
+                {filteredPalette.map((entry) => (
+                  <PaletteItem
+                    key={entry.type}
+                    entry={entry}
+                    onAdd={() => {
+                      const block = entry.defaultData()
+                      addBlock(block)
+                      setSelectedBlockId(block._id)
+                      setActiveTab('blocks')
+                    }}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </aside>
 
         {/* Sidebar resize handle */}
         {sidebarOpen && (
           // biome-ignore lint/a11y/noStaticElementInteractions: drag handle
-          <div className="flex-none w-[4px] cursor-col-resize bg-transparent transition-[background] duration-150 z-[5] hover:bg-primary hover:opacity-35 active:bg-primary active:opacity-35" onMouseDown={startSidebarResize} />
+          <div
+            className="flex-none w-[4px] cursor-col-resize bg-transparent transition-[background] duration-150 z-[5] hover:bg-primary hover:opacity-35 active:bg-primary active:opacity-35"
+            onMouseDown={startSidebarResize}
+          />
         )}
 
         {/* ── Right canvas ── */}
         <div className="flex-1 overflow-y-auto min-w-0 bg-[var(--workspace)] flex flex-col">
-
           {/* Page header */}
           <div className="px-[34px] pt-[26px] pb-[22px] flex items-start justify-between gap-[24px] flex-wrap flex-none">
             <div>
               <div className="flex items-center gap-[8px] mb-[10px]">
-                <Link href="/admin/pages" className="font-mono text-[11.5px] tracking-[0.08em] text-[var(--chrome-muted)] no-underline transition-colors duration-[120ms] hover:text-text">Pages</Link>
-                <span className="text-[var(--chrome-faint)] text-[12px] leading-none">›</span>
-                <span className="font-mono text-[11.5px] tracking-[0.08em] text-text">{page.title || 'Untitled'}</span>
+                <Link
+                  href="/admin/pages"
+                  className="font-mono text-[11.5px] tracking-[0.08em] text-[var(--chrome-muted)] no-underline transition-colors duration-[120ms] hover:text-text"
+                >
+                  Pages
+                </Link>
+                <span className="text-[var(--chrome-faint)] text-[12px] leading-none">
+                  ›
+                </span>
+                <span className="font-mono text-[11.5px] tracking-[0.08em] text-text">
+                  {page.title || 'Untitled'}
+                </span>
               </div>
 
               <div className="flex items-center gap-[14px] flex-wrap">
@@ -310,21 +372,29 @@ export function PageEditor({
                   }}
                 />
 
-                <span className={`inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none ${page.status === 'published' ? 'bg-[rgba(31,138,91,0.12)] text-[#1f8a5b]' : 'bg-bluishgray text-[var(--chrome-muted)]'}`}>
+                <span
+                  className={`inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none ${page.status === 'published' ? 'bg-[rgba(31,138,91,0.12)] text-[#1f8a5b]' : 'bg-bluishgray text-[var(--chrome-muted)]'}`}
+                >
                   {page.status === 'published' ? 'Published' : 'Draft'}
                 </span>
 
                 {isHomepage && (
-                  <span className="inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none bg-[rgba(255,77,0,0.1)] text-primary">Homepage</span>
+                  <span className="inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none bg-[rgba(255,77,0,0.1)] text-primary">
+                    Homepage
+                  </span>
                 )}
               </div>
 
               <div className="font-body text-[14px] text-[var(--chrome-muted)] mt-[10px] flex items-center gap-[8px]">
                 {isHomepage ? (
-                  <span className="font-mono text-[12px] text-[var(--chrome-muted)]">/</span>
+                  <span className="font-mono text-[12px] text-[var(--chrome-muted)]">
+                    /
+                  </span>
                 ) : (
                   <div className="flex items-center gap-[4px] flex-1 min-w-0">
-                    <span className="font-mono text-[13px] text-[var(--chrome-faint)] flex-none">/</span>
+                    <span className="font-mono text-[13px] text-[var(--chrome-faint)] flex-none">
+                      /
+                    </span>
                     <input
                       type="text"
                       value={page.slug}
@@ -339,7 +409,7 @@ export function PageEditor({
                           return
                         }
                         const res = await fetch(
-                          `/api/admin/pages?slugCheck=${encodeURIComponent(val)}&excludeId=${page.id}`,
+                          `/api/admin/pages?slugCheck=${encodeURIComponent(val)}&excludeId=${page.id}`
                         )
                         const data = (await res.json()) as { taken?: boolean }
                         setSlugError(data.taken ? 'Slug already in use' : null)
@@ -348,7 +418,9 @@ export function PageEditor({
                       className={`font-mono text-[13px] text-[var(--chrome-muted)] border border-transparent bg-transparent py-[2px] px-[6px] rounded-[4px] transition-[border-color,background] duration-150 min-w-[60px] flex-1 max-w-[300px] outline-none hover:border-[var(--c-card-border)] hover:bg-[var(--c-card)] focus:border-[var(--chrome-muted)] focus:bg-[var(--c-card)] focus:text-text${slugError ? ' border-primary' : ''}`}
                     />
                     {slugError && (
-                      <span className="text-[12px] text-primary font-body">{slugError}</span>
+                      <span className="text-[12px] text-primary font-body">
+                        {slugError}
+                      </span>
                     )}
                   </div>
                 )}
@@ -382,12 +454,16 @@ export function PageEditor({
 
                 {/* Save status + button */}
                 <span className="font-mono text-[11.5px] whitespace-nowrap tracking-[0.04em]">
-                  {isSaving && <span className="text-[var(--chrome-muted)]">Saving…</span>}
-                  {!isSaving && saveError && <span className="text-primary">{saveError}</span>}
-                  {!(isSaving || saveError ) && isDirty && (
+                  {isSaving && (
+                    <span className="text-[var(--chrome-muted)]">Saving…</span>
+                  )}
+                  {!isSaving && saveError && (
+                    <span className="text-primary">{saveError}</span>
+                  )}
+                  {!(isSaving || saveError) && isDirty && (
                     <span className="text-[#b87c20]">● Unsaved</span>
                   )}
-                  {!((isSaving || saveError ) || isDirty ) && lastSaved && (
+                  {!(isSaving || saveError || isDirty) && lastSaved && (
                     <span className="text-[#1f8a5b]">✓ Saved</span>
                   )}
                 </span>
@@ -395,12 +471,14 @@ export function PageEditor({
                 <Button
                   type="button"
                   variant="default"
-                  color={"primary"}
+                  color={'primary'}
                   size="sm"
                   disabled={isSaving || !isDirty}
                   onClick={save}
                   title="Save (Ctrl+S)"
-                  className={isSaving || !isDirty ? 'opacity-50 cursor-not-allowed' : ''}
+                  className={
+                    isSaving || !isDirty ? 'opacity-50 cursor-not-allowed' : ''
+                  }
                 >
                   {isSaving ? 'Saving…' : 'Save changes'}
                 </Button>
@@ -430,8 +508,6 @@ export function PageEditor({
                   {previewOpen ? 'Hide preview' : 'Preview'}
                 </Button>
 
-                {/* biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: intentional toggle */}
-                {/* biome-ignore lint/a11y/useSemanticElements: label triggers checkbox */}
                 <label className="inline-flex items-center gap-[10px] cursor-pointer select-none">
                   <input
                     type="checkbox"
@@ -442,14 +518,16 @@ export function PageEditor({
                       setSlug(
                         e.target.checked
                           ? ''
-                          : (page.title
+                          : page.title
                               .toLowerCase()
                               .replace(/[^a-z0-9]+/g, '-')
-                              .replace(/(^-|-$)/g, '') || 'untitled'),
+                              .replace(/(^-|-$)/g, '') || 'untitled'
                       )
                     }}
                   />
-                  <span className="font-mono text-[11.5px] tracking-[0.08em] uppercase text-[var(--chrome-muted)]">Set as homepage</span>
+                  <span className="font-mono text-[11.5px] tracking-[0.08em] uppercase text-[var(--chrome-muted)]">
+                    Set as homepage
+                  </span>
                 </label>
               </div>
             </div>
@@ -472,7 +550,11 @@ export function PageEditor({
               >
                 {label}
                 {count !== null && (
-                  <span className={`font-mono text-[11px] py-[2px] px-[7px] rounded-full ${activeTab === id ? 'bg-[rgba(255,77,0,0.1)] text-primary' : 'bg-bluishgray text-[var(--chrome-faint)]'}`}>{count}</span>
+                  <span
+                    className={`font-mono text-[11px] py-[2px] px-[7px] rounded-full ${activeTab === id ? 'bg-[rgba(255,77,0,0.1)] text-primary' : 'bg-bluishgray text-[var(--chrome-faint)]'}`}
+                  >
+                    {count}
+                  </span>
                 )}
               </button>
             ))}
@@ -488,7 +570,8 @@ export function PageEditor({
                 <div className="flex flex-col gap-[14px]">
                   {page.blocks.length === 0 && (
                     <div className="flex items-center justify-center gap-[8px] p-[22px] rounded-[12px] border-[1.5px] border-dashed border-[var(--chrome-faint)] bg-transparent text-[var(--chrome-muted)] font-mono text-[13px] tracking-[0.04em] cursor-default text-center">
-                      Drag a block from the left panel or click a block to add it.
+                      Drag a block from the left panel or click a block to add
+                      it.
                     </div>
                   )}
                   {page.blocks.map((block, i) => (
@@ -499,12 +582,13 @@ export function PageEditor({
                       isSelected={block._id === selectedBlockId}
                       onSelect={() =>
                         setSelectedBlockId(
-                          block._id === selectedBlockId ? null : block._id,
+                          block._id === selectedBlockId ? null : block._id
                         )
                       }
                       onRemove={() => {
                         removeBlock(block._id)
-                        if (selectedBlockId === block._id) setSelectedBlockId(null)
+                        if (selectedBlockId === block._id)
+                          setSelectedBlockId(null)
                       }}
                       onDuplicate={() => duplicateBlock(block._id)}
                       onToggleVisible={() =>
@@ -537,55 +621,93 @@ export function PageEditor({
         </div>
 
         {/* ── Preview resize handle ── */}
-        {activeTab === 'blocks' && previewOpen && (() => {
-          const previewPct = available > 0 ? Math.round((previewWidth / available) * 100) : 50
-          const editorPct = 100 - previewPct
-          const labelBase = 'absolute top-1/2 -translate-y-1/2 font-mono text-[10px] tracking-[0.06em] whitespace-nowrap px-[7px] py-[3px] rounded-full border bg-[var(--c-card)] border-[var(--chrome-border)] pointer-events-none transition-[opacity,color] duration-150'
-          return (
-            // biome-ignore lint/a11y/noStaticElementInteractions: drag handle
-            <div
-              className="relative flex-none w-[14px] cursor-col-resize z-[5] select-none group flex items-center justify-center"
-              onMouseDown={startPreviewResize}
-            >
-              {/* track line */}
-              <div className={`absolute inset-y-0 w-px left-1/2 -translate-x-px transition-colors duration-150 ${isResizing ? 'bg-primary/40' : 'bg-[var(--chrome-border)] group-hover:bg-primary/30'}`} />
+        {activeTab === 'blocks' &&
+          previewOpen &&
+          (() => {
+            const previewPct =
+              available > 0 ? Math.round((previewWidth / available) * 100) : 50
+            const editorPct = 100 - previewPct
+            const labelBase =
+              'absolute top-1/2 -translate-y-1/2 font-mono text-[10px] tracking-[0.06em] whitespace-nowrap px-[7px] py-[3px] rounded-full border bg-[var(--c-card)] border-[var(--chrome-border)] pointer-events-none transition-[opacity,color] duration-150'
+            return (
+              // biome-ignore lint/a11y/noStaticElementInteractions: drag handle
+              <div
+                className="relative flex-none w-[14px] cursor-col-resize z-[5] select-none group flex items-center justify-center"
+                onMouseDown={startPreviewResize}
+              >
+                {/* track line */}
+                <div
+                  className={`absolute inset-y-0 w-px left-1/2 -translate-x-px transition-colors duration-150 ${isResizing ? 'bg-primary/40' : 'bg-[var(--chrome-border)] group-hover:bg-primary/30'}`}
+                />
 
-              {/* ||| pill */}
-              <div className={`relative z-[1] flex items-center justify-center h-[36px] w-[10px] rounded-full bg-[var(--c-card)] border transition-[border-color,color,box-shadow] duration-150 ${isResizing ? 'border-primary/50 text-primary shadow-[0_0_0_3px_rgba(255,77,0,0.08)]' : 'border-[var(--chrome-border)] text-[var(--chrome-faint)] group-hover:border-primary/40 group-hover:text-primary'}`}>
-                <svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor" aria-hidden="true">
-                  <rect x="0" y="0" width="1.5" height="10" rx="0.75" />
-                  <rect x="2.25" y="0" width="1.5" height="10" rx="0.75" />
-                  <rect x="4.5" y="0" width="1.5" height="10" rx="0.75" />
-                </svg>
-              </div>
+                {/* ||| pill */}
+                <div
+                  className={`relative z-[1] flex items-center justify-center h-[36px] w-[10px] rounded-full bg-[var(--c-card)] border transition-[border-color,color,box-shadow] duration-150 ${isResizing ? 'border-primary/50 text-primary shadow-[0_0_0_3px_rgba(255,77,0,0.08)]' : 'border-[var(--chrome-border)] text-[var(--chrome-faint)] group-hover:border-primary/40 group-hover:text-primary'}`}
+                >
+                  <svg
+                    width="6"
+                    height="10"
+                    viewBox="0 0 6 10"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <rect x="0" y="0" width="1.5" height="10" rx="0.75" />
+                    <rect x="2.25" y="0" width="1.5" height="10" rx="0.75" />
+                    <rect x="4.5" y="0" width="1.5" height="10" rx="0.75" />
+                  </svg>
+                </div>
 
-              {/* editor width label — floats into canvas */}
-              <div className={`${labelBase} right-full mr-[8px] ${isResizing ? 'opacity-100 text-text' : 'opacity-0 group-hover:opacity-100 text-[var(--chrome-muted)]'}`}>
-                {editorPct}%
-              </div>
+                {/* editor width label — floats into canvas */}
+                <div
+                  className={`${labelBase} right-full mr-[8px] ${isResizing ? 'opacity-100 text-text' : 'opacity-0 group-hover:opacity-100 text-[var(--chrome-muted)]'}`}
+                >
+                  {editorPct}%
+                </div>
 
-              {/* preview width label — floats into preview */}
-              <div className={`${labelBase} left-full ml-[8px] ${isResizing ? 'opacity-100 text-text' : 'opacity-0 group-hover:opacity-100 text-[var(--chrome-muted)]'}`}>
-                {previewPct}%
+                {/* preview width label — floats into preview */}
+                <div
+                  className={`${labelBase} left-full ml-[8px] ${isResizing ? 'opacity-100 text-text' : 'opacity-0 group-hover:opacity-100 text-[var(--chrome-muted)]'}`}
+                >
+                  {previewPct}%
+                </div>
               </div>
-            </div>
-          )
-        })()}
+            )
+          })()}
 
         {activeTab === 'blocks' && previewOpen && (
-          <div className="flex-none bg-[var(--chrome)] flex flex-col overflow-hidden" style={{ width: previewWidth }}>
+          <div
+            className="flex-none bg-[var(--chrome)] flex flex-col overflow-hidden"
+            style={{ width: previewWidth }}
+          >
             <div className="px-[20px] py-[13px] border-b border-[var(--chrome-border)] flex items-center justify-between flex-none">
-              <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Preview</span>
+              <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">
+                Preview
+              </span>
               <button
                 type="button"
                 className="inline-flex items-center justify-center w-[26px] h-[26px] rounded-[6px] border-none bg-transparent text-[var(--chrome-muted)] cursor-pointer transition-[background,color] duration-[120ms] flex-none hover:bg-[rgba(26,26,26,0.08)] hover:text-text"
                 onClick={() => setPreviewOpen(false)}
                 title="Hide preview"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
               </button>
             </div>
-            <BlocksPreview blocks={page.blocks} selectedBlockId={selectedBlockId} />
+            <BlocksPreview
+              blocks={page.blocks}
+              selectedBlockId={selectedBlockId}
+            />
           </div>
         )}
       </div>
@@ -594,9 +716,13 @@ export function PageEditor({
       <DragOverlay>
         {activePaletteEntry && (
           <div className="flex items-center gap-[11px] py-[10px] px-[12px] rounded-[10px] cursor-grab bg-[rgba(255,255,255,0.88)] border border-[rgba(26,26,26,0.08)] shadow-[0_8px_24px_rgba(0,0,0,0.15)] text-text select-none opacity-[0.88]">
-            <span className="text-[var(--chrome-faint)] cursor-grab flex-none leading-none text-[16px]">⠿</span>
+            <span className="text-[var(--chrome-faint)] cursor-grab flex-none leading-none text-[16px]">
+              ⠿
+            </span>
             <span className="w-[30px] h-[30px] rounded-[8px] flex-none inline-flex items-center justify-center bg-bluishgray text-[var(--chrome-muted)]" />
-            <span className="font-body text-[13px] whitespace-nowrap overflow-hidden text-ellipsis">{activePaletteEntry.label}</span>
+            <span className="font-body text-[13px] whitespace-nowrap overflow-hidden text-ellipsis">
+              {activePaletteEntry.label}
+            </span>
           </div>
         )}
       </DragOverlay>
@@ -609,7 +735,12 @@ function PaletteItem({
   entry,
   onAdd,
 }: {
-  entry: { type: string; label: string; icon?: string; defaultData: () => BlockData }
+  entry: {
+    type: string
+    label: string
+    icon?: string
+    defaultData: () => BlockData
+  }
   onAdd: () => void
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -627,11 +758,18 @@ function PaletteItem({
       {...listeners}
       {...attributes}
     >
-      <span className="text-[var(--chrome-faint)] cursor-grab flex-none leading-none text-[16px]">⠿</span>
-      <span className="w-[30px] h-[30px] rounded-[8px] flex-none inline-flex items-center justify-center bg-bluishgray text-[var(--chrome-muted)]" style={{ fontSize: 14 }}>
+      <span className="text-[var(--chrome-faint)] cursor-grab flex-none leading-none text-[16px]">
+        ⠿
+      </span>
+      <span
+        className="w-[30px] h-[30px] rounded-[8px] flex-none inline-flex items-center justify-center bg-bluishgray text-[var(--chrome-muted)]"
+        style={{ fontSize: 14 }}
+      >
         {entry.icon ? '◈' : '▣'}
       </span>
-      <span className="font-body text-[13px] whitespace-nowrap overflow-hidden text-ellipsis">{entry.label}</span>
+      <span className="font-body text-[13px] whitespace-nowrap overflow-hidden text-ellipsis">
+        {entry.label}
+      </span>
     </div>
   )
 }
@@ -665,6 +803,9 @@ function SortableBlockCard({
 
   const entry = BLOCK_REGISTRY.find((e) => e.type === block._type)
   const isVisible = block.visible ?? true
+  let opacity = 1
+  if (isDragging) opacity = 0.4
+  else if (!isVisible) opacity = 0.5
 
   return (
     <div
@@ -672,13 +813,12 @@ function SortableBlockCard({
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
-        opacity: isDragging ? 0.4 : isVisible ? 1 : 0.5,
+        opacity,
       }}
     >
       <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
         {/* Card header — click to expand/collapse */}
-        {/* biome-ignore lint/a11y/noStaticElementInteractions: dnd-kit sortable wrapper */}
-        {/* biome-ignore lint/a11y/useSemanticElements: sortable requires div */}
+        {/* biome-ignore lint/a11y/useSemanticElements: contains nested action <button>s, can't itself be a <button> */}
         <div
           className="flex items-center justify-between px-[18px] py-[14px] border-b border-[var(--c-card-border)] bg-[var(--workspace)] cursor-pointer transition-[background] duration-100 select-none hover:bg-[#f5f3f0]"
           onClick={onSelect}
@@ -705,14 +845,18 @@ function SortableBlockCard({
             </span>
 
             <div className="flex items-center gap-[9px] min-w-0">
-              <span className="font-heading text-[16px] text-text whitespace-nowrap overflow-hidden text-ellipsis">{entry?.label ?? block._type}</span>
-              <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-[var(--chrome-faint)] border border-[var(--c-card-border)] rounded-[4px] py-[2px] px-[6px] flex-none">Block {String(index + 1).padStart(2, '0')}</span>
+              <span className="font-heading text-[16px] text-text whitespace-nowrap overflow-hidden text-ellipsis">
+                {entry?.label ?? block._type}
+              </span>
+              <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-[var(--chrome-faint)] border border-[var(--c-card-border)] rounded-[4px] py-[2px] px-[6px] flex-none">
+                Block {String(index + 1).padStart(2, '0')}
+              </span>
             </div>
           </div>
 
+          {/* biome-ignore lint/a11y/noStaticElementInteractions: only blocks propagation to the card's onSelect, children are the real controls */}
           <div
             className="flex items-center gap-[6px] flex-none"
-            // stop propagation so clicks on action buttons don't toggle selection
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
           >
@@ -771,24 +915,41 @@ function SeoTab({
   const keywords = (seo.keywords ?? []).join(', ')
 
   const fieldCls = 'flex flex-col gap-[8px]'
-  const labelCls = 'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
-  const inputSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
-  const hintCls = 'font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]'
+  const labelCls =
+    'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
+  const inputSmCls =
+    'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
+  const hintCls =
+    'font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]'
 
   return (
     <div className="px-[34px] py-[24px] pb-[40px] flex-1">
-      <div className="grid gap-[26px] items-start" style={{ gridTemplateColumns: 'minmax(0,1fr) 400px' }}>
+      <div
+        className="grid gap-[26px] items-start"
+        style={{ gridTemplateColumns: 'minmax(0,1fr) 400px' }}
+      >
         {/* Left: form */}
         <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
           <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
-            <h3 className="font-heading font-normal text-[19px] m-0 text-text">Search engine optimization</h3>
-            <p className="font-body text-[13.5px] text-[var(--chrome-muted)] mt-[5px] mb-0">How this page appears in search results and when shared.</p>
+            <h3 className="font-heading font-normal text-[19px] m-0 text-text">
+              Search engine optimization
+            </h3>
+            <p className="font-body text-[13.5px] text-[var(--chrome-muted)] mt-[5px] mb-0">
+              How this page appears in search results and when shared.
+            </p>
           </div>
           <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
             <div className={fieldCls}>
-              <div className={labelCls} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Meta title <span className="text-primary">*</span></span>
-                <span className={`font-body text-[12px] ${metaTitle.length > 60 ? 'text-primary' : 'text-[var(--chrome-faint)]'}`}>
+              <div
+                className={labelCls}
+                style={{ display: 'flex', justifyContent: 'space-between' }}
+              >
+                <span>
+                  Meta title <span className="text-primary">*</span>
+                </span>
+                <span
+                  className={`font-body text-[12px] ${metaTitle.length > 60 ? 'text-primary' : 'text-[var(--chrome-faint)]'}`}
+                >
                   {metaTitle.length} / 60
                 </span>
               </div>
@@ -802,9 +963,14 @@ function SeoTab({
             </div>
 
             <div className={fieldCls}>
-              <div className={labelCls} style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div
+                className={labelCls}
+                style={{ display: 'flex', justifyContent: 'space-between' }}
+              >
                 <span>Meta description</span>
-                <span className={`font-body text-[12px] ${metaDesc.length > 160 ? 'text-primary' : 'text-[var(--chrome-faint)]'}`}>
+                <span
+                  className={`font-body text-[12px] ${metaDesc.length > 160 ? 'text-primary' : 'text-[var(--chrome-faint)]'}`}
+                >
                   {metaDesc.length} / 160
                 </span>
               </div>
@@ -818,8 +984,11 @@ function SeoTab({
             </div>
 
             <div className={fieldCls}>
-              <label className={labelCls}>Keywords</label>
+              <label className={labelCls} htmlFor="seo-keywords">
+                Keywords
+              </label>
               <input
+                id="seo-keywords"
                 type="text"
                 className={inputSmCls}
                 value={keywords}
@@ -838,8 +1007,11 @@ function SeoTab({
 
             {/* OG image if available */}
             <div className={fieldCls}>
-              <label className={labelCls}>Social share image (OG)</label>
+              <label className={labelCls} htmlFor="seo-og-image">
+                Social share image (OG)
+              </label>
               <input
+                id="seo-og-image"
                 type="url"
                 className={`${inputSmCls} font-mono`}
                 value={seo.ogImage ?? ''}
@@ -852,10 +1024,23 @@ function SeoTab({
             {/* Search indexing toggle */}
             <div className="flex items-center justify-between px-[16px] py-[14px] rounded-[10px] bg-bluishgray">
               <div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500 }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 500,
+                  }}
+                >
                   Allow search indexing
                 </div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--chrome-muted)', marginTop: 2 }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    color: 'var(--chrome-muted)',
+                    marginTop: 2,
+                  }}
+                >
                   Let search engines list this page.
                 </div>
               </div>
@@ -870,14 +1055,28 @@ function SeoTab({
         </div>
 
         {/* Right: previews */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22, position: 'sticky', top: 0 }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 22,
+            position: 'sticky',
+            top: 0,
+          }}
+        >
           <div>
-            <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Search result preview</div>
+            <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">
+              Search result preview
+            </div>
             <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] px-[20px] py-[18px] mt-[12px]">
               <div className="flex items-center gap-[9px] mb-[8px]">
-                <span className="w-[26px] h-[26px] rounded-full bg-primary text-offwhite font-body font-bold text-[13px] inline-flex items-center justify-center flex-none">p</span>
+                <span className="w-[26px] h-[26px] rounded-full bg-primary text-offwhite font-body font-bold text-[13px] inline-flex items-center justify-center flex-none">
+                  p
+                </span>
                 <div>
-                  <div className="font-body text-[13px] leading-[1.2] text-text">PaperHouse</div>
+                  <div className="font-body text-[13px] leading-[1.2] text-text">
+                    PaperHouse
+                  </div>
                   <div className="font-mono text-[11.5px] text-[var(--chrome-muted)]">
                     https://paperhouse.agency/{page.slug || ''}
                   </div>
@@ -887,26 +1086,39 @@ function SeoTab({
                 {metaTitle || page.title || 'Page title'}
               </div>
               <div className="font-body text-[13px] text-[var(--chrome-muted)] leading-[1.5]">
-                {metaDesc || 'Add a meta description to preview how this page appears in search results.'}
+                {metaDesc ||
+                  'Add a meta description to preview how this page appears in search results.'}
               </div>
             </div>
           </div>
 
           <div>
-            <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">Social card</div>
+            <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)]">
+              Social card
+            </div>
             <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden mt-[12px]">
               <div className="aspect-[1200/500] overflow-hidden bg-bluishgray flex items-center justify-center text-[var(--chrome-faint)] font-mono text-[12px]">
                 {seo.ogImage ? (
                   // biome-ignore lint/performance/noImgElement: admin-only preview
-                  <img src={seo.ogImage} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={seo.ogImage}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <span>No OG image set</span>
                 )}
               </div>
               <div className="px-[16px] py-[14px]">
-                <div className="font-mono text-[11px] tracking-[0.08em] uppercase text-[var(--chrome-faint)]">paperhouse.agency</div>
-                <div className="font-heading text-[16px] mt-[5px] text-text">{metaTitle || page.title}</div>
-                <div className="font-body text-[12px] text-[var(--chrome-muted)] mt-[4px] leading-[1.5]">{metaDesc}</div>
+                <div className="font-mono text-[11px] tracking-[0.08em] uppercase text-[var(--chrome-faint)]">
+                  paperhouse.agency
+                </div>
+                <div className="font-heading text-[16px] mt-[5px] text-text">
+                  {metaTitle || page.title}
+                </div>
+                <div className="font-body text-[12px] text-[var(--chrome-muted)] mt-[4px] leading-[1.5]">
+                  {metaDesc}
+                </div>
               </div>
             </div>
           </div>
@@ -980,28 +1192,35 @@ function SettingsTab({
   }
 
   const fieldCls = 'flex flex-col gap-[8px]'
-  const labelCls = 'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
-  const selectSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary cursor-pointer appearance-auto'
-  const inputSmCls = 'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
+  const labelCls =
+    'font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--chrome-muted)] flex items-center gap-[3px]'
+  const selectSmCls =
+    'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary cursor-pointer appearance-auto'
+  const inputSmCls =
+    'w-full bg-[var(--c-card)] border border-[var(--field-border)] rounded-[6px] px-[10px] py-[8px] font-body text-[13.5px] text-text outline-none transition-[border-color] duration-150 focus:border-primary placeholder:text-[var(--chrome-faint)]'
 
   return (
     <div className="px-[34px] py-[24px] pb-[40px] flex-1">
       <div className="max-w-[780px] flex flex-col gap-[20px]">
-
         {/* ── Page settings card ── */}
         <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
           <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
-            <h3 className="font-heading font-normal text-[19px] m-0 text-text">Page settings</h3>
-            <p className="font-body text-[13.5px] text-[var(--chrome-muted)] mt-[5px] mb-0">Placement, visibility and authorship for this page.</p>
+            <h3 className="font-heading font-normal text-[19px] m-0 text-text">
+              Page settings
+            </h3>
+            <p className="font-body text-[13.5px] text-[var(--chrome-muted)] mt-[5px] mb-0">
+              Placement, visibility and authorship for this page.
+            </p>
           </div>
           <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
-
             {/* 2-col grid */}
-            <div className="grid gap-[18px_20px]" style={{ gridTemplateColumns: '1fr 1fr' }}>
-
+            <div
+              className="grid gap-[18px_20px]"
+              style={{ gridTemplateColumns: '1fr 1fr' }}
+            >
               {/* Status (read-only — use Publish toggle below) */}
               <div className={fieldCls}>
-                <label className={labelCls}>Status</label>
+                <div className={labelCls}>Status</div>
                 <span
                   className={`inline-flex items-center gap-[6px] rounded-full py-[4px] px-[11px] font-mono text-[11px] tracking-[0.1em] uppercase whitespace-nowrap before:content-[''] before:w-[6px] before:h-[6px] before:rounded-full before:bg-current before:flex-none self-start ${page.status === 'published' ? 'bg-[rgba(31,138,91,0.12)] text-[#1f8a5b]' : 'bg-bluishgray text-[var(--chrome-muted)]'}`}
                 >
@@ -1011,29 +1230,40 @@ function SettingsTab({
 
               {/* Visibility */}
               <div className={fieldCls}>
-                <label htmlFor="settings-visibility" className={labelCls}>Visibility</label>
+                <label htmlFor="settings-visibility" className={labelCls}>
+                  Visibility
+                </label>
                 <select
                   id="settings-visibility"
                   className={selectSmCls}
                   value={s.visibility ?? 'public'}
                   onChange={(e) =>
-                    updateSettings({ visibility: e.target.value as CmsPageSettings['visibility'] })
+                    updateSettings({
+                      visibility: e.target
+                        .value as CmsPageSettings['visibility'],
+                    })
                   }
                 >
                   {VISIBILITY_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
                   ))}
                 </select>
               </div>
 
               {/* Parent page */}
               <div className={fieldCls}>
-                <label htmlFor="settings-parent" className={labelCls}>Parent page</label>
+                <label htmlFor="settings-parent" className={labelCls}>
+                  Parent page
+                </label>
                 <select
                   id="settings-parent"
                   className={selectSmCls}
                   value={s.parentSlug ?? ''}
-                  onChange={(e) => updateSettings({ parentSlug: e.target.value || undefined })}
+                  onChange={(e) =>
+                    updateSettings({ parentSlug: e.target.value || undefined })
+                  }
                 >
                   <option value="">— None (top level) —</option>
                   {allPages.map((p) => (
@@ -1046,34 +1276,46 @@ function SettingsTab({
 
               {/* Template */}
               <div className={fieldCls}>
-                <label htmlFor="settings-template" className={labelCls}>Template</label>
+                <label htmlFor="settings-template" className={labelCls}>
+                  Template
+                </label>
                 <select
                   id="settings-template"
                   className={selectSmCls}
                   value={s.template ?? 'default'}
                   onChange={(e) =>
-                    updateSettings({ template: e.target.value as CmsPageSettings['template'] })
+                    updateSettings({
+                      template: e.target.value as CmsPageSettings['template'],
+                    })
                   }
                 >
                   {TEMPLATE_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
                   ))}
                 </select>
               </div>
 
               {/* Author */}
               <div className={fieldCls}>
-                <label htmlFor="settings-author" className={labelCls}>Author</label>
+                <label htmlFor="settings-author" className={labelCls}>
+                  Author
+                </label>
                 {authors.length > 0 ? (
                   <select
                     id="settings-author"
                     className={selectSmCls}
                     value={s.author ?? ''}
-                    onChange={(e) => updateSettings({ author: e.target.value || undefined })}
+                    onChange={(e) =>
+                      updateSettings({ author: e.target.value || undefined })
+                    }
                   >
                     <option value="">— Unassigned —</option>
                     {authors.map((a) => (
-                      <option key={a.id} value={a.name}>{a.name}</option>
+                      <option key={a.id} value={a.name}>
+                        {a.name}
+                      </option>
                     ))}
                   </select>
                 ) : (
@@ -1082,7 +1324,9 @@ function SettingsTab({
                     type="text"
                     className={inputSmCls}
                     value={s.author ?? ''}
-                    onChange={(e) => updateSettings({ author: e.target.value || undefined })}
+                    onChange={(e) =>
+                      updateSettings({ author: e.target.value || undefined })
+                    }
                     placeholder="Author name"
                   />
                 )}
@@ -1090,7 +1334,9 @@ function SettingsTab({
 
               {/* Language */}
               <div className={fieldCls}>
-                <label htmlFor="settings-language" className={labelCls}>Language</label>
+                <label htmlFor="settings-language" className={labelCls}>
+                  Language
+                </label>
                 <select
                   id="settings-language"
                   className={selectSmCls}
@@ -1098,34 +1344,58 @@ function SettingsTab({
                   onChange={(e) => updateSettings({ language: e.target.value })}
                 >
                   {LANGUAGE_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
                   ))}
                 </select>
               </div>
-
             </div>
 
             {/* Publish date (read-only timestamp, auto-set on first publish) */}
             <div className={fieldCls}>
-              <label className={labelCls}>First published</label>
+              <label className={labelCls} htmlFor="settings-first-published">
+                First published
+              </label>
               <input
+                id="settings-first-published"
                 type="text"
                 className={`${inputSmCls} font-mono`}
                 value={formatPublishedAt(s.publishedAt)}
                 readOnly
                 placeholder="Not yet published"
-                style={{ color: s.publishedAt ? 'var(--color-text)' : 'var(--chrome-faint)' }}
+                style={{
+                  color: s.publishedAt
+                    ? 'var(--color-text)'
+                    : 'var(--chrome-faint)',
+                }}
               />
-              <span className="font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]">Set automatically when this page is first published.</span>
+              <span className="font-body text-[12px] text-[var(--chrome-faint)] mt-[-2px] leading-[1.4]">
+                Set automatically when this page is first published.
+              </span>
             </div>
 
             {/* Set as homepage toggle */}
             <div className="flex items-center justify-between px-[16px] py-[14px] rounded-[10px] bg-bluishgray">
               <div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500, color: 'var(--color-text)' }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: 'var(--color-text)',
+                  }}
+                >
                   Set as homepage
                 </div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--chrome-muted)', marginTop: 2 }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    color: 'var(--chrome-muted)',
+                    marginTop: 2,
+                  }}
+                >
                   Serve this page at the site root (/).
                 </div>
               </div>
@@ -1137,10 +1407,10 @@ function SettingsTab({
                   setSlug(
                     e.target.checked
                       ? ''
-                      : (page.title
+                      : page.title
                           .toLowerCase()
                           .replace(/[^a-z0-9]+/g, '-')
-                          .replace(/(^-|-$)/g, '') || 'untitled'),
+                          .replace(/(^-|-$)/g, '') || 'untitled'
                   )
                 }}
               />
@@ -1149,11 +1419,27 @@ function SettingsTab({
             {/* Published toggle */}
             <div className="flex items-center justify-between px-[16px] py-[14px] rounded-[10px] bg-bluishgray">
               <div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500, color: 'var(--color-text)' }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: 'var(--color-text)',
+                  }}
+                >
                   Published
                 </div>
-                <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--chrome-muted)', marginTop: 2 }}>
-                  {page.status === 'published' ? 'Live — visible to the public.' : 'Draft — not publicly visible.'}
+                <div
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    color: 'var(--chrome-muted)',
+                    marginTop: 2,
+                  }}
+                >
+                  {page.status === 'published'
+                    ? 'Live — visible to the public.'
+                    : 'Draft — not publicly visible.'}
                 </div>
               </div>
               <input
@@ -1163,39 +1449,76 @@ function SettingsTab({
                 onChange={() => toggleStatus()}
               />
             </div>
-
           </div>
         </div>
 
         {/* ── Meta card (read-only timestamps) ── */}
         <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
           <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
-            <h3 className="font-heading font-normal text-[19px] m-0 text-text">Page info</h3>
+            <h3 className="font-heading font-normal text-[19px] m-0 text-text">
+              Page info
+            </h3>
           </div>
           <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
-            <div className="grid gap-[18px_20px]" style={{ gridTemplateColumns: '1fr 1fr' }}>
+            <div
+              className="grid gap-[18px_20px]"
+              style={{ gridTemplateColumns: '1fr 1fr' }}
+            >
               <div className={fieldCls}>
-                <label className={labelCls}>Page ID</label>
-                <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--chrome-muted)', wordBreak: 'break-all' }}>
+                <div className={labelCls}>Page ID</div>
+                <code
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 12,
+                    color: 'var(--chrome-muted)',
+                    wordBreak: 'break-all',
+                  }}
+                >
                   {page.id}
                 </code>
               </div>
               <div className={fieldCls}>
-                <label className={labelCls}>URL slug</label>
-                <code style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--chrome-muted)' }}>
+                <div className={labelCls}>URL slug</div>
+                <code
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 13,
+                    color: 'var(--chrome-muted)',
+                  }}
+                >
                   /{page.slug || ''}
                 </code>
               </div>
               <div className={fieldCls}>
-                <label className={labelCls}>Created</label>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--chrome-muted)' }}>
-                  {new Date(page.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                <div className={labelCls}>Created</div>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 13.5,
+                    color: 'var(--chrome-muted)',
+                  }}
+                >
+                  {new Date(page.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
                 </span>
               </div>
               <div className={fieldCls}>
-                <label className={labelCls}>Last updated</label>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--chrome-muted)' }}>
-                  {new Date(page.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                <div className={labelCls}>Last updated</div>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 13.5,
+                    color: 'var(--chrome-muted)',
+                  }}
+                >
+                  {new Date(page.updatedAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
                 </span>
               </div>
             </div>
@@ -1205,20 +1528,45 @@ function SettingsTab({
         {/* ── Danger zone card ── */}
         <div className="bg-[var(--c-card)] rounded-[12px] border border-[var(--c-card-border)] shadow-[var(--c-card-shadow)] overflow-hidden">
           <div className="px-[22px] py-[18px] border-b border-[var(--c-card-border)]">
-            <h3 className="font-heading font-normal text-[19px] m-0 text-primary">Danger zone</h3>
+            <h3 className="font-heading font-normal text-[19px] m-0 text-primary">
+              Danger zone
+            </h3>
           </div>
           <div className="px-[22px] py-[22px] flex flex-col gap-[20px]">
             <div className="flex items-center justify-between gap-[20px]">
               <div>
-                <h4 style={{ fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500, margin: '0 0 3px', color: 'var(--color-text)' }}>Delete this page</h4>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--chrome-muted)', margin: 0 }}>Permanently removes the page and all its blocks. This cannot be undone.</p>
+                <h4
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 14,
+                    fontWeight: 500,
+                    margin: '0 0 3px',
+                    color: 'var(--color-text)',
+                  }}
+                >
+                  Delete this page
+                </h4>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 12,
+                    color: 'var(--chrome-muted)',
+                    margin: 0,
+                  }}
+                >
+                  Permanently removes the page and all its blocks. This cannot
+                  be undone.
+                </p>
               </div>
               <Button
                 variant="outline"
                 color="primary"
                 size="sm"
                 onClick={async () => {
-                  if (!confirm(`Delete "${page.title}"? This cannot be undone.`)) return
+                  if (
+                    !confirm(`Delete "${page.title}"? This cannot be undone.`)
+                  )
+                    return
                   await fetch(`/api/admin/pages/${page.id}`, {
                     method: 'DELETE',
                     headers: { 'x-requested-with': 'XMLHttpRequest' },
@@ -1231,7 +1579,6 @@ function SettingsTab({
             </div>
           </div>
         </div>
-
       </div>
     </div>
   )

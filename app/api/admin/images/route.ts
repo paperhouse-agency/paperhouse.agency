@@ -26,7 +26,10 @@ export async function POST(req: Request) {
   // Buffer the full request body
   const buffer = await req.arrayBuffer()
   if (buffer.byteLength > MAX_SIZE) {
-    return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'File too large (max 10MB)' },
+      { status: 400 }
+    )
   }
 
   // Check magic bytes

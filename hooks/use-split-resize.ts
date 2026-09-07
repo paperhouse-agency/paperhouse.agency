@@ -57,8 +57,8 @@ export function useSplitResize({
 
     rafId = requestAnimationFrame(attempt)
     return () => cancelAnimationFrame(rafId)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // biome-ignore lint/correctness/useExhaustiveDependencies: measureAvailable is recreated every render by design
+  }, [defaultRatio, measureAvailable])
 
   function startResize(e: React.MouseEvent) {
     e.preventDefault()

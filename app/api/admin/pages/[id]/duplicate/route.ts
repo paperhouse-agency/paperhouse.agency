@@ -3,7 +3,10 @@ import { getSession } from '@/libs/cms/auth/session'
 import { canPerform } from '@/libs/cms/auth/permissions'
 import { readPageById, writePage } from '@/libs/cms/storage'
 
-export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = await getSession()
   if (!(session.isLoggedIn && session.role)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -15,7 +18,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
 
   const { id } = await params
   const original = await readPageById(id)
-  if (!original) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (!original)
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const now = new Date().toISOString()
   const copy = {
