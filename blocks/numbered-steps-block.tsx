@@ -1,13 +1,8 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import type { LucideIcon } from 'lucide-react'
 
-const AnimatedFlowSteps = dynamic(
-  () =>
-    import('@/animations/animated-flow-steps').then((m) => m.AnimatedFlowSteps),
-  { ssr: false }
-)
+import { AnimatedFlowSteps } from '@/animations/animated-flow-steps'
 
 export interface NumberedStepCard {
   icon: LucideIcon

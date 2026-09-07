@@ -189,6 +189,19 @@ GET https://paperhouse.agency/api/routes
 
 **Note on titles:** HQ-set titles bypass the root layout's `%s - PaperHouse` template and render exactly as typed, so the character counter is truthful.
 
+## Fixed: homepage was not server-rendered
+
+The homepage used to prerender to nothing but the `app/loading.tsx` shell ("Cooking…", ~20KB, no `<main>`), with every Suspense boundary marked `BAILOUT_TO_CLIENT_SIDE_RENDERING`. Crawlers received no body content — which would have undermined the entire SEO/GEO effort, since AI crawlers generally do not execute JavaScript.
+
+Two independent causes:
+
+1. **`Math.random()` during render** in `components/marquee/index.tsx` (`useRef(Math.random() * 1000)`). With `cacheComponents: true`, a non-deterministic value in the static prerender forces the render to bail to the client. Because `BrandsBlock` and `TaglineMarqueeBlock` use `Marquee`, this took down the whole page. Fixed by seeding the offset on the first animation tick instead of during render.
+2. **`ssr: false` on the GSAP animation wrappers** in `image-content-cards-block.tsx` and `numbered-steps-block.tsx`, which hid the three value-prop cards and all four process steps from the HTML. Both animations run entirely inside `useGSAP` (an effect) and never touch the DOM during render, so the dynamic import was unnecessary. Now imported normally.
+
+Result: the homepage prerender went from ~20KB with no content to ~94KB with every section present.
+
+Symptom worth remembering: this reproduced only in `next build` (dev SSR rendered fine), so verify SEO changes against `.next/server/app/*.html`, not the dev server.
+
 ## Open items
 
 1. **Nav links to routes that don't exist** — the header links `/about`, `/blog`, `/contact`, none of which are routes. They 404 today (this predates these changes). Either build the pages or trim `content/navigation.ts`.
