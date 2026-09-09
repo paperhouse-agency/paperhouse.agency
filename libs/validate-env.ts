@@ -19,32 +19,6 @@ const ENV_VARIABLES: EnvValidation[] = [
     description: 'Base URL for the application (defaults to localhost:3000)',
   },
 
-  // Sanity CMS
-  {
-    name: 'NEXT_PUBLIC_SANITY_PROJECT_ID',
-    required: false,
-    description: 'Sanity project ID',
-    integration: 'Sanity',
-  },
-  {
-    name: 'NEXT_PUBLIC_SANITY_DATASET',
-    required: false,
-    description: 'Sanity dataset name',
-    integration: 'Sanity',
-  },
-  {
-    name: 'NEXT_PUBLIC_SANITY_STUDIO_URL',
-    required: false,
-    description: 'Sanity Studio URL',
-    integration: 'Sanity',
-  },
-  {
-    name: 'SANITY_API_WRITE_TOKEN',
-    required: false,
-    description: 'Sanity API write token for draft mode',
-    integration: 'Sanity',
-  },
-
   // HubSpot
   {
     name: 'HUBSPOT_ACCESS_TOKEN',
@@ -59,18 +33,19 @@ const ENV_VARIABLES: EnvValidation[] = [
     integration: 'HubSpot',
   },
 
-  // CMS
+  // SEO/GEO — data managed in HQ (hq.paperhouse.agency), read from Neon
   {
-    name: 'CMS_SESSION_SECRET',
+    name: 'POSTGRES_URL',
     required: false,
-    description: 'iron-session AES-256-GCM key (32+ chars)',
-    integration: 'CMS',
+    description: 'Neon Postgres connection string (read-only SEO/GEO data)',
+    integration: 'SEO',
   },
   {
-    name: 'BLOB_READ_WRITE_TOKEN',
+    name: 'REVALIDATE_SECRET',
     required: false,
-    description: 'Vercel Blob read/write token',
-    integration: 'CMS',
+    description:
+      'Shared bearer secret HQ uses to call POST /api/revalidate and GET /api/routes',
+    integration: 'SEO',
   },
 
   // Mailchimp
@@ -129,7 +104,8 @@ const ENV_VARIABLES: EnvValidation[] = [
   {
     name: 'NEXT_PUBLIC_CLARITY_PROJECT_ID',
     required: false,
-    description: 'Microsoft Clarity project ID for heatmaps and session recordings',
+    description:
+      'Microsoft Clarity project ID for heatmaps and session recordings',
     integration: 'Analytics',
   },
 ]

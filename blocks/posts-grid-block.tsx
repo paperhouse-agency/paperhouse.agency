@@ -1,20 +1,16 @@
+'use client'
+
+import { useState } from 'react'
+import { Button } from '@/components/button'
 import { ArticleCard } from '@/components/molecules/article-card'
+import { POSTS } from '@/content/posts'
 
-export interface CardGridArticle {
-  image: {
-    src: string
-    alt: string
-  }
-  heading: string
-  content: string
-  ctaUrl?: string
-}
+const POSTS_PER_PAGE = 6
 
-export interface CardGridBlockProps {
+export interface PostsGridBlockProps {
   preheadingContent?: string
   headingContent: string
   bodyContent?: string
-  articles: CardGridArticle[]
 }
 
 function parseHeading(content: string) {
@@ -32,12 +28,18 @@ function parseHeading(content: string) {
   })
 }
 
-export function CardGridBlock({
+export function PostsGridBlock({
   preheadingContent,
   headingContent,
   bodyContent,
-  articles,
-}: CardGridBlockProps) {
+}: PostsGridBlockProps) {
+  const [page, setPage] = useState(1)
+
+  const posts = POSTS.slice(0, page * POSTS_PER_PAGE)
+  const hasMore = posts.length < POSTS.length
+
+  if (POSTS.length === 0) return null
+
   return (
     <section className="py-15 dt:px-5">
       <div className="wrapper mx-auto">
@@ -55,10 +57,29 @@ export function CardGridBlock({
           )}
 
           <div className="grid grid-cols-1 dt:grid-cols-3 gap-5">
-            {articles.map((article) => (
-              <ArticleCard key={article.heading} {...article} />
+            {posts.map((post) => (
+              <ArticleCard
+                key={post.id}
+                image={post.image}
+                heading={post.title}
+                content={post.excerpt}
+                ctaUrl={`/${post.slug}`}
+              />
             ))}
           </div>
+
+          {hasMore && (
+            <div className="flex justify-center mt-5">
+              <Button
+                variant="outline"
+                color="primary"
+                size="md"
+                onClick={() => setPage((p) => p + 1)}
+              >
+                Load More
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>

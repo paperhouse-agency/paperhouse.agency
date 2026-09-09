@@ -147,9 +147,21 @@ const iconWrapperVariants = cva(
       },
     },
     compoundVariants: [
-      { variant: 'tertiary', color: 'primary', className: 'bg-primary text-white' },
-      { variant: 'tertiary', color: 'secondary', className: 'bg-secondary text-white' },
-      { variant: 'tertiary', color: 'neutral', className: 'bg-black! text-white!' },
+      {
+        variant: 'tertiary',
+        color: 'primary',
+        className: 'bg-primary text-white',
+      },
+      {
+        variant: 'tertiary',
+        color: 'secondary',
+        className: 'bg-secondary text-white',
+      },
+      {
+        variant: 'tertiary',
+        color: 'neutral',
+        className: 'bg-black! text-white!',
+      },
     ],
     defaultVariants: {
       size: 'md',
@@ -228,7 +240,7 @@ export function Button({
     return (
       <Link
         href={url}
-        datatype='paperhouse-button'
+        datatype="paperhouse-button"
         className={buttonVariants({ variant, color, size, hasIcon, className })}
         {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
       >

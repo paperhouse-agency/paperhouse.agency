@@ -1,5 +1,4 @@
 'use client'
-import type { BlockSchema } from '@/libs/cms/block-schema'
 
 import { useActionState } from 'react'
 import Script from 'next/script'
@@ -24,12 +23,18 @@ export interface NewsletterBlockProps {
   preheadingContent?: string
   headingContent?: string
   bodyContent?: string
+  emailPlaceholder: string
+  subscribeLabel: string
+  subscribingLabel: string
 }
 
 export function NewsletterBlock({
-  preheadingContent = 'THE PAPER TRAIL',
-  headingContent = 'One sharp idea on design & building, every two weeks',
-  bodyContent = "No fluff, no spam. Just the things we're learning in the studio. Join 4,000+ founders and makers",
+  preheadingContent,
+  headingContent,
+  bodyContent,
+  emailPlaceholder,
+  subscribeLabel,
+  subscribingLabel,
 }: NewsletterBlockProps) {
   const [state, formAction, isPending] = useActionState(
     hubspotNewsletterAction,
@@ -41,7 +46,8 @@ export function NewsletterBlock({
   const turnstileError = state.errors?.get('turnstile')?.message
   const serverError =
     state.status === 500
-      ? (errorMessages[state.message] ?? 'Something went wrong. Please try again.')
+      ? (errorMessages[state.message] ??
+        'Something went wrong. Please try again.')
       : null
 
   return (
@@ -53,7 +59,6 @@ export function NewsletterBlock({
       <section className="py-15 px-5">
         <div className="wrapper mx-auto">
           <div className="relative bg-primary rounded-3xl overflow-hidden px-8 py-12 dt:px-16 dt:py-20 flex flex-col dt:flex-row dt:items-center gap-10 dt:gap-20">
-
             {/* Decorative circles */}
             <div className="absolute -top-24 -left-16 w-72 h-72 rounded-full bg-white/10 pointer-events-none" />
             <div className="absolute -bottom-28 right-32 w-96 h-96 rounded-full bg-white/10 pointer-events-none" />
@@ -82,7 +87,7 @@ export function NewsletterBlock({
                       <input
                         type="email"
                         name="email"
-                        placeholder="you@company.com"
+                        placeholder={emailPlaceholder}
                         required
                         defaultValue={state.inputs?.email}
                         className="flex-1 bg-transparent pl-3 body text-text placeholder:text-text/40 outline-none"
@@ -92,55 +97,43 @@ export function NewsletterBlock({
                         disabled={isPending}
                         className="bg-text text-offwhite body rounded-full px-5 py-2 shrink-0 transition-colors duration-500 hover:bg-text/80 disabled:opacity-60"
                       >
-                        {isPending ? 'Subscribing...' : 'Subscribe'}
+                        {isPending ? subscribingLabel : subscribeLabel}
                       </button>
                     </div>
 
                     <div
                       className="cf-turnstile"
-                      data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY}
+                      data-sitekey={
+                        process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY
+                      }
                       data-appearance="interaction-only"
                       data-size="invisible"
                     />
 
                     {(emailError || turnstileError || serverError) && (
                       <p className="body-small text-offwhite/80">
-                        {emailError && (errorMessages[emailError] ?? emailError)}
-                        {!emailError && turnstileError && 'Security verification failed. Please try again.'}
+                        {emailError &&
+                          (errorMessages[emailError] ?? emailError)}
+                        {!emailError &&
+                          turnstileError &&
+                          'Security verification failed. Please try again.'}
                         {!(emailError || turnstileError) && serverError}
                       </p>
                     )}
                   </form>
 
-                  <p className="mono-wide text-offwhite/60" style={{ fontSize: '11px' }}>
+                  <p
+                    className="mono-wide text-offwhite/60"
+                    style={{ fontSize: '11px' }}
+                  >
                     Unsubscribe any time. We respect your inbox
                   </p>
                 </>
               )}
             </div>
-
           </div>
         </div>
       </section>
     </>
   )
-}
-
-
-export const cmsSchema: BlockSchema = {
-  type: 'newsletter',
-  label: 'Newsletter',
-  icon: 'Mail',
-  fields: [
-    { key: 'preheadingContent', label: 'Preheading', type: 'text', placeholder: 'THE PAPER TRAIL' },
-    { key: 'headingContent', label: 'Heading', type: 'text', span: 'full', placeholder: 'One sharp idea on design & building, every two weeks' },
-    { key: 'bodyContent', label: 'Body', type: 'textarea', span: 'full', description: 'Short subheading below the main heading' },
-  ],
-  defaultData: () => ({
-    _id: crypto.randomUUID(),
-    _type: 'newsletter',
-    preheadingContent: '',
-    headingContent: '',
-    bodyContent: '',
-  }),
 }

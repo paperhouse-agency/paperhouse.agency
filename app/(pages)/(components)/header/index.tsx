@@ -4,8 +4,9 @@ import cn from 'clsx'
 import { useState } from 'react'
 
 import { Button } from '@/components/button'
+import { Image } from '@/components/image'
 import { Link } from '@/components/link'
-import type { CmsNavItem } from '@/libs/cms/types'
+import type { NavItem } from '@/content/navigation'
 
 const PRODUCTS = [
   {
@@ -45,7 +46,7 @@ function MenuIcon({ isOpen }: { isOpen: boolean }) {
   )
 }
 
-export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
+export function Header({ navItems = [] }: { navItems?: NavItem[] }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => setIsOpen((v) => !v)
@@ -77,22 +78,40 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
 
             {/* Center: logo */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-[100px] dt:px-0">
-              <img
+              <Image
                 src="/PAPERHOUSE_ALT.svg"
                 alt="PaperHouse Agency"
-                className={cn('transition-opacity duration-150', isOpen ? 'opacity-0' : 'opacity-100')}
+                width={172}
+                height={18}
+                priority
+                className={cn(
+                  'transition-opacity duration-150',
+                  isOpen ? 'opacity-0' : 'opacity-100'
+                )}
                 style={{ maxHeight: '16px', width: 'auto' }}
               />
-              <img
+              <Image
                 src="/PAPERHOUSE.svg"
                 alt="PaperHouse Agency"
-                className={cn('absolute transition-opacity duration-150', isOpen ? 'opacity-100' : 'opacity-0')}
+                width={172}
+                height={18}
+                priority
+                className={cn(
+                  'absolute transition-opacity duration-150',
+                  isOpen ? 'opacity-100' : 'opacity-0'
+                )}
                 style={{ maxHeight: '16px', width: 'auto' }}
               />
             </div>
 
             {/* Right: CTA */}
-            <Button variant="tertiary" color="neutral" size="sm" hasIcon className="mono uppercase">
+            <Button
+              variant="tertiary"
+              color="neutral"
+              size="sm"
+              hasIcon
+              className="mono uppercase"
+            >
               <span className="dt:hidden">TALK</span>
               <span className="hidden dt:inline">LET'S TALK</span>
             </Button>
@@ -109,7 +128,6 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
           >
             <div className="h-px bg-bluishgray mx-6" />
             <div className="grid grid-cols-2 dt:grid-cols-4 relative">
-
               {/* Column dividers — not full height */}
               <div className="hidden dt:block absolute left-1/4 top-6 bottom-6 w-px bg-bluishgray" />
               <div className="hidden dt:block absolute left-2/4 top-6 bottom-6 w-px bg-bluishgray" />
@@ -117,7 +135,9 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
 
               {/* Col 1: Explore */}
               <div className="px-6 py-6 dt:px-8 dt:py-7 border-b border-bluishgray dt:border-b-0">
-                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">Explore</p>
+                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">
+                  Explore
+                </p>
                 <ul className="flex flex-col gap-2">
                   {navItems.map((item) => (
                     <li key={item.id}>
@@ -125,7 +145,10 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
                         href={item.url}
                         className="heading-4 text-text hover:text-primary transition-colors block"
                         onClick={close}
-                        {...(item.openInNewTab && { target: '_blank', rel: 'noopener noreferrer' })}
+                        {...(item.openInNewTab && {
+                          target: '_blank',
+                          rel: 'noopener noreferrer',
+                        })}
                       >
                         {item.label}
                       </Link>
@@ -136,7 +159,9 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
 
               {/* Col 2: Products */}
               <div className="px-6 py-6 dt:px-8 dt:py-7 border-b border-bluishgray dt:border-b-0">
-                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">Products</p>
+                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">
+                  Products
+                </p>
                 <ul className="flex flex-col gap-4">
                   {PRODUCTS.map((product) => (
                     <li key={product.name}>
@@ -159,7 +184,9 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
 
               {/* Col 3: Work */}
               <div className="px-6 py-6 dt:px-8 dt:py-7">
-                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">Work</p>
+                <p className="mono-wide text-[10px] text-text/35 mb-4 tracking-widest">
+                  Work
+                </p>
                 <ul className="flex flex-col gap-2">
                   {WORK_LINKS.map((link) => (
                     <li key={link.label}>
@@ -177,11 +204,14 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
 
               {/* Col 4: Featured */}
               <div className="px-6 py-6 dt:px-8 dt:py-7 flex flex-col gap-3">
-                <p className="mono-wide text-[10px] text-text/35 tracking-widest">Latest Product</p>
+                <p className="mono-wide text-[10px] text-text/35 tracking-widest">
+                  Latest Product
+                </p>
                 <div className="flex-1 rounded-[14px] bg-secondary min-h-[120px] dt:min-h-[160px]">
                   <div className="p-5 h-full flex flex-col items-center justify-center gap-3 text-center">
                     <p className="heading-4 text-white">Habitly</p>
                     <div className="w-full rounded-[10px] overflow-hidden bg-white/10 aspect-[16/7]">
+                      {/* biome-ignore lint/performance/noImgElement: temporary placehold.co placeholder, not an allowlisted image domain */}
                       <img
                         src="https://placehold.co/400x175/ffffff/cccccc?text=Habitly"
                         alt="Habitly app preview"
@@ -201,20 +231,21 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </header>
 
       {/* Backdrop */}
-      <div
-        role="button"
+      <button
+        type="button"
         tabIndex={-1}
         aria-label="Close menu"
         className={cn(
-          'fixed top-0 left-0 w-screen h-screen z-[48] bg-black/30 backdrop-blur-[2px] transition-opacity duration-300',
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          'fixed top-0 left-0 w-screen h-screen z-[48] appearance-none border-0 bg-black/30 p-0 backdrop-blur-[2px] transition-opacity duration-300',
+          isOpen
+            ? 'opacity-100 pointer-events-auto'
+            : 'opacity-0 pointer-events-none'
         )}
         onClick={close}
         onKeyDown={(e) => e.key === 'Escape' && close()}
@@ -222,22 +253,130 @@ export function Header({ navItems = [] }: { navItems?: CmsNavItem[] }) {
 
       {/* Progressive blur — top */}
       <div className="fixed top-0 left-0 right-0 h-[120px] z-[49] pointer-events-none">
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 12%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 12%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 25%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 25%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 42%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 42%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 60%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 60%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 78%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 78%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(1px)', WebkitBackdropFilter: 'blur(1px)', maskImage: 'linear-gradient(to bottom, black 0%, transparent 95%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 95%)' }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(40px)',
+            WebkitBackdropFilter: 'blur(40px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 12%)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 0%, transparent 12%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 25%)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 0%, transparent 25%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 42%)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 0%, transparent 42%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 60%)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 0%, transparent 60%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 78%)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 0%, transparent 78%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(1px)',
+            WebkitBackdropFilter: 'blur(1px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 95%)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 0%, transparent 95%)',
+          }}
+        />
       </div>
 
       {/* Progressive blur — bottom */}
       <div className="fixed bottom-0 left-0 right-0 h-[120px] z-[49] pointer-events-none">
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', maskImage: 'linear-gradient(to top, black 0%, transparent 12%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 12%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', maskImage: 'linear-gradient(to top, black 0%, transparent 25%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 25%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', maskImage: 'linear-gradient(to top, black 0%, transparent 42%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 42%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', maskImage: 'linear-gradient(to top, black 0%, transparent 60%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 60%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', maskImage: 'linear-gradient(to top, black 0%, transparent 78%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 78%)' }} />
-        <div className="absolute inset-0" style={{ backdropFilter: 'blur(1px)', WebkitBackdropFilter: 'blur(1px)', maskImage: 'linear-gradient(to top, black 0%, transparent 95%)', WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 95%)' }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(40px)',
+            WebkitBackdropFilter: 'blur(40px)',
+            maskImage: 'linear-gradient(to top, black 0%, transparent 12%)',
+            WebkitMaskImage:
+              'linear-gradient(to top, black 0%, transparent 12%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            maskImage: 'linear-gradient(to top, black 0%, transparent 25%)',
+            WebkitMaskImage:
+              'linear-gradient(to top, black 0%, transparent 25%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            maskImage: 'linear-gradient(to top, black 0%, transparent 42%)',
+            WebkitMaskImage:
+              'linear-gradient(to top, black 0%, transparent 42%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            maskImage: 'linear-gradient(to top, black 0%, transparent 60%)',
+            WebkitMaskImage:
+              'linear-gradient(to top, black 0%, transparent 60%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            maskImage: 'linear-gradient(to top, black 0%, transparent 78%)',
+            WebkitMaskImage:
+              'linear-gradient(to top, black 0%, transparent 78%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(1px)',
+            WebkitBackdropFilter: 'blur(1px)',
+            maskImage: 'linear-gradient(to top, black 0%, transparent 95%)',
+            WebkitMaskImage:
+              'linear-gradient(to top, black 0%, transparent 95%)',
+          }}
+        />
       </div>
     </>
   )

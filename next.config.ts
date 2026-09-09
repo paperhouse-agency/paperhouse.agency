@@ -101,10 +101,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'cdn.sanity.io',
-      },
-      {
-        protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com',
       },
     ],
@@ -143,17 +139,13 @@ const nextConfig: NextConfig = {
       ],
     },
   ],
+  // `/home` is now served at `/` directly; keep the 301 so old inbound links
+  // and any existing search-engine results still resolve.
   redirects: async () => [
     {
       source: '/home',
       destination: '/',
       permanent: true,
-    },
-  ],
-  rewrites: async () => [
-    {
-      source: '/',
-      destination: '/home',
     },
   ],
 }

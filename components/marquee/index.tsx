@@ -34,7 +34,11 @@ export function Marquee({
 
   // return
   const elementsRef = useRef<HTMLDivElement[]>([])
-  const transformRef = useRef(Math.random() * 1000)
+  // Seeded on the first animation tick rather than during render: Math.random()
+  // is non-deterministic, and calling it while prerendering forces the whole
+  // page to bail out to client-side rendering (so crawlers get an empty shell).
+  const transformRef = useRef(0)
+  const isSeededRef = useRef(false)
   const isHovered = useRef(false)
 
   const [setIntersectionRef, intersection] = useIntersectionObserver()
@@ -43,6 +47,11 @@ export function Marquee({
 
   useTempus((_, deltaTime) => {
     const entry = getEntry()
+
+    if (!isSeededRef.current) {
+      transformRef.current = Math.random() * 1000
+      isSeededRef.current = true
+    }
 
     if (!intersection?.isIntersecting) return
     if (pauseOnHover && isHovered.current) return

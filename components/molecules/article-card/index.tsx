@@ -11,7 +11,12 @@ export interface ArticleCardProps {
   ctaUrl?: string
 }
 
-export function ArticleCard({ image, heading, content, ctaUrl }: ArticleCardProps) {
+export function ArticleCard({
+  image,
+  heading,
+  content,
+  ctaUrl,
+}: ArticleCardProps) {
   return (
     <div className="flex flex-col gap-5 items-start">
       <div className="relative w-full aspect-[440/293] rounded-lg overflow-hidden shrink-0">

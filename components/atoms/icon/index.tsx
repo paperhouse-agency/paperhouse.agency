@@ -18,7 +18,7 @@ export function IconAtom({
     <div
       className={cn(
         'w-12 h-12 rounded-full bg-bluishgray flex items-center justify-center shrink-0',
-        wrapperClassName,
+        wrapperClassName
       )}
     >
       <Icon size={size} className={cn('text-text', className)} />
