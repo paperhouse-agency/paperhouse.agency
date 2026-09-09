@@ -18,6 +18,28 @@ export const pageSeoTag = (slug: string) => `seo-page:${slug}`
 export const SITE_SEO_TAG = 'seo-site'
 export const SITEMAP_TAG = 'seo-sitemap'
 
+/** Postgres `undefined_table` — the table has not been created yet. */
+const UNDEFINED_TABLE = '42P01'
+
+/**
+ * HQ owns these tables and their migrations. Until it runs them the tables
+ * simply do not exist, which is an expected state rather than a fault: callers
+ * fall back to the in-code defaults. Keep that case quiet so it does not read
+ * as a broken build, but still surface genuine connection/query failures.
+ */
+function reportReadFailure(what: string, error: unknown) {
+  if ((error as { code?: string } | null)?.code === UNDEFINED_TABLE) {
+    if (process.env.NODE_ENV === 'development') {
+      console.info(
+        `[seo] ${what} not provisioned by HQ yet — using in-code defaults`
+      )
+    }
+    return
+  }
+
+  console.warn(`[seo] ${what} read failed:`, error)
+}
+
 export async function getPageSeo(slug: string): Promise<PageSeo | null> {
   'use cache'
   cacheTag(pageSeoTag(slug))
@@ -44,7 +66,7 @@ export async function getPageSeo(slug: string): Promise<PageSeo | null> {
       updatedAt: row.updated_at ? String(row.updated_at) : undefined,
     }
   } catch (error) {
-    console.warn(`[seo] page_seo read failed for "${slug}":`, error)
+    reportReadFailure(`page_seo ("${slug}")`, error)
     return null
   }
 }
@@ -73,7 +95,7 @@ export async function getSiteSeo(): Promise<SiteSeo> {
       updatedAt: row.updated_at ? String(row.updated_at) : undefined,
     }
   } catch (error) {
-    console.warn('[seo] site_seo read failed:', error)
+    reportReadFailure('site_seo', error)
     return SITE_SEO_FALLBACK
   }
 }
@@ -99,7 +121,7 @@ export async function getAllPageSeo(): Promise<Record<string, PageSeo>> {
     }
     return map
   } catch (error) {
-    console.warn('[seo] page_seo bulk read failed:', error)
+    reportReadFailure('page_seo (bulk)', error)
     return {}
   }
 }
