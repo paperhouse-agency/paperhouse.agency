@@ -1,36 +1,45 @@
-import { IBM_Plex_Sans } from 'next/font/google'
 import localFont from 'next/font/local'
 
-// Heading font - Bianco Serif (local)
+// Heading font - P22 Mackinac Pro (local)
 const heading = localFont({
   src: [
     {
-      path: '../public/fonts/BiancoSerif/BiancoSerif-Regular.woff2',
+      path: '../public/fonts/Mackinac/P22MackinacPro-Book_25.otf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: '../public/fonts/BiancoSerif/BiancoSerif-Italic.woff2',
+      path: '../public/fonts/Mackinac/P22MackinacPro-BookItalic_15.otf',
       weight: '400',
       style: 'italic',
     },
     {
-      path: '../public/fonts/BiancoSerif/BiancoSerif-Bold.woff2',
+      path: '../public/fonts/Mackinac/P22MackinacPro-Medium_26.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/Mackinac/P22MackinacPro-MedItalic_18.otf',
+      weight: '500',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/Mackinac/P22MackinacPro-Bold_16.otf',
       weight: '700',
       style: 'normal',
     },
     {
-      path: '../public/fonts/BiancoSerif/BiancoSerif-BoldItalic.woff2',
+      path: '../public/fonts/Mackinac/P22MackinacPro-BoldItalic_11.otf',
       weight: '700',
       style: 'italic',
     },
     {
-      path: '../public/fonts/BiancoSerif/BiancoSerif-ExtraBold.woff2',
+      path: '../public/fonts/Mackinac/P22MackinacPro-ExtraBold_12.otf',
       weight: '800',
       style: 'normal',
     },
     {
-      path: '../public/fonts/BiancoSerif/BiancoSerif-ExtraBoldItalic.woff2',
+      path: '../public/fonts/Mackinac/P22MackinacPro-ExBoldItalic_17.otf',
       weight: '800',
       style: 'italic',
     },
@@ -41,11 +50,70 @@ const heading = localFont({
   fallback: ['Georgia', 'Times New Roman', 'serif'],
 })
 
-// Body font - IBM Plex Sans (Google Fonts)
-const body = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
+// Body font - Quiet Sans (local)
+const body = localFont({
+  src: [
+    {
+      path: '../public/fonts/QuietSans/Flatit  QuietSansExtraLight.otf',
+      weight: '200',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  Quiet Sans ExtraLight Italic.otf',
+      weight: '200',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  QuietSansLight.otf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  Quiet Sans Light Italic.otf',
+      weight: '300',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  QuietSansRegular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  Quiet Sans Italic.otf',
+      weight: '400',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  QuietSansSemiBold.otf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  Quiet Sans SemiBold Italic.otf',
+      weight: '600',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  Quiet Sans Bold.otf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  Quiet Sans Bold Italic.otf',
+      weight: '700',
+      style: 'italic',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  QuietSansExtraBold.otf',
+      weight: '800',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/QuietSans/Flatit  Quiet Sans ExtraBold Italic.otf',
+      weight: '800',
+      style: 'italic',
+    },
+  ],
   display: 'swap',
   variable: '--font-body',
   preload: true,

@@ -95,7 +95,7 @@ const buttonVariants = cva(
         variant: ['default', 'outline'],
         size: 'lg',
         hasIcon: false,
-        className: 'px-[30px] py-5',
+        className: 'px-[30px] py-[13px]',
       },
       // Size padding with icon
       {
@@ -114,7 +114,7 @@ const buttonVariants = cva(
         variant: ['default', 'outline'],
         size: 'lg',
         hasIcon: true,
-        className: 'py-2 pr-2 pl-[30px]',
+        className: 'py-1.5 pr-1.5 pl-[30px]',
       },
     ],
     defaultVariants: {
@@ -133,7 +133,7 @@ const iconWrapperVariants = cva(
       size: {
         sm: 'w-[18px] h-[18px]',
         md: 'w-[30px] h-[30px]',
-        lg: 'w-[50px] h-[50px]',
+        lg: 'w-10 h-10',
       },
       color: {
         primary: 'bg-accent text-white',

@@ -58,3 +58,6 @@ storybook-static
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Local scratch files
+demo_gradient.ts
