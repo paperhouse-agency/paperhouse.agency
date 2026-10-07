@@ -79,28 +79,12 @@ export function Header({ navItems = [] }: { navItems?: NavItem[] }) {
             {/* Center: logo */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-[100px] dt:px-0">
               <Image
-                src="/PAPERHOUSE_ALT.svg"
+                src="/Horizontal-Dark.svg"
                 alt="PaperHouse Agency"
-                width={172}
-                height={18}
+                width={106}
+                height={24}
                 priority
-                className={cn(
-                  'transition-opacity duration-150',
-                  isOpen ? 'opacity-0' : 'opacity-100'
-                )}
-                style={{ maxHeight: '16px', width: 'auto' }}
-              />
-              <Image
-                src="/PAPERHOUSE.svg"
-                alt="PaperHouse Agency"
-                width={172}
-                height={18}
-                priority
-                className={cn(
-                  'absolute transition-opacity duration-150',
-                  isOpen ? 'opacity-100' : 'opacity-0'
-                )}
-                style={{ maxHeight: '16px', width: 'auto' }}
+                style={{ maxHeight: '24px', width: 'auto' }}
               />
             </div>
 

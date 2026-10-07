@@ -4,6 +4,7 @@ const colors = {
   accent: '#fa971a',
   offwhite: '#f9f7f4',
   bluishgray: '#e8ebef',
+  graphite: '#282827',
   foreground: '#f9f7f4',
   white: '#ffffff',
   black: '#000000',

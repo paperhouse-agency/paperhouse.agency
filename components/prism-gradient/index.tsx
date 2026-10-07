@@ -9,7 +9,6 @@ import {
   drawPrism,
   GRAIN_TILE_SIZE,
   getGrainDataUrl,
-  mixColors,
   type PrismOptions,
 } from './prism'
 
@@ -26,13 +25,9 @@ export interface PrismPreset {
 
 export const PRISM_PRESETS = {
   paperhouse: {
-    // Soft brand tints so dark text stays readable across the whole hero
-    stops: [
-      mixColors(colors.offwhite, colors.primary, 0.35),
-      mixColors(colors.offwhite, colors.accent, 0.25),
-      colors.offwhite,
-    ],
-    options: { count: 11 },
+    // White at the top, bluish gray in the middle, orange at the bottom
+    stops: [colors.white, colors.bluishgray, colors.primary],
+    options: { count: 11, blend: 90 },
     speed: 40,
     startTime: 29.69,
     grain: 2,

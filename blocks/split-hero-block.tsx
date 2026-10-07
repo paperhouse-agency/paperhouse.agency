@@ -6,6 +6,9 @@ import { ContentWithButton } from '@/components/content-with-button'
 import { Image } from '@/components/image'
 import { PRISM_PRESETS, PrismGradient } from '@/components/prism-gradient'
 
+// Prism background is hidden for now — flip to true to re-enable it
+const SHOW_PRISM_GRADIENT = false
+
 export interface SplitHeroButton {
   label: string
   size?: 'sm' | 'md' | 'lg'
@@ -92,10 +95,12 @@ export function SplitHeroBlock({
 
   return (
     <section className="relative isolate">
-      <PrismGradient
-        {...PRISM_PRESETS.paperhouse}
-        className="absolute inset-0 -z-10"
-      />
+      {SHOW_PRISM_GRADIENT && (
+        <PrismGradient
+          {...PRISM_PRESETS.paperhouse}
+          className="absolute inset-0 -z-10"
+        />
+      )}
       <div className="wrapper mx-auto min-h-screen flex flex-col justify-center pt-28 pb-10 px-5">
         <div className="desktop-only grid grid-cols-2">
           <ContentWithButton
